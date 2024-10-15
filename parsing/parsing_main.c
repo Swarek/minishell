@@ -12,18 +12,18 @@
 
 #include "minishell_d.h"
 
-int handle_special_char(char *str, int i, t_arg **current_args, t_cmd **cmds)
+int handle_special_char(char *str, int i, t_arg **current_args)
 {
     if (str[i] == '\'' || str[i] == '\"')
-        return(save_it_quoted(str, i, current_args));
+        return(save_it_quoted(str, i, current_args) + 1);
     else if (str[i] == ';')
-        return (save_it_semicolon(current_args));
+        return (save_it_semicolon(i, current_args) + 1);
     else if (str[i] == '>')
-        return (save_it_redir_right(str, i, current_args));
+        return (save_it_redir_right(str, i, current_args) + 1);
     else if (str[i] == '<')
-        return(save_it_redir_left(current_args));
+        return(save_it_redir_left(i, current_args) + 1);
     else
-        return(save_it_word(str, i, current_args));
+        return(save_it_word(str, i, current_args) + 1);
 }
 
 int parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
@@ -32,9 +32,9 @@ int parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
     {
         if (str[i] == ' ' || str[i] == '\t')
             i++;
-        else
+        else    
         {
-            i = handle_special_char(str, i, current_args, cmds);
+            i = handle_special_char(str, i, current_args);
             if (i == -1)
                 return (-1);
         }
@@ -52,7 +52,7 @@ int parse_it(char *str, t_cmd **cmds)
 	i = 0;
     while (str[i])
 	{
-        i = parse_command(str, i, &current_args, cmds);
+        i = parse_one_command(str, i, &current_args, cmds);
         if (i == -1)
             return -1;
         if (str[i] == '|')

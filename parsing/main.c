@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 // Fonction pour afficher le contenu d'une commande parsée
-void print_command(t_cmd *cmd)
+void print_command(t_cmd *cmd) 
 {
     printf("Command: ");
     t_arg *arg = cmd->args;
@@ -37,9 +37,10 @@ void print_all_commands(t_cmd *cmds)
     printf("\n");
 }
 
-int main() {
+int main() 
+{
     char *test_cases[] = {
-        "echo hello world",
+        "echo 'hello world'",
         "ls -l | grep .c",
         "echo \"quoted string\" unquoted 'single quoted'",
         "cat file.txt > output.txt",
@@ -55,9 +56,11 @@ int main() {
     for (int i = 0; test_cases[i] != NULL; i++) {
         printf("Test case %d: \"%s\"\n", i + 1, test_cases[i]);
         t_cmd *cmds = NULL;
-        if (parse_it(test_cases[i], &cmds) == 0) {
+        if (parse_it(test_cases[i], &cmds) == 0) 
+        {
             print_all_commands(cmds);
-        } else {
+        } 
+        else {
             printf("Error parsing command\n");
         }
         printf("----------------------------\n");

@@ -1,11 +1,11 @@
-#include "damien/minishell_d.h"
+#include "minishell_d.h"
 
 t_arg *create_arg(char *content, char *type)
 {
     t_arg *new = malloc(sizeof(t_arg));
     if (!new) return NULL;
-    new->content = strdup(content);
-    new->type = strdup(type);
+    new->content = ft_strdup(content);
+    new->type = ft_strdup(type);
     new->next = NULL;
     return new;
 }

@@ -1,14 +1,14 @@
-#include "damien/minishell_d.h"
+#include "minishell_d.h"
 
-int save_it_semicolon(t_arg **args)
+int save_it_semicolon(int i, t_arg **args)
 {
     add_arg(args, create_arg(";", "separator"));
-    return (1);
+    return (i);
 }
 
 int save_it_redir_right(char *str, int i, t_arg **args)
 {
-    if (str[i + 1] == '>')
+    if (str[i] && str[i + 1] == '>')
 	{
         add_arg(args, create_arg(">>", "append"));
         return (i + 1);
@@ -20,24 +20,24 @@ int save_it_redir_right(char *str, int i, t_arg **args)
     }
 }
 
-int save_it_redir_left(t_arg **args)
+int save_it_redir_left(int i, t_arg **args)
 {
     add_arg(args, create_arg("<", "input"));
-    return (1);
+    return (i);
 }
 
 int save_it_word(char *str, int i, t_arg **args)
 {
     int j;
-	char *content;
+	char *to_save;
 	t_arg *new_arg;
 
 	j = i;
     while (str[j] && !ft_strchr(" \t;><'\"", str[j]))
 		j++;
-    content = strndup(str + i, j - i);
-    new_arg = create_arg(content, "word");
-    free(content);
+    to_save = ft_substr(str, i, j - i);
+    new_arg = create_arg(to_save, "word");
+    free(to_save);
     add_arg(args, new_arg);
     return (j - 1);
 }
