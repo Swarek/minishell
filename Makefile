@@ -1,51 +1,81 @@
 NAME_EXEC = minishell_exec
 NAME_PARSING = minishell_parsing
 
+EXEC_DIR = exec
+PARSING_DIR = parsing
+OBJ_EXEC_DIR = obj_exec
+OBJ_PARSING_DIR = obj_parsing
+INC_DIR = includes
+
+# Libft pour exec et parsing
+LIBFT_EXEC_DIR = Libft
+LIBFT_PARSING_DIR = libft
+LIBFT_EXEC = $(LIBFT_EXEC_DIR)/libft.a
+LIBFT_PARSING = $(LIBFT_PARSING_DIR)/libft.a
+
+# Flags
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+DEBUG_FLAGS = -g
 RM = rm -f
 
-# Chemins
-PARSING_DIR = parsing/
-EXEC_DIR = exec/
-LIBFT_DIR = libft/
-INCLUDES = -I. -I$(LIBFT_DIR)
+# Includes
+INCLUDES = -I$(INC_DIR) -I$(LIBFT_EXEC_DIR)/includes -I$(LIBFT_PARSING_DIR)/includes
 
-# Fichiers sources
-SRCS_PARSING = $(wildcard $(PARSING_DIR)*.c)
-SRCS_EXEC = $(wildcard $(EXEC_DIR)*.c)
-OBJS_PARSING = $(SRCS_PARSING:.c=.o)
-OBJS_EXEC = $(SRCS_EXEC:.c=.o)
+# Sources et objets
+SRCS_EXEC := $(wildcard $(EXEC_DIR)/*.c)
+OBJS_EXEC = $(SRCS_EXEC:$(EXEC_DIR)/%.c=$(OBJ_EXEC_DIR)/%.o)
 
-# Libft
-LIBFT = $(LIBFT_DIR)libft.a
+SRCS_PARSING := $(wildcard $(PARSING_DIR)/*.c)
+OBJS_PARSING = $(SRCS_PARSING:$(PARSING_DIR)/%.c=$(OBJ_PARSING_DIR)/%.o)
 
-all: $(LIBFT) $(NAME_EXEC) $(NAME_PARSING)
+# Targets
+all: $(NAME_EXEC) $(NAME_PARSING)
 
-$(NAME_EXEC): $(OBJS_EXEC)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LIBFT)
+$(NAME_EXEC): $(LIBFT_EXEC) $(OBJS_EXEC)
+	$(CC) $(CFLAGS) $(OBJS_EXEC) -o $(NAME_EXEC) -L$(LIBFT_EXEC_DIR) -lft
 
-$(NAME_PARSING): $(OBJS_PARSING)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LIBFT)
+$(NAME_PARSING): $(LIBFT_PARSING) $(OBJS_PARSING)
+	$(CC) $(CFLAGS) $(OBJS_PARSING) -o $(NAME_PARSING) -L$(LIBFT_PARSING_DIR) -lft
 
-exec: $(LIBFT) $(NAME_EXEC)
-
-parsing: $(LIBFT) $(NAME_PARSING)
-
-$(LIBFT):
-	make -C $(LIBFT_DIR)
-
-%.o: %.c
+# Compilation des objets pour exec
+$(OBJ_EXEC_DIR)/%.o: $(EXEC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+# Compilation des objets pour parsing
+$(OBJ_PARSING_DIR)/%.o: $(PARSING_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compilation de libft pour exec
+$(LIBFT_EXEC):
+	make -C $(LIBFT_EXEC_DIR)
+
+# Compilation de libft pour parsing
+$(LIBFT_PARSING):
+	make -C $(LIBFT_PARSING_DIR)
+
+exec: $(NAME_EXEC)
+
+parsing: $(NAME_PARSING)
+
+# Clean et fclean
 clean:
-	$(RM) $(OBJS_EXEC) $(OBJS_PARSING)
-	make -C $(LIBFT_DIR) clean
+	$(RM) -r $(OBJ_EXEC_DIR) $(OBJ_PARSING_DIR)
+	make -C $(LIBFT_EXEC_DIR) clean
+	make -C $(LIBFT_PARSING_DIR) clean
 
 fclean: clean
 	$(RM) $(NAME_EXEC) $(NAME_PARSING)
-	make -C $(LIBFT_DIR) fclean
+	make -C $(LIBFT_EXEC_DIR) fclean
+	make -C $(LIBFT_PARSING_DIR) fclean
 
+# Rebuild tout
 re: fclean all
 
-.PHONY: all clean fclean re exec parsing
+# Mode debug
+debug: CFLAGS += $(DEBUG_FLAGS)
+debug: re
+
+.PHONY: all clean fclean re debug exec parsing

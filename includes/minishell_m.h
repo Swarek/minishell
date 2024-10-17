@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell_m.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/17 19:31:12 by mblanc           ###   ########.fr       */
+/*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
+/*   Updated: 2024/10/17 19:28:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_m.h"
+#ifndef MINISHELL_M_H
+# define MINISHELL_M_H
 
-int	main(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	return (0);
-}
+# include "../Libft/includes/libft.h"
+# include "minishell_d.h"
+
+#endif
