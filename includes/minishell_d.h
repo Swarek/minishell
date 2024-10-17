@@ -6,14 +6,14 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/17 23:19:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 01:49:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_D_H
 # define MINISHELL_D_H
 
-# include "../libft/libft.h"
+// # include "../libft/libft.h"
 
 // Structures
 
@@ -37,6 +37,7 @@ typedef struct s_cmd
 int		handle_special_char(char *str, int i, t_arg **current_args);
 int		parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds);
 int		parse_it(char *str, t_cmd **cmds);
+
 
 // parsing_save_it.c
 

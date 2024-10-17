@@ -1,97 +1,65 @@
-NAME_EXEC = minishell_exec
-NAME_PARSING = minishell_parsing
-NAME = minishell
+# Compiler and flags
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
+DEBUGFLAGS	= -g
+LIBFT		= ./Libft/libft.a
 
-EXEC_DIR = exec
-PARSING_DIR = parsing
-OBJ_EXEC_DIR = obj_exec
-OBJ_PARSING_DIR = obj_parsing
-OBJ_MAIN_DIR = obj_main
-INC_DIR = includes
+# Directories
+SRC_DIR		= ./src
+OBJ_DIR		= ./obj
+INC_DIR		= ./includes
 
-# Libft pour exec et parsing
-LIBFT_EXEC_DIR = Libft
-LIBFT_PARSING_DIR = libft
-LIBFT_EXEC = $(LIBFT_EXEC_DIR)/libft.a
-LIBFT_PARSING = $(LIBFT_PARSING_DIR)/libft.a
+# Sources
+SRC_FILES	= exec/ft_echo.c exec/main_exec.c exec/main_test.c exec/reading_line.c \
+			  parsing/main.c parsing/parsing_main.c parsing/parsing_save_it.c parsing/parsing_utils.c \
+			  utils/free_structs.c
 
-# Flags
-CC = cc
-CFLAGS = -Wall -Wextra #-Werror
-DEBUG_FLAGS = -g
-RM = rm -f
+MAIN_SRC	= main.c
+
+SRCS		= $(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(MAIN_SRC)
+
+# Object files with directory structure included (to avoid name conflicts)
+OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+# Name of the program
+NAME		= minishell
 
 # Includes
-INCLUDES = -I$(INC_DIR) -I$(LIBFT_EXEC_DIR)/includes -I$(LIBFT_PARSING_DIR)/includes
+INCLUDES	= -I$(INC_DIR)
 
-# Bibliothèques
-LIBS = -lreadline
+# Linker flags for readline
+LDFLAGS		= -lreadline
 
-# Sources et objets
-SRCS_EXEC := $(wildcard $(EXEC_DIR)/*.c)
-OBJS_EXEC = $(SRCS_EXEC:$(EXEC_DIR)/%.c=$(OBJ_EXEC_DIR)/%.o)
+# Phony targets
+.PHONY: all clean fclean re debug
 
-SRCS_PARSING := $(wildcard $(PARSING_DIR)/*.c)
-OBJS_PARSING = $(SRCS_PARSING:$(PARSING_DIR)/%.c=$(OBJ_PARSING_DIR)/%.o)
-
-SRCS_MAIN = main.c
-OBJS_MAIN = $(SRCS_MAIN:%.c=$(OBJ_MAIN_DIR)/%.o)
-
-# Targets
+# Default rule
 all: $(NAME)
 
-$(NAME): $(LIBFT_EXEC) $(LIBFT_PARSING) $(OBJS_EXEC) $(OBJS_PARSING) $(OBJS_MAIN)
-	$(CC) $(CFLAGS) $(OBJS_EXEC) $(OBJS_PARSING) $(OBJS_MAIN) -o $(NAME) -L$(LIBFT_EXEC_DIR) -lft -L$(LIBFT_PARSING_DIR) -lft $(LIBS)
+# Link the program, adding the readline library
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
-$(NAME_EXEC): $(LIBFT_EXEC) $(OBJS_EXEC)
-	$(CC) $(CFLAGS) $(OBJS_EXEC) -o $(NAME_EXEC) -L$(LIBFT_EXEC_DIR) -lft $(LIBS)
-
-$(NAME_PARSING): $(LIBFT_PARSING) $(OBJS_PARSING)
-	$(CC) $(CFLAGS) $(OBJS_PARSING) -o $(NAME_PARSING) -L$(LIBFT_PARSING_DIR) -lft $(LIBS)
-
-# Compilation des objets pour exec
-$(OBJ_EXEC_DIR)/%.o: $(EXEC_DIR)/%.c
+# Compile object files, ensuring directory structure in obj/
+$(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# Compilation des objets pour parsing
-$(OBJ_PARSING_DIR)/%.o: $(PARSING_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-# Compilation des objets pour main
-$(OBJ_MAIN_DIR)/%.o: %.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-# Compilation de libft pour exec
-$(LIBFT_EXEC):
-	make -C $(LIBFT_EXEC_DIR)
-
-# Compilation de libft pour parsing
-$(LIBFT_PARSING):
-	make -C $(LIBFT_PARSING_DIR)
-
-exec: $(NAME_EXEC)
-
-parsing: $(NAME_PARSING)
-
-# Clean et fclean
-clean:
-	$(RM) -r $(OBJ_EXEC_DIR) $(OBJ_PARSING_DIR) $(OBJ_MAIN_DIR)
-	make -C $(LIBFT_EXEC_DIR) clean
-	make -C $(LIBFT_PARSING_DIR) clean
-
-fclean: clean
-	$(RM) $(NAME_EXEC) $(NAME_PARSING) $(NAME)
-	make -C $(LIBFT_EXEC_DIR) fclean
-	make -C $(LIBFT_PARSING_DIR) fclean
-
-# Rebuild tout
-re: fclean all
-
-# Mode debug
-debug: CFLAGS += $(DEBUG_FLAGS)
+# Debug rule
+debug: CFLAGS += $(DEBUGFLAGS)
 debug: re
 
-.PHONY: all clean fclean re debug exec parsing
+# Clean object files
+clean:
+	rm -rf $(OBJ_DIR)
+
+# Clean object files and the binary
+fclean: clean
+	rm -f $(NAME)
+
+# Recompile everything
+re: fclean all
+
+# Compile libft
+$(LIBFT):
+	make -C ./Libft
