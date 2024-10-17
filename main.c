@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_m.h                                      :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/17 21:03:41 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/17 22:55:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_M_H
-# define MINISHELL_M_H
+#include "minishell_m.h"
 
-# include "minishell.h"
+int	main(void)
+{
+	char	*line;
+	t_cmd	*cmds;
 
-char	*reading_line(void);
-
-#endif
+	cmds = NULL;
+	while (1)
+	{
+		line = reading_line();
+		ft_printf("Here is the line : %s\n", line);
+		if (parse_it(line, &cmds) != 0)
+			return (free(line), -1);
+		free(line);
+		// exec_it(cmds);
+	}
+	return (0);
+}

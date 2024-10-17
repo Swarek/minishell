@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/17 19:11:41 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/17 22:36:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@
 
 typedef struct s_arg
 {
-	char		*content;
-	char		*type;
-	struct s_arg *next;
+	char			*content;
+	char			*type;
+	struct s_arg	*next;
 }				t_arg;
 
 typedef struct s_cmd
 {
-    t_arg *args;
-    struct s_cmd *next;
+	t_arg			*args;
+	struct s_cmd	*next;
 }	t_cmd;
 
 // 		Parsing
