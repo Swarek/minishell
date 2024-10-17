@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/17 23:26:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/17 23:26:57 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_built_in(t_arg *args)
 
 int	exec_it(t_cmd *cmds)
 {
-	//my_print_command(cmds->args);
+	my_print_command(cmds->args);
 	if (is_built_in(cmds->args) == 1)
 	{
 		if (ft_strcmp(cmds->args->content, "echo") == 0)
