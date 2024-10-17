@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/17 21:32:35 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/17 23:07:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_colored_prompt(void)
+static char	*get_colored_prompt(void)
 {
 	char	cwd[PATH_MAX];
 	char	*current_dir;

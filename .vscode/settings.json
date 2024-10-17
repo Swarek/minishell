@@ -4,6 +4,7 @@
 		"minishell_m.h": "c",
 		"minishell_d.h": "c",
 		"limits.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"stdio.h": "c"
 	}
 }
