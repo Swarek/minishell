@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 12:27:21 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:30:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 # include "libft.h"
 # include "minishell_d.h"
-# include "minishell_m.h"
 # include "pipex.h"
+# include "minishell_m.h"
 
 // Utils
 void	print_command(t_cmd *cmd);
