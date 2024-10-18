@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 20:01:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 22:32:38 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*verify_a_path(char *path, char *command)
 	return (NULL);
 }
 
-static char	*find_command_path(char *command, char **envp)
+char	*find_command_path(char *command, char **envp)
 {
 	int		i;
 	char	**paths;
@@ -99,7 +99,6 @@ int	do_the_execution(t_arg *args, char **envp)
 	int		nbr_args;
 	int		access_result;
 
-	print_args(args);
 	path = find_command_path(args->content, envp);
 	if (!path)
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 19:55:40 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 21:39:07 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		execute_solo(t_shell *shell);
 int		execution(t_shell *shell);
 int		count_pipe(t_cmd *cmd);
 int		try_all_redirection(t_cmd *cmds, t_pipex *pipex);
-
+char	*find_command_path(char *command, char **envp);
 
 // Functions Pipex
 

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 18:40:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 21:51:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ int	init_pipex_structure(t_pipex *pipex, char **env)
 	pipex->nbr_pipes = pipex->cmd_count - 1;
 	pipex->child_pids = NULL;
 	pipex->envp = env;
-	pipex->infile = STDIN_FILENO;
-	pipex->outfile = STDOUT_FILENO;
+	pipex->infile = dup(STDIN_FILENO);
+	pipex->outfile = dup(STDOUT_FILENO);
 	return (0);
 }
 

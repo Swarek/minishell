@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:07:29 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 16:42:43 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 20:45:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int handle_output_redirection(t_cmd *cmds, t_pipex *pipex)
 {
 	while (cmds)
 	{
-		if (ft_strcmp(cmds->args->type, "output") == 0
+		if (ft_strcmp(cmds->args->type, "redir_right") == 0
 			|| ft_strcmp (cmds->args->content, ">") == 0)
 		{
 			if (opening_files(pipex, NULL, cmds->next->args->content, OUTPUT_REDIRECTION) == -1)

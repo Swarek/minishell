@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:29:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 18:48:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 22:32:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	child_process(t_pipex *pipex, int cmd_index)
 
 int	is_interesting_cmd(t_arg *args)
 {
-	ft_printf("Passage ici\n");
 	if (ft_strcmp(args->type, "pipe") == 0
 		|| ft_strcmp(args->content, ">") == 0
 		|| ft_strcmp(args->content, ">>") == 0
@@ -84,7 +83,7 @@ int	fork_process(t_pipex *pipex)
 	cmd_index = 0;
 	while (pipex->cmds)
 	{
-		if (is_interesting_cmd(pipex->cmds->args) == 1)
+		if (ft_strcmp(pipex->cmds->args->type, "command") == 0)
 		{
 			pid = fork();
 			if (pid < 0)

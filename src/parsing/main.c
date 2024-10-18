@@ -6,11 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:21:11 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 20:21:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 20:38:35 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "minishell_d.h"
 #include <stdio.h>
 
 // Fonction pour afficher le contenu d'une commande parsée
@@ -19,10 +19,10 @@ void print_command(t_cmd *cmd)
     printf("Command: ");
     t_arg *arg = cmd->args;
     while (arg) {
-        ft_printf("[%s (%s)] ", arg->content, arg->type);
+        printf("[%s (%s)] ", arg->content, arg->type);
         arg = arg->next;
     }
-    ft_printf("\n");
+    printf("\n");
 }
 
 // Fonction pour afficher toutes les commandes parsées

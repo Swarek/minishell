@@ -1,0 +1,15 @@
+saved_stdin : 3 && save_stdout : 4
+PASSAGE ICI
+total 96
+drwxr-xr-x 2 mblanc 2024_paris    82 Oct 18 20:38 includes
+drwxr-xr-x 2 mblanc 2024_paris  4096 Oct 18 20:37 libft
+drwxr-xr-x 4 mblanc 2024_paris    64 Oct 18 20:37 Libft
+-rw-r--r-- 1 mblanc 2024_paris  3081 Oct 18 20:40 main.c
+-rw-r--r-- 1 mblanc 2024_paris  1164 Oct 18 20:33 Makefile
+-rwxr-xr-x 1 mblanc 2024_paris 52864 Oct 18 20:57 minishell
+-rwxr-xr-x 1 mblanc 2024_paris 17112 Oct 18 20:37 minishell_parsing
+-rw-r--r-- 1 mblanc 2024_paris   663 Oct 18 20:55 outfile
+-rw-r--r-- 1 mblanc 2024_paris   651 Oct 18 20:48 output
+drwxr-xr-x 5 mblanc 2024_paris    46 Oct 18 20:38 src
+-rw-r--r-- 1 mblanc 2024_paris    47 Oct 18 20:57 test
+[?2004h[0;31mmerged_minishell minishell> [0m^C[?2004l
