@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 11:11:13 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:39:32 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_pipex
 	int		outfile;
 	char	**envp;
 	int		fd[2];
-	char	**cmds;
+	t_cmd	*cmds;
 	pid_t	*child_pids;
 }	t_pipex;
 
@@ -64,7 +64,7 @@ int		init_child_pids(t_pipex *pipex);
 int		init_cmds(t_pipex *pipex, char **av);
 int		init_pipex_structure(t_pipex *pipex, char **env, int ac, char **av);
 int		all_init(t_pipex *pipex, char **env, int ac, char **av);
-int		opening_files(t_pipex *pipex, char **argv, int argc);
+int		opening_files(t_pipex *pipex, char *infile, char *outfile);
 
 // Execution
 int		do_the_execution(t_arg *args, char **envp);

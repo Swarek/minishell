@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 10:08:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:14:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static int	write_to_temp(int fd, char *line)
 	return (0);
 }
 
-int	handle_here_doc(int *argc, char **argv)
+int	handle_here_doc(char *limiter)
 {
 	int	i;
 	int	return_value;
 
-	return_value = here_doc_management(argv[2]);
+	return_value = here_doc_management(limiter);
 	argv[1] = "temp.txt";
 	i = 2;
 	while (argv[i + 1])
@@ -37,7 +37,6 @@ int	handle_here_doc(int *argc, char **argv)
 		i++;
 	}
 	argv[i] = NULL;
-	(*argc)--;
 	return (return_value);
 }
 

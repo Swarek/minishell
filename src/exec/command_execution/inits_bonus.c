@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 10:08:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:39:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,37 +49,23 @@ int	init_child_pids(t_pipex *pipex)
 	return (0);
 }
 
-int	init_cmds(t_pipex *pipex, char **av)
+int	init_pipex_structure(t_pipex *pipex, char **env)
 {
-	int		i;
-
-	i = 2;
-	while (av[i + 1])
-	{
-		pipex->cmds[i - 2] = av[i];
-		i++;
-	}
-	return (0);
-}
-
-int	init_pipex_structure(t_pipex *pipex, char **env, int ac, char **av)
-{
-	pipex->cmds = malloc(sizeof(char *) * (ac - 3));
+	pipex->cmds = malloc(sizeof(char *) * (pipex->cmd_count + 1));
 	if (!pipex->cmds)
 		return (error_msg("Memory allocation failed\n"), -1);
 	pipex->pipes = NULL;
-	pipex->cmd_count = ac - 3;
 	pipex->nbr_pipes = pipex->cmd_count - 1;
 	pipex->child_pids = NULL;
 	pipex->envp = env;
-	if (init_cmds(pipex, av) == -1)
-		return (-1);
+	pipex->infile = STDIN_FILENO;
+	pipex->outfile = STDOUT_FILENO;
 	return (0);
 }
 
-int	all_init(t_pipex *pipex, char **env, int ac, char **av)
+int	all_init(t_pipex *pipex, char **env)
 {
-	if (init_pipex_structure(pipex, env, ac, av) == -1)
+	if (init_pipex_structure(pipex, env, av) == -1)
 		return (-1);
 	if (init_pipes(pipex) == -1)
 		return (-1);

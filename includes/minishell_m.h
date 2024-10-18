@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 11:20:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:18:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "minishell.h"
 
+# define OUTPUT_REDIRECTION 0
+# define APPEND_REDIRECTION 1
 typedef struct s_shell
 {
 	int		last_exit_status;	// To save the exit status ($?) to exit

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 11:22:47 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:25:14 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	wait_and_cleanup(t_pipex *pipex)
 
 int	execution(t_shell *shell)
 {
-	// t_pipex	pipex;
+	t_pipex	pipex;
 
 	if (len_cmd(shell->cmds) == 1)
 	{
@@ -48,7 +48,9 @@ int	execution(t_shell *shell)
 		else
 			return (execute(shell));
 	}
-	
+	pipex.cmd_count = count_cmd(shell->cmds);
+	if (all_init(&pipex, envp, argv) == -1)
+		return (-1);
 	return (0);
 }
 // int	main(int argc, char **argv, char **envp)
@@ -61,7 +63,7 @@ int	execution(t_shell *shell)
 // 	if (ft_strcmp(argv[1], "here_doc") == 0 && argc > 5)
 // 		if (handle_here_doc(&argc, argv) == -1)
 // 			return (-1);
-// 	if (opening_files(&pipex, argv, argc) == -1)
+	// if (opening_files(&pipex, argv, argc) == -1)
 // 		return (-1);
 // 	if (all_init(&pipex, envp, argc, argv) == -1)
 // 		return (-1);
