@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 09:35:30 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 11:02:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	my_print_command(t_arg *args)
 	ft_printf("\n");
 }
 
-static int	is_built_in(t_arg *args)
+int	is_built_in(t_arg *args)
 {
 	if (ft_strcmp(args->content, "echo") == 0)
 		return (1);
@@ -43,7 +43,7 @@ static int	is_built_in(t_arg *args)
 	return (0);
 }
 
-static int	execute_built_in(t_arg *args)
+int	execute_built_in(t_arg *args)
 {
 	if (ft_strcmp(args->content, "echo") == 0)
 		return (ft_echo(args));
@@ -76,17 +76,16 @@ int	how_much_pipes(t_arg *cmds)
 	return (count);
 }
 
-int	exec_it(t_cmd *cmds)
+int	exec_it(t_shell *shell)
 {
-	int	nb_pipes;
-
-	if (cmds == NULL || cmds->args == NULL)
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (0);
-	nb_pipes = how_much_pipes(cmds->args);
-	if (is_built_in(cmds->args))
-	{
-		if (execute_built_in(cmds->args) == -1)
-			return (-1);
-	}
+	shell->args = shell->cmds->args;
+	execution(shell);
+	// if (is_built_in(shell->args))
+	// {
+	// 	if (execute_built_in(shell->args) == -1)
+	// 		return (-1);
+	// }
 	return (0);
 }

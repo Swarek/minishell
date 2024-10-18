@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 09:25:21 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 11:02:41 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,16 @@
 # include "libft.h"
 # include "minishell_d.h"
 # include "minishell_m.h"
+# include "pipex.h"
 
+// Utils
 void	print_command(t_cmd *cmd);
 void	print_all_commands(t_cmd *cmds);
 void	my_print_command(t_arg *args);
 void	free_cmd(t_cmd *cmd);
+int		len_cmd(t_cmd *cmd);
+int		count_cmd(t_cmd *cmd);
+int		count_arguments(t_arg *args);
+char	**convert_args_to_argv(t_arg *args);
 
 #endif

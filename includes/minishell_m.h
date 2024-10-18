@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 09:34:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 11:20:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 
 typedef struct s_shell
 {
-	int	last_exit_status;	// Pour sauvegarder l'état de sortie ($?) pour exit
-	char	**envp;			// Environnement
-	t_cmd	*cmds;			// Liste des commandes
-	t_arg	*args;			// Liste des arguments d'une commande
+	int		last_exit_status;	// To save the exit status ($?) to exit
+	int		cmd_count;		// Nbr of cmd in the list
+	char	**envp;			// Environnemen
+	t_cmd	*cmds;			// List of cmds
+	t_arg	*args;			// Liste of args of a cmd (including the cmd)
 }	t_shell;
 
 // Build-in functions
@@ -32,8 +33,12 @@ void	ft_env(char **envp);
 void	ft_unset(t_arg *args, char ***env);
 int		ft_exit(t_arg *args);
 
-char	*reading_line(void);
+char	*reading_line(int color);
 int		ft_echo(t_arg *args);
-int		exec_it(t_cmd *cmds);
+int		exec_it(t_shell *shell);
+int		is_built_in(t_arg *args);
+int		execute_built_in(t_arg *args);
+int		do_the_execution(t_arg *args, char **envp);
+int		execute(t_shell *shell);
 
 #endif

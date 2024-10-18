@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 09:46:01 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 09:59:52 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,27 @@ static char	*get_colored_prompt(int color)
 	char	*current_dir;
 	char	*colored_prompt;
 	char	*prompt;
+	char	**colors;
 
+	colors = init_colors();
+	if (!colors)
+		return (NULL);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		current_dir = strrchr(cwd, '/');
+		current_dir = ft_strrchr(cwd, '/');
 		if (current_dir != NULL)
 			current_dir++;
 		else
 			current_dir = cwd;
-		colored_prompt = ft_strjoin(COLOR_GREEN, current_dir);
-		prompt = ft_strjoin(colored_prompt, COLOR_PURPLE);
+		colored_prompt = ft_strjoin(colors[color % 14], current_dir);
+		prompt = ft_strjoin(colored_prompt, " minishell> ");
 		free(colored_prompt);
-		colored_prompt = ft_strjoin(prompt, " minishell> ");
+		colored_prompt = ft_strjoin(prompt, RESET_COLOR);
 		free(prompt);
-		prompt = ft_strjoin(colored_prompt, RESET_COLOR);
-		free(colored_prompt);
 	}
 	else
-		prompt = ft_strdup("minishell> ");
-	return (prompt);
+		colored_prompt = ft_strdup("minishell>");
+	return (free(colors), colored_prompt);
 }
 
 // Main function to read the line

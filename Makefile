@@ -6,7 +6,7 @@ LIBFT		= ./Libft/libft.a
 
 # Directories
 SRC_DIR		= ./src
-OBJ_DIR		= ./obj
+OBJ_DIR		= ./.obj
 INC_DIR		= ./includes
 
 # Sources

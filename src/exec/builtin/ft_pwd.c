@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:55:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 06:25:46 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 10:02:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ int	ft_pwd(void)
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		ft_printf("%s\n", cwd);
 	else
-		return (ft_error_msg("pwd: error retrieving current directory\n"), -1);
+		return (error_msg("pwd: error retrieving current directory\n"), -1);
 	return (0);
 }

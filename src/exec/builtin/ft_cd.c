@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 06:26:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 10:02:47 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,10 @@ static int	go_last_place(void)
 
 	oldpwd = getenv("OLDPWD");
 	if (!oldpwd)
-	{
-		fprintf(stderr, "cd: OLDPWD not set\n");
-		return (1);
-	}
+		return (error_msg("cd: OLDPWD not set\n"));
 	if (chdir(oldpwd) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
-	printf("%s\n", oldpwd);
+		return (error_msg("cd"));
+	ft_printf("%s\n", oldpwd);
 	return (0);
 }
 
@@ -56,7 +50,7 @@ int	ft_cd(t_arg *args)
 
 	arg = args->next;
 	if (arg && arg->next)
-		return (ft_error_msg("cd: too many arguments\n"), -1);
+		return (error_msg("cd: too many arguments\n"), -1);
 	if (!arg)
 	{
 		if (go_home() != 0)
