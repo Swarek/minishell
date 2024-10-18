@@ -1,51 +1,63 @@
-NAME_EXEC = minishell_exec
-NAME_PARSING = minishell_parsing
+# Compiler and flags
+CC			= cc
+CFLAGS = -Wall -Wextra -Werror -Iincludes -I./Libft/includes
+DEBUGFLAGS	= -g
+LIBFT		= ./Libft/libft.a
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-RM = rm -f
+# Directories
+SRC_DIR		= ./src
+OBJ_DIR		= ./.obj
+INC_DIR		= ./includes
 
-# Chemins
-PARSING_DIR = parsing/
-EXEC_DIR = exec/
-LIBFT_DIR = libft/
-INCLUDES = -I. -I$(LIBFT_DIR)
+# Sources
+SRC_FILES	= $(shell find $(SRC_DIR) -name '*.c')
 
-# Fichiers sources
-SRCS_PARSING = $(wildcard $(PARSING_DIR)*.c)
-SRCS_EXEC = $(wildcard $(EXEC_DIR)*.c)
-OBJS_PARSING = $(SRCS_PARSING:.c=.o)
-OBJS_EXEC = $(SRCS_EXEC:.c=.o)
+MAIN_SRC	= main.c
 
-# Libft
-LIBFT = $(LIBFT_DIR)libft.a
+SRCS		= $(SRC_FILES) $(MAIN_SRC)
 
-all: $(LIBFT) $(NAME_EXEC) $(NAME_PARSING)
+# Object files with directory structure included (to avoid name conflicts)
+OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
-$(NAME_EXEC): $(OBJS_EXEC)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LIBFT)
+# Name of the program
+NAME		= minishell
 
-$(NAME_PARSING): $(OBJS_PARSING)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LIBFT)
+# Includes
+INCLUDES	= -I$(INC_DIR)
 
-exec: $(LIBFT) $(NAME_EXEC)
+# Linker flags for readline
+LDFLAGS		= -lreadline
 
-parsing: $(LIBFT) $(NAME_PARSING)
+# Phony targets
+.PHONY: all clean fclean re debug
 
-$(LIBFT):
-	make -C $(LIBFT_DIR)
+# Default rule
+all: $(NAME)
 
-%.o: %.c
+# Link the program, adding the readline library
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
+
+# Compile object files, ensuring directory structure in obj/
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+# Debug rule
+debug: CFLAGS += $(DEBUGFLAGS)
+debug: re
+
+# Clean object files
 clean:
-	$(RM) $(OBJS_EXEC) $(OBJS_PARSING)
-	make -C $(LIBFT_DIR) clean
+	rm -rf $(OBJ_DIR)
 
+# Clean object files and the binary
 fclean: clean
-	$(RM) $(NAME_EXEC) $(NAME_PARSING)
-	make -C $(LIBFT_DIR) fclean
+	rm -f $(NAME)
 
+# Recompile everything
 re: fclean all
 
-.PHONY: all clean fclean re exec parsing
+# Compile libft
+$(LIBFT):
+	make -C ./Libft
