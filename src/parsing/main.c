@@ -6,11 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:21:11 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/17 22:54:31 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 06:13:09 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_d.h"
+#include "minishell.h"
 #include <stdio.h>
 
 // Fonction pour afficher le contenu d'une commande parsée

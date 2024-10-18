@@ -5,6 +5,7 @@
 		"minishell_d.h": "c",
 		"limits.h": "c",
 		"libft.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"readline.h": "c"
 	}
 }

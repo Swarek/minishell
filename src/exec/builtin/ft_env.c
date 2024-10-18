@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/17 22:59:55 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/18 09:06:09 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/18 09:06:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_m.h"
+#include "minishell.h"
 
-// int	main(void)
-// {
-// 	return (test_minishell());
-// }
+void	ft_env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		ft_printf("%s\n", envp[i]);
+		i++;
+	}
+}

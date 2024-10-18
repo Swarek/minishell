@@ -1,6 +1,6 @@
 # Compiler and flags
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -Iincludes -I./Libft/includes
 DEBUGFLAGS	= -g
 LIBFT		= ./Libft/libft.a
 
@@ -10,13 +10,11 @@ OBJ_DIR		= ./obj
 INC_DIR		= ./includes
 
 # Sources
-SRC_FILES	= exec/ft_echo.c exec/main_exec.c exec/main_test.c exec/reading_line.c \
-			  parsing/main.c parsing/parsing_main.c parsing/parsing_save_it.c parsing/parsing_utils.c \
-			  utils/free_structs.c
+SRC_FILES	= $(shell find $(SRC_DIR) -name '*.c')
 
 MAIN_SRC	= main.c
 
-SRCS		= $(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(MAIN_SRC)
+SRCS		= $(SRC_FILES) $(MAIN_SRC)
 
 # Object files with directory structure included (to avoid name conflicts)
 OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
