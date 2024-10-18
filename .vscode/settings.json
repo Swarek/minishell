@@ -8,6 +8,9 @@
 		"stdio.h": "c",
 		"readline.h": "c",
 		"pipex.h": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"history.h": "c",
+		"wait.h": "c",
+		"fcntl.h": "c"
 	}
 }

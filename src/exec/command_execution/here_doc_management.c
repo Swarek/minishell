@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 12:14:49 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 16:38:21 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,6 @@ static int	write_to_temp(int fd, char *line)
 		return (error_msg("Problem writing newline to temp.txt"),
 			free(line), close(fd), -1);
 	return (0);
-}
-
-int	handle_here_doc(char *limiter)
-{
-	int	i;
-	int	return_value;
-
-	return_value = here_doc_management(limiter);
-	argv[1] = "temp.txt";
-	i = 2;
-	while (argv[i + 1])
-	{
-		argv[i] = argv[i + 1];
-		i++;
-	}
-	argv[i] = NULL;
-	return (return_value);
 }
 
 int	here_doc_management(char *limiter)

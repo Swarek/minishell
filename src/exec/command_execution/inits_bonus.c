@@ -6,11 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 12:39:49 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:40:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 int	init_pipes(t_pipex *pipex)
 {
@@ -51,9 +51,6 @@ int	init_child_pids(t_pipex *pipex)
 
 int	init_pipex_structure(t_pipex *pipex, char **env)
 {
-	pipex->cmds = malloc(sizeof(char *) * (pipex->cmd_count + 1));
-	if (!pipex->cmds)
-		return (error_msg("Memory allocation failed\n"), -1);
 	pipex->pipes = NULL;
 	pipex->nbr_pipes = pipex->cmd_count - 1;
 	pipex->child_pids = NULL;
@@ -65,7 +62,7 @@ int	init_pipex_structure(t_pipex *pipex, char **env)
 
 int	all_init(t_pipex *pipex, char **env)
 {
-	if (init_pipex_structure(pipex, env, av) == -1)
+	if (init_pipex_structure(pipex, env) == -1)
 		return (-1);
 	if (init_pipes(pipex) == -1)
 		return (-1);

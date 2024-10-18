@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 11:27:45 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 17:34:44 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	*find_command_path(char *command, char **envp)
 	return (NULL);
 }
 
-int	execute(t_shell *shell)
+int	execute_solo(t_shell *shell)
 {
 	pid_t	pid;
 	int		status;

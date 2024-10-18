@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 12:25:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:50:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,26 @@ void	wait_and_cleanup(t_pipex *pipex)
 	exit(exit_code);
 }
 
+// Il faut aussi une fonction speciale si len_cmd > 1 mais qu'il n'y a pas de pipe
+// Par exemple si on fait ls -l > outfile
 int	execution(t_shell *shell)
 {
 	t_pipex	pipex;
 
 	if (len_cmd(shell->cmds) == 1)
 	{
+		ft_printf("Len command = 1\n");
 		if (is_built_in(shell->cmds->args))
-			return (execute_built_in(shell->cmds->args));
+			return (execute_built_in(shell->cmds->args, &shell->envp));
 		else
-			return (execute(shell));
+			return (execute_solo(shell));
 	}
-	pipex.cmd_count = count_cmd(shell->cmds);
-	if (all_init(&pipex, envp, argv) == -1)
+	pipex.cmd_count = count_arguments(shell->args);
+	if (all_init(&pipex, shell->envp) == -1)
 		return (-1);
+	pipex.cmds = shell->cmds;
+	fork_process(&pipex);
+	wait_and_cleanup(&pipex);
 	return (0);
 }
 // int	main(int argc, char **argv, char **envp)

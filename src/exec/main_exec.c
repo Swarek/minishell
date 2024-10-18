@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 11:02:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 17:35:25 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_built_in(t_arg *args)
 	return (0);
 }
 
-int	execute_built_in(t_arg *args)
+int	execute_built_in(t_arg *args, char ***envp)
 {
 	if (ft_strcmp(args->content, "echo") == 0)
 		return (ft_echo(args));
@@ -51,12 +51,12 @@ int	execute_built_in(t_arg *args)
 		return (ft_cd(args));
 	if (ft_strcmp(args->content, "pwd") == 0)
 		return (ft_pwd());
-	// if (ft_strcmp(args->content, "export") == 0)
-		// return (ft_export(args, &g_shell.envp));
-	// if (ft_strcmp(args->content, "env") == 0)
-	// 	return (ft_env(g_shell.envp), 0);
-	// if (ft_strcmp(args->content, "unset") == 0)
-	// 	return (ft_unset(args, &g_shell.envp), 0);
+	if (ft_strcmp(args->content, "export") == 0)
+		return (ft_export(args, envp));
+	if (ft_strcmp(args->content, "env") == 0)
+		return (ft_env(*envp), 0);
+	if (ft_strcmp(args->content, "unset") == 0)
+		return (ft_unset(args, envp), 0);
 	if (ft_strcmp(args->content, "exit") == 0)
 		return (ft_exit(args));
 	return (-1);
@@ -82,6 +82,7 @@ int	exec_it(t_shell *shell)
 		return (0);
 	shell->args = shell->cmds->args;
 	execution(shell);
+	// execute_solo(shell);
 	// if (is_built_in(shell->args))
 	// {
 	// 	if (execute_built_in(shell->args) == -1)

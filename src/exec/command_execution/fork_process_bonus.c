@@ -6,11 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:29:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 10:08:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:48:24 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 int	parent_process(t_pipex *pipex, pid_t pid, int cmd_index)
 {
@@ -43,7 +43,7 @@ void	child_process(t_pipex *pipex, int cmd_index)
 		exit(1);
 	}
 	j = 0;
-	while (j < pipex->cmd_count - 1)
+	while (j < pipex->nbr_pipes)
 	{
 		close(pipex->pipes[j][0]);
 		close(pipex->pipes[j][1]);
@@ -51,9 +51,22 @@ void	child_process(t_pipex *pipex, int cmd_index)
 	}
 	close(pipex->infile);
 	close(pipex->outfile);
-	if (execute(pipex->cmds[cmd_index], pipex->envp) == -1)
+	if (do_the_execution(pipex->cmds->args, pipex->envp) == -1)
 		exit(1);
 	exit(0);
+}
+
+int	is_interesting_cmd(t_arg *args)
+{
+	ft_printf("Passage ici\n");
+	if (ft_strcmp(args->type, "pipe") == 0
+		|| ft_strcmp(args->content, ">") == 0
+		|| ft_strcmp(args->content, ">>") == 0
+		|| ft_strcmp(args->content, "<") == 0
+		|| ft_strcmp(args->content, "<<") == 0
+		)
+		return (0);
+	return (1);
 }
 
 // This function will do all the forks and call the execute_child_process
@@ -65,19 +78,24 @@ void	child_process(t_pipex *pipex, int cmd_index)
 // - pid_t *child as malloced array of pid_t, of len cmd_count
 int	fork_process(t_pipex *pipex)
 {
-	int		cmd_index;
 	pid_t	pid;
+	int		cmd_index;
 
-	cmd_index = -1;
-	while (++cmd_index < pipex->cmd_count)
+	cmd_index = 0;
+	while (pipex->cmds)
 	{
-		pid = fork();
-		if (pid < 0)
-			return (error_msg("Fork failed\n"));
-		if (pid == 0)
-			child_process(pipex, cmd_index);
-		else
-			parent_process(pipex, pid, cmd_index);
+		if (is_interesting_cmd(pipex->cmds->args) == 1)
+		{
+			pid = fork();
+			if (pid < 0)
+				return (error_msg("Fork failed\n"));
+			if (pid == 0)
+				child_process(pipex, cmd_index);
+			else
+				parent_process(pipex, pid, cmd_index);
+			cmd_index++;
+		}
+		pipex->cmds = pipex->cmds->next;
 	}
 	return (0);
 }

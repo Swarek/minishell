@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:07:29 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 12:24:54 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 16:42:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int	opening_files(t_pipex *pipex, char *infile, char *outfile, int output_mode)
 			pipex->outfile = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
 	if (pipex->outfile < 0 && pipex->infile < 0)
-		return (ft_error_msg("Problem with infile and outfile\n"));
+		return (error_msg("Problem with infile and outfile\n"));
 	else if (pipex->infile < 0)
-		return (close(pipex->infile), ft_error_msg("Failed to open infile\n"));
+		return (close(pipex->infile), error_msg("Failed to open infile\n"));
 	if (pipex->outfile < 0)
-		return (close(pipex->infile), ft_error_msg("Failed to open outfile\n"));
+		return (close(pipex->infile), error_msg("Failed to open outfile\n"));
 	return (0);
 }
 
@@ -44,6 +44,7 @@ int	handle_input_redirection(t_cmd *cmds, t_pipex *pipex)
 		}
 		cmds = cmds->next;
 	}
+	return (0);
 }
 
 int handle_output_redirection(t_cmd *cmds, t_pipex *pipex)
@@ -58,6 +59,7 @@ int handle_output_redirection(t_cmd *cmds, t_pipex *pipex)
 		}
 		cmds = cmds->next;
 	}
+	return (0);
 }
 
 int handle_append_redirection(t_cmd *cmds, t_pipex *pipex)
@@ -72,6 +74,7 @@ int handle_append_redirection(t_cmd *cmds, t_pipex *pipex)
 		}
 		cmds = cmds->next;
 	}
+	return (0);
 }
 
 int	looking_for_here_doc(t_cmd *cmds, t_pipex *pipex)
@@ -81,11 +84,12 @@ int	looking_for_here_doc(t_cmd *cmds, t_pipex *pipex)
 		if (ft_strcmp(cmds->args->type, "here_doc") == 0
 			|| ft_strcmp (cmds->args->content, "<<") == 0)
 		{
-			if (handle_here_doc(cmds->next->args->content) == -1)
+			if (here_doc_management(cmds->next->args->content) == -1)
 				return (-1);
 			if (opening_files(pipex, "temp.txt", NULL, 0) == -1)
 				return (-1);
 		}
 		cmds = cmds->next;
 	}
+	return (0);
 }

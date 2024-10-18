@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 09:59:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 17:32:05 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,32 @@
 // 	return 0;
 // }
 
+char	**env_copy(char **env)
+{
+	int		i;
+	char	**new_env;
+
+	i = 0;
+	while (env[i])
+		i++;
+	new_env = malloc(sizeof(char *) * (i + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (env[i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+		{
+			while(i >= 0)
+				free(new_env[i--]);
+			return (NULL);
+		}
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
 t_shell	*init_struct_shell(char **envp)
 {
 	t_shell *shell;
@@ -58,11 +84,12 @@ t_shell	*init_struct_shell(char **envp)
 	if (!shell)
 		return (NULL);
 	shell->last_exit_status = 0;
-	shell->envp = envp;
+	shell->envp = env_copy(envp);
 	shell->cmds = NULL;
 	shell->args = NULL;
 	return (shell);
 }
+
 
 int	main(int ac, char **av, char **envp)
 {
@@ -81,7 +108,6 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		line = reading_line(color);
-		// ft_printf("Here is the line : %s\n", line);
 		if (parse_it(line, &cmds) != 0)
 			return (free(line), -1);
 		free(line);
