@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   try_all_redirection.c                              :+:      :+:    :+:   */
+/*   pipe_counter.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 12:25:22 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 12:27:37 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/18 19:39:41 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/18 19:40:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	try_all_redirection(t_cmd *cmds, t_pipex *pipex)
+int	count_pipe(t_cmd *cmd)
 {
-	if (handle_input_redirection(cmds, pipex) == -1)
-		return (-1);
-	if (handle_output_redirection(cmds, pipex) == -1)
-		return (-1);
-	if (looking_for_here_doc(cmds, pipex) == -1)
-		return (-1);
-	if (handle_append_redirection(cmds, pipex) == -1)
-		return (-1);
-	return (0);
+	int	nbr_pipe;
+
+	nbr_pipe = 0;
+	while (cmd)
+	{
+		if (ft_strcmp(cmd->args->type, "pipe") == 0)
+			nbr_pipe++;
+		cmd = cmd->next;
+	}
+	return (nbr_pipe);
 }

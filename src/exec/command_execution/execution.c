@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 17:34:44 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/18 20:01:14 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int	execute_solo(t_shell *shell)
 	else
 	{
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->last_exit_status = WEXITSTATUS(status);
+		// if (WIFEXITED(status))
+		// 	shell->last_exit_status = WEXITSTATUS(status);
 	}
 	return (0);
 }
@@ -99,6 +99,7 @@ int	do_the_execution(t_arg *args, char **envp)
 	int		nbr_args;
 	int		access_result;
 
+	print_args(args);
 	path = find_command_path(args->content, envp);
 	if (!path)
 		return (-1);
