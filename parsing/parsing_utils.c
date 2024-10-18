@@ -12,9 +12,12 @@ t_arg *create_arg(char *content, char *type)
 
 void add_arg(t_arg **head, t_arg *new_arg)
 {    
-    if (!*head) {
+    if (!*head)
+    {
         *head = new_arg;
-    } else {
+    }
+    else
+    {
         t_arg *current = *head;
         while (current->next) {
             current = current->next;

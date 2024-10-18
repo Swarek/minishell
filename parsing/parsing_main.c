@@ -18,17 +18,13 @@ int handle_special_char(char *str, int i, t_arg **current_args)
         return(save_it_quoted(str, i, current_args) + 1);
     else if (str[i] == ';')
         return (save_it_semicolon(i, current_args) + 1);
-    else if (str[i] == '>')
-        return (save_it_redir_right(str, i, current_args) + 1);
-    else if (str[i] == '<')
-        return(save_it_redir_left(i, current_args) + 1);
     else
         return(save_it_word(str, i, current_args) + 1);
 }
 
 int parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
 {
-    while (str[i] && str[i] != '|')
+    while (str[i] && str[i] != '|' && str[i] != '>' && str[i] != '<')
     {
         if (str[i] == ' ' || str[i] == '\t')
             i++;
@@ -58,6 +54,25 @@ int parse_it(char *str, t_cmd **cmds)
         if (str[i] == '|')
         {
             add_arg(&current_args, create_arg("|", "pipe"));
+            add_command(cmds, &current_args);
+            i++;
+        }
+        else if (str[i] == '>' && str[i + 1] =='>')
+        {
+            add_arg(&current_args, create_arg(">>", "double_redir_right"));
+            add_command(cmds, &current_args);
+            i = i + 2;
+        }
+        else if (str[i] == '>')
+        {
+            add_arg(&current_args, create_arg(">", "redir_right"));
+            add_command(cmds, &current_args);
+            i++;
+        }
+        else if (str[i] == '<')
+        {
+            add_arg(&current_args, create_arg("<", "redir_left"));
+            add_command(cmds, &current_args);
             i++;
         }
 	}

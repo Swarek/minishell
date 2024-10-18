@@ -2,27 +2,7 @@
 
 int save_it_semicolon(int i, t_arg **args)
 {
-    add_arg(args, create_arg(";", "separator"));
-    return (i);
-}
-
-int save_it_redir_right(char *str, int i, t_arg **args)
-{
-    if (str[i] && str[i + 1] == '>')
-	{
-        add_arg(args, create_arg(">>", "append"));
-        return (i + 1);
-    }
-	else
-	{
-        add_arg(args, create_arg(">", "output"));
-        return (i);
-    }
-}
-
-int save_it_redir_left(int i, t_arg **args)
-{
-    add_arg(args, create_arg("<", "input"));
+    add_arg(args, create_arg(";", "semicolon"));
     return (i);
 }
 
