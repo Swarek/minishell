@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 10:44:54 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 10:46:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/19 22:46:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	count_cmd(t_cmd *cmd)
 	nbr_cmd = 0;
 	while (cmd)
 	{
-		if (strcmp(cmd->args->type, "CMD") == 0)
+		if (ft_strcmp(cmd->args->type, "command") == 0)
 			nbr_cmd++;
 		cmd = cmd->next;
 	}
