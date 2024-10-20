@@ -6,44 +6,14 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 16:14:01 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 16:41:10 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-// Fonction pour afficher le contenu d'une commande parsée
-void	print_command(t_cmd *cmd)
-{
-	t_arg	*arg;
-
-	printf("Command: ");
-	arg = cmd->args;
-	while (arg)
-	{
-		printf("[%s (%s)] ", arg->content, arg->type);
-		arg = arg->next;
-	}
-	printf("\n");
-}
-
-// Fonction pour afficher toutes les commandes parsées
-void	print_all_commands(t_cmd *cmds)
-{
-	int	i;
-
-	i = 0;
-	while (cmds)
-	{
-		printf("Command %d:\n", i++);
-		print_command(cmds);
-		cmds = cmds->next;
-	}
-	printf("\n");
-}
-
-int	main(void)
+char	**env_copy(char **env)
 {
 	int		i;
 	char	**new_env;
@@ -82,13 +52,21 @@ t_shell	*init_struct_shell(char **envp)
 	return (shell);
 }
 
-
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_cmd	*cmds;
+	t_shell	*shell;
+	int		color;
 
-	for (int i = 0; test_cases[i] != NULL; i++)
+	(void)ac;
+	(void)av;
+	shell = init_struct_shell(envp);
+	if (!shell)
+		return (-1);
+	cmds = NULL;
+	color = 0;
+	while (1)
 	{
 		line = reading_line(color);
 		if (parse_it(line, &cmds) != 0)
