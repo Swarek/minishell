@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 10:31:14 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 11:21:35 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 12:32:04 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,9 @@ int	save_it_quoted(char *str, int i, t_arg **args)
 	char	*to_save;
 
 	j = i + 1;
-	while (str[j] && str[j] != str[i])
+	while (str[j] && (str[j] != str[i] && str[j - 1] != '\\' ))
 	{
 		j++;
-		if (str[j] == '\0')
-			return (-1);
 	}
 	to_save = ft_substr(str, i + 1, j - i - 1);
 	if (str[i] == '"')

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 11:36:20 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 12:44:07 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_cmd
 /*
 
 Si c'est un pipe ça sera une commande de type = "pipe" et de content "|"
+Si c'est un double pipe ça sera une commande de type = "double_pipe" et de content "||"
 Si c'est une ">" ça sera une commande de type = "redir_right" et de content = ">"
 Si c'est une ">>" ça sera une commande de type = "double_redir_right" et de content = ">>"
 Si c'est une "<" ça sera une commande de type = "redir_left" et de content = "<"

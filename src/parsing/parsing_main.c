@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:34:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 11:38:14 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 12:33:01 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ int	check_if_another_quote(char *str, int i)
 	j = i + 1;
 	while (str[j])
 	{
-		if (str[j] == str[i])
+		if (str[j] == str[i] && str[j - 1] != '\\')
 		{
-			write(1, "\nFinished\n", 10);
 			return (1);
 		}
 		j++;
@@ -77,9 +76,19 @@ int	parse_it(char *str, t_cmd **cmds)
 			return (-1);
 		if (str[i] == '|')
 		{
-			add_arg(&current_args, create_arg("|", "pipe"));
-			add_command(cmds, &current_args);
-			i++;
+			if (str[i + 1] == '|')
+			{
+				add_arg(&current_args, create_arg("more-than_one_pipe", "error"));
+				add_command(cmds, &current_args);
+				while (str[i] == '|')
+					i++;
+			}
+			else
+			{
+				add_arg(&current_args, create_arg("|", "pipe"));
+				add_command(cmds, &current_args);
+				i++;
+			}
 		}
 		else if (str[i] == ';')
 		{
