@@ -3,6 +3,11 @@
 		"minishell.h": "c",
 		"minishell_d.h": "c",
 		"pipex.h": "c",
-		"minishell_m.h": "c"
+		"minishell_m.h": "c",
+		"readline.h": "c",
+		"libft.h": "c",
+		"history.h": "c",
+		"limits.h": "c",
+		"stdio.h": "c"
 	}
 }

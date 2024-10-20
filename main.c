@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/20 11:34:05 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 14:29:07 by dmathis          ###   ########.fr       */
+/*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/20 16:14:01 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_d.h"
+#include "minishell.h"
 #include <stdio.h>
 
 // Fonction pour afficher le contenu d'une commande parsée
@@ -45,30 +45,62 @@ void	print_all_commands(t_cmd *cmds)
 
 int	main(void)
 {
-	char	*test_cases[] = {"\"echo $HOME\"", "ls -l | grep .c",
-			"echo \"quoted string\" unquoted 'single quoted'",
-			"cat file.txt > output.txt", "echo hello | wc -l > count.txt",
-			"echo $HOME | sed 's/home/house/'", "ls -l ; echo done",
-			"echo 'single | quote' | grep quote",
-			"echo \"double | quote\" ; ls",
-			"cat<input.txt|sort|uniq>output.txt", NULL};
+	int		i;
+	char	**new_env;
+
+	i = 0;
+	while (env[i])
+		i++;
+	new_env = malloc(sizeof(char *) * (i + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (env[i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+		{
+			while(i >= 0)
+				free(new_env[i--]);
+			return (NULL);
+		}
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
+t_shell	*init_struct_shell(char **envp)
+{
+	t_shell *shell;
+	
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return (NULL);
+	shell->last_exit_status = 0;
+	shell->envp = env_copy(envp);
+	shell->cmds = NULL;
+	return (shell);
+}
+
+
+int	main(int ac, char **av, char **envp)
+{
+	char	*line;
 	t_cmd	*cmds;
 
 	for (int i = 0; test_cases[i] != NULL; i++)
 	{
-		printf("Test case %d: \"%s\"\n", i + 1, test_cases[i]);
+		line = reading_line(color);
+		if (parse_it(line, &cmds) != 0)
+			return (free(line), -1);
+		free(line);
+		shell->cmds = cmds;
+		print_all_commands(cmds);
+		exec_it(shell);
+		// free_cmds(cmds);
+		// ft_printf("Testttttttt\n");
 		cmds = NULL;
-		if (parse_it(test_cases[i], &cmds) == 0)
-		{
-			expand_env_vars_in_cmds_tab(&cmds);
-			print_all_commands(cmds);
-		}
-		else
-		{
-			printf("Error parsing command\n");
-		}
-		printf("----------------------------\n");
-		free_cmds(cmds);
+		color++;
 	}
 	return (0);
 }
