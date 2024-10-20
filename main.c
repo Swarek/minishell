@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 11:34:05 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 12:35:05 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 14:29:07 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	print_all_commands(t_cmd *cmds)
 
 int	main(void)
 {
-	char	*test_cases[] = {"echo 'hello \' world'", "ls -l | grep .c",
+	char	*test_cases[] = {"\"echo $HOME\"", "ls -l | grep .c",
 			"echo \"quoted string\" unquoted 'single quoted'",
 			"cat file.txt > output.txt", "echo hello | wc -l > count.txt",
 			"echo $HOME | sed 's/home/house/'", "ls -l ; echo done",
@@ -60,6 +60,7 @@ int	main(void)
 		cmds = NULL;
 		if (parse_it(test_cases[i], &cmds) == 0)
 		{
+			expand_env_vars_in_cmds_tab(&cmds);
 			print_all_commands(cmds);
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 12:44:07 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 14:21:26 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,9 @@ void				free_cmds(t_cmd *cmds);
 void				add_command(t_cmd **cmds, t_arg **current_args);
 
 void				print_args(t_arg *args);
+
+void				expand_env_vars_in_cmds_tab(t_cmd **cmds);
+void				expand_env_vars(t_arg *current_arg);
+void				replace_env_var(t_arg *current_arg, int start, int end, const char *value);
 
 #endif
