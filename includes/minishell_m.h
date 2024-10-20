@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/18 21:39:07 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 15:16:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,16 @@
 # define APPEND_REDIRECTION 1
 typedef struct s_shell
 {
-	int		last_exit_status;	// To save the exit status ($?) to exit
-	int		cmd_count;		// Nbr of cmd in the list
-	char	**envp;			// Environnemen
+	int		last_exit_status;	// To save the exit status ($?) to exit	// Nbr of cmd in the list
+	char	**envp;			// Environment
 	t_cmd	*cmds;			// List of cmds
-	t_arg	*args;			// Liste of args of a cmd (including the cmd)
+	// Redirections :
+	int		total_cmd_count;// Nbr total de cmd
+	int		nbr_pipes;		// Nbr total of pipes
+	int		infile;			// infile de la commande actuelle
+	int		outfile;		// outfile de la commande actuelle
+	int		**pipes;		// Les pipes (fd[2])
+	pid_t	*child_pids;	// ID des processus enfants
 }	t_shell;
 
 typedef struct s_pipex
@@ -59,6 +64,11 @@ int		execution(t_shell *shell);
 int		count_pipe(t_cmd *cmd);
 int		try_all_redirection(t_cmd *cmds, t_pipex *pipex);
 char	*find_command_path(char *command, char **envp);
+int	single_cmd(t_shell *shell);
+int	setup_file_redirections(t_shell *shell);
+void	find_and_add_type_cmd(t_arg *args, char **envp);
+int		is_redir(t_arg *arg);
+int	cut_the_cmd_plus_args(t_cmd *cmd);
 
 // Functions Pipex
 
@@ -78,11 +88,11 @@ int		parent_process(t_pipex *pipex, pid_t pid, int cmd_index);
 int		setup_redirection(t_pipex *pipex, int cmd_index);
 
 // Inits
-int		init_pipes(t_pipex *pipex);
-int		init_child_pids(t_pipex *pipex);
-int		init_cmds(t_pipex *pipex, char **av);
-int		init_pipex_structure(t_pipex *pipex, char **env);
-int		all_init(t_pipex *pipex, char **env);
+int		init_pipes(t_shell *shell);
+int		init_child_pids(t_shell *shell);
+int		init_cmds(t_shell *shell, char **av);
+int		init_shell_structure(t_shell *shell);
+int		all_init(t_shell *shell);
 int		opening_files(t_pipex *pipex, char *infile, char *outfile, int output_mode);
 
 // Execution

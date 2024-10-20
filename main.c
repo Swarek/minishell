@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/19 22:53:02 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 16:04:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ t_shell	*init_struct_shell(char **envp)
 	shell->last_exit_status = 0;
 	shell->envp = env_copy(envp);
 	shell->cmds = NULL;
-	shell->args = NULL;
 	return (shell);
 }
 
@@ -112,8 +111,10 @@ int	main(int ac, char **av, char **envp)
 			return (free(line), -1);
 		free(line);
 		shell->cmds = cmds;
-		// exec_it(shell);
-		free_cmds(cmds);
+		print_all_commands(cmds);
+		exec_it(shell);
+		// free_cmds(cmds);
+		// ft_printf("Testttttttt\n");
 		cmds = NULL;
 		color++;
 	}

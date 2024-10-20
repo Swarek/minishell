@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_1.c                                          :+:      :+:    :+:   */
+/*   parsing_main.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:34:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/09/14 15:51:56 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 15:53:29 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_d.h"
+#include "minishell.h"
 
 int handle_special_char(char *str, int i, t_arg **current_args)
 {

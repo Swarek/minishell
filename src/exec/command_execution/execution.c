@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/19 14:49:10 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 11:44:16 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	execute_solo(t_shell *shell)
 	}
 	if (pid == 0)
 	{
-		if (do_the_execution(shell->args, shell->envp) == -1)
+		if (do_the_execution(shell->cmds->args, shell->envp) == -1)
 			exit(1);
 	}
 	else
