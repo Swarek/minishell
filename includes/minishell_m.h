@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 15:16:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 21:01:32 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,19 @@ typedef struct s_pipex
 }	t_pipex;
 
 // Build-in functions
-int		ft_pwd(void);
-int		ft_echo(t_arg *args);
-int		ft_cd(t_arg *args);
+int		ft_pwd(t_shell *shell);
+int		ft_echo(t_shell *shell);
+int		ft_cd(t_shell *shell);
 int		ft_export(t_arg *args, char ***envp);
-void	ft_env(char **envp);
+void	ft_env(char **envp, t_shell *shell);
 void	ft_unset(t_arg *args, char ***env);
-int		ft_exit(t_arg *args);
+int		ft_exit(t_shell *shell, t_arg *args);
 
 char	*reading_line(int color);
-int		ft_echo(t_arg *args);
 int		exec_it(t_shell *shell);
-int		is_built_in(t_arg *args);
-int		execute_built_in(t_arg *args, char ***envp);
-int		do_the_execution(t_arg *args, char **envp);
+int		is_built_in(char **args);
+int		execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp);
+int		do_the_execution(t_cmd *cmd, char **envp);
 int		execute_solo(t_shell *shell);
 int		execution(t_shell *shell);
 int		count_pipe(t_cmd *cmd);
@@ -96,7 +95,7 @@ int		all_init(t_shell *shell);
 int		opening_files(t_pipex *pipex, char *infile, char *outfile, int output_mode);
 
 // Execution
-int		do_the_execution(t_arg *args, char **envp);
+int		do_the_execution(t_cmd *cmd, char **envp);
 int		is_absolute_or_relative_path(char *command);
 char	*handle_absolute_or_relative_path(char *command);
 int		execute_with_shell(char *path, char **cmd, char **envp, int cmd_count);

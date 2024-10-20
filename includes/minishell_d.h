@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 16:11:49 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 20:57:39 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_arg
 typedef struct s_cmd
 {
     t_arg 			*args;
-	char			**only_cmd_and_args;
+	char			**cmd_arg_stdin;
     struct s_cmd 	*next;
 } 					t_cmd;
 

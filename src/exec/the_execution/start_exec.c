@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 16:04:00 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 20:58:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int	single_cmd(t_shell *shell)
 
 	while (ft_strcmp(shell->cmds->args->type, "command") != 0)
 		shell->cmds->args = shell->cmds->args->next;
-	if (is_built_in(shell->cmds->args))
+	if (is_built_in(shell->cmds->cmd_arg_stdin))
 	{
-		return_value = execute_built_in(shell->cmds->args, &shell->envp);
+		return_value = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
 		return (return_value);
 	}
 	else
@@ -78,13 +78,16 @@ int	exec_it(t_shell *shell)
 	i = 0;
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (-1);
-	// if (setup_file_redirections(shell) == -1) // Attention ca se fera dans la boucle
-	// 	return(error_msg("OHH L'ERREUR\n"));  // Et si ca fail il faudra juste que s'il y a un pipe apres on lui envoie NULL
+	if (setup_file_redirections(shell) == -1) // Attention ca se fera dans la boucle
+		return(error_msg("OHH L'ERREUR\n"));  // Et si ca fail il faudra juste que s'il y a un pipe apres on lui envoie NULL
 	find_and_add_type_cmd(shell->cmds->args, shell->envp);
 	all_init(shell);
+	ft_printf("Infile : %d, stdin : %d\n", shell->infile, STDIN_FILENO);
+	ft_printf("Outfile : %d stdout : %d\n", shell->outfile, STDOUT_FILENO);
 	cut_the_cmd_plus_args(shell->cmds);
+	print_all_commands(shell->cmds);
+	single_cmd(shell);
 	// print_all_commands(shell->cmds);
-	// single_cmd(shell);
 	// while (i < shell->total_cmd_count)
 	// {
 	// 	if (single_cmd(shell) == -1)

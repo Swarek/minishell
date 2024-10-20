@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 11:44:16 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 20:58:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ int	execute_solo(t_shell *shell)
 	}
 	if (pid == 0)
 	{
-		if (do_the_execution(shell->cmds->args, shell->envp) == -1)
+		dup2(shell->infile, STDIN_FILENO);
+		dup2(shell->outfile, STDOUT_FILENO);
+		if (do_the_execution(shell->cmds, shell->envp) == -1)
 			exit(1);
 	}
 	else
@@ -92,28 +94,25 @@ int	execute_solo(t_shell *shell)
 	return (0);
 }
 
-int	do_the_execution(t_arg *args, char **envp)
+int	do_the_execution(t_cmd *cmd, char **envp)
 {
-	char	**cmd;
 	char	*path;
 	int		nbr_args;
 	int		access_result;
 
-	path = find_command_path(args->content, envp);
+	path = find_command_path(cmd->args->content, envp);
 	if (!path)
 		return (-1);
-	nbr_args = count_arguments(args);
-	cmd = convert_args_to_argv(args);
-	if (execve(path, cmd, envp) == -1)
+	nbr_args = count_arguments(cmd->cmd_arg_stdin);
+	if (execve(path, cmd->cmd_arg_stdin, envp) == -1)
 	{
 		access_result = access(path, X_OK);
 		if (access_result == 0)
-			execute_with_shell(path, cmd, envp, nbr_args);
+			execute_with_shell(path, cmd->cmd_arg_stdin, envp, nbr_args);
 		else
 			perror("execve error");
 		free(path);
 		error_msg("Command execution failed\n");
-		safe_free_all_strings(&cmd);
 		return (-1);
 	}
 	free(path);

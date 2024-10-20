@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 16:41:10 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 16:57:51 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int ac, char **av, char **envp)
 			return (free(line), -1);
 		free(line);
 		shell->cmds = cmds;
-		print_all_commands(cmds);
+		// print_all_commands(cmds);
 		exec_it(shell);
 		// free_cmds(cmds);
 		// ft_printf("Testttttttt\n");
