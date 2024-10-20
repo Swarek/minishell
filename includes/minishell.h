@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 11:33:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 17:55:02 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@
 # include "minishell_d.h"
 # include "pipex.h"
 # include "minishell_m.h"
+# include <signal.h>
+# include <stdio.h>
+
+// Variable globale
+extern int	g_last_exit_status;
 
 // Utils
 void	print_command(t_cmd *cmd);
@@ -34,9 +39,9 @@ char	**convert_args_to_argv(t_arg *args);
 void	print_args(t_arg *args);
 void	find_and_add_type_cmd(t_arg *args, char **envp);
 
-int	looking_for_here_doc(t_cmd *cmds, t_pipex *pipex);
-int handle_output_redirection(t_cmd *cmds, t_pipex *pipex);
-int handle_append_redirection(t_cmd *cmds, t_pipex *pipex);
-int	handle_input_redirection(t_cmd *cmds, t_pipex *pipex);
+int		looking_for_here_doc(t_cmd *cmds, t_pipex *pipex);
+int		handle_output_redirection(t_cmd *cmds, t_pipex *pipex);
+int		handle_append_redirection(t_cmd *cmds, t_pipex *pipex);
+int		handle_input_redirection(t_cmd *cmds, t_pipex *pipex);
 
 #endif

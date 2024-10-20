@@ -3,15 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 16:41:10 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 18:32:14 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+
+int						g_last_exit_status = 0;
+volatile sig_atomic_t	g_sigint_received = 0;
+
+void	free_shell(t_shell *shell)
+{
+	(void)shell;
+}
+
+void	update_exit_status(int status)
+{
+	if (WIFEXITED(status))
+		g_last_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_last_exit_status = 128 + WTERMSIG(status);
+}
+
+void	sigint_handler(int signum)
+{
+	(void)signum;
+	g_sigint_received = 1;
+	g_last_exit_status = 128 + 2;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void	setup_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 char	**env_copy(char **env)
 {
@@ -30,7 +64,7 @@ char	**env_copy(char **env)
 		new_env[i] = ft_strdup(env[i]);
 		if (!new_env[i])
 		{
-			while(i >= 0)
+			while (i >= 0)
 				free(new_env[i--]);
 			return (NULL);
 		}
@@ -39,10 +73,11 @@ char	**env_copy(char **env)
 	new_env[i] = NULL;
 	return (new_env);
 }
+
 t_shell	*init_struct_shell(char **envp)
 {
-	t_shell *shell;
-	
+	t_shell	*shell;
+
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (NULL);
@@ -66,19 +101,25 @@ int	main(int ac, char **av, char **envp)
 		return (-1);
 	cmds = NULL;
 	color = 0;
+	setup_signals();
 	while (1)
 	{
+		g_sigint_received = 0;
 		line = reading_line(color);
-		if (parse_it(line, &cmds) != 0)
-			return (free(line), -1);
+		if (!line)
+			break ;
+		if (g_sigint_received || parse_it(line, &cmds) != 0)
+		{
+			free(line);
+			continue ;
+		}
 		free(line);
 		shell->cmds = cmds;
 		print_all_commands(cmds);
 		exec_it(shell);
-		// free_cmds(cmds);
-		// ft_printf("Testttttttt\n");
 		cmds = NULL;
 		color++;
 	}
+	free_shell(shell);
 	return (0);
 }

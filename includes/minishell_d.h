@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_d.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 16:11:49 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 17:55:11 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ typedef struct s_arg
 
 typedef struct s_cmd
 {
-    t_arg 			*args;
+	t_arg			*args;
 	char			**only_cmd_and_args;
-    struct s_cmd 	*next;
-} 					t_cmd;
+	struct s_cmd	*next;
+}					t_cmd;
 
 // 		Parsing
 
@@ -48,7 +48,8 @@ Pour les arguments les types sont :
 "double_quoted" : Contenu entre double quotes
 "unfinished single_quoted" : Contenu placé après une seule single quote jamais fermée
 "unfinished double_quoted" : Contenu placé après une seule double quote jamais fermée
-"word" : le reste, séparés par des espaces,	c'est à dire une suite de caractères qui ne contient pas de tout ça ; > < ' " |
+"word" : le reste,
+		séparés par des espaces,	c'est à dire une suite de caractères qui ne contient pas de tout ça ; > < ' " |
 
 */
 
@@ -78,6 +79,7 @@ void				print_args(t_arg *args);
 
 void				expand_env_vars_in_cmds_tab(t_cmd **cmds);
 void				expand_env_vars(t_arg *current_arg);
-void				replace_env_var(t_arg *current_arg, int start, int end, const char *value);
+void				replace_env_var(t_arg *current_arg, int start, int end,
+						const char *value);
 
 #endif
