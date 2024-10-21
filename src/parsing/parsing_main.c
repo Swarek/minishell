@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:02 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 20:53:24 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/21 21:38:17 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ int	parse_it(char *str, t_cmd **cmds)
 
 	current_args = NULL;
 	i = 0;
+	if (precheck(str) == 1)
+		return (ft_printf("Error with parentheses\n"), -1);
+	if (precheck(str) == 2)
+		return (ft_printf("Error with pipe position\n"), -1);
 	while (str[i])
 	{
 		i = parse_one_command(str, i, &current_args, cmds);

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/21 02:02:33 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/21 21:32:41 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "minishell_m.h"
 # include <signal.h>
 # include <stdio.h>
+# include <string.h>
 
 // Variable globale
 extern int	g_last_exit_status;

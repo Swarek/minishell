@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/21 02:36:56 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/21 21:36:07 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_D_H
 
 # include "../libft/libft.h"
+
+# include <stdbool.h>
 
 // Structures
 
@@ -101,4 +103,9 @@ void				remove_backslashs_in_cmds_tab3(char **str, int index);
 void				remove_backslashs_in_words(t_cmd **cmds);
 void				remove_backslashs_in_words2(t_arg *current_arg);
 void				remove_backslashs_in_words3(char **str, int index);
+
+int					precheck(const char *input);
+bool				check_pipe_position(const char *input);
+bool				check_parentheses(const char *input);
+
 #endif
