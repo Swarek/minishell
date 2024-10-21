@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 14:33:53 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/20 22:22:21 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,13 @@ void	expand_env_vars(t_arg *current_arg)
 	i = 0;
 	while (current_arg->content[i])
 	{
-		if (current_arg->content[i] == '$' && current_arg->content[i + 1])
+		if (i == 0 && current_arg->content[i] == '$' && current_arg->content[i
+			+ 1])
+			process_env_var(current_arg, &i);
+		else
+			i += 1;
+		if (current_arg->content[i] == '$' && current_arg->content[i + 1]
+			&& current_arg->content[i - 1] != '\\')
 			process_env_var(current_arg, &i);
 		i++;
 	}

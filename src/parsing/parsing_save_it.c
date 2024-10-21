@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_save_it.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/20 20:53:29 by dmathis           #+#    #+#             */
+/*   Updated: 2024/10/20 22:11:58 by dmathis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	save_it_word(char *str, int i, t_arg **args)
@@ -7,7 +19,7 @@ int	save_it_word(char *str, int i, t_arg **args)
 	t_arg	*new_arg;
 
 	j = i;
-	while (str[j] && !ft_strchr(" \t;><'\"", str[j]))
+	while (str[j] && !ft_strchr(" ;><'\"", str[j]))
 		j++;
 	to_save = ft_substr(str, i, j - i);
 	new_arg = create_arg(to_save, "word");
@@ -18,16 +30,25 @@ int	save_it_word(char *str, int i, t_arg **args)
 
 int	save_it_quoted(char *str, int i, t_arg **args)
 {
-	int		j;
-	t_arg	*arg;
-	char	*to_save;
+	int			j;
+	t_arg		*arg;
+	char		*to_save;
+	t_exclude	exclude;
 
 	j = i + 1;
-	while (str[j] && (str[j] != str[i] && str[j - 1] != '\\' ))
+	exclude.count = 0;
+	while (str[j])
 	{
+		if (str[j] == str[i] && str[j - 1] != '\\')
+			break ;
+		if (str[j] == str[i] && str[j - 1] == '\\')
+		{
+			exclude.indices[exclude.count] = j - 1;
+			exclude.count++;
+		}
 		j++;
 	}
-	to_save = ft_substr(str, i + 1, j - i - 1);
+	to_save = copy_string_exclude(str, i + 1, j - 1, &exclude);
 	if (str[i] == '"')
 		arg = create_arg(to_save, "double_quoted");
 	else

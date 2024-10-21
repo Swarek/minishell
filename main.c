@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 18:32:14 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/21 02:30:32 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,35 @@
 
 int						g_last_exit_status = 0;
 volatile sig_atomic_t	g_sigint_received = 0;
+
+void	print_command(t_cmd *cmd)
+{
+	t_arg	*arg;
+
+	printf("Command: ");
+	arg = cmd->args;
+	while (arg)
+	{
+		printf("[%s (%s)] ", arg->content, arg->type);
+		arg = arg->next;
+	}
+	printf("\n");
+}
+
+void	print_all_commands(t_cmd *cmds)
+{
+	int	i;
+
+	i = 0;
+	while (cmds)
+	{
+		ft_print_array(cmds->only_cmd_and_args);
+		printf("Command %d:\n", i++);
+		print_command(cmds);
+		cmds = cmds->next;
+	}
+	printf("\n");
+}
 
 void	free_shell(t_shell *shell)
 {
@@ -114,6 +143,9 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		free(line);
+		expand_env_vars_in_cmds_tab(&cmds);
+		remove_backslashs_in_cmds_tab(&cmds);
+		remove_backslashs_in_words(&cmds);
 		shell->cmds = cmds;
 		print_all_commands(cmds);
 		exec_it(shell);

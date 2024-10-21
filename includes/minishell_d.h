@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 17:55:11 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/21 02:36:56 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ typedef struct s_cmd
 	char			**only_cmd_and_args;
 	struct s_cmd	*next;
 }					t_cmd;
+
+typedef struct s_exclude
+{
+	int	indices[1000];
+	int	count;
+	int	start;
+	int	end;
+}		t_exclude;
 
 // 		Parsing
 
@@ -82,4 +90,15 @@ void				expand_env_vars(t_arg *current_arg);
 void				replace_env_var(t_arg *current_arg, int start, int end,
 						const char *value);
 
+char				*copy_string_exclude(const char *source, int start, int end, t_exclude *excl);
+int					should_skip(int idx, t_exclude *excl);
+int					calc_len(int start, int end, t_exclude *excl);
+
+void				remove_backslashs_in_cmds_tab(t_cmd **cmds);
+void				remove_backslashs_in_cmds_tab2(t_arg *current_arg);
+void				remove_backslashs_in_cmds_tab3(char **str, int index);
+
+void				remove_backslashs_in_words(t_cmd **cmds);
+void				remove_backslashs_in_words2(t_arg *current_arg);
+void				remove_backslashs_in_words3(char **str, int index);
 #endif
