@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/21 21:36:07 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/22 02:07:27 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,15 @@ void				remove_backslashs_in_words(t_cmd **cmds);
 void				remove_backslashs_in_words2(t_arg *current_arg);
 void				remove_backslashs_in_words3(char **str, int index);
 
-int					precheck(const char *input);
-bool				check_pipe_position(const char *input);
-bool				check_parentheses(const char *input);
+// Pre-check
+
+int					precheck(char *input);
+bool				check_pipe_position(char *input);
+bool				check_parentheses(char *input);
+int					check_file_name(char *input);
+int					is_valid_char(char str);
+
+void				type_to_file_in_args1(t_cmd **cmds);
+void				type_to_file_in_args2(t_arg *current_arg);
 
 #endif

@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_m.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 15:16:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 00:38:09 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_M_H
 # define MINISHELL_M_H
 
-# include "minishell.h"
-
 # define OUTPUT_REDIRECTION 0
 # define APPEND_REDIRECTION 1
+
 typedef struct s_shell
 {
 	int		last_exit_status;	// To save the exit status ($?) to exit	// Nbr of cmd in the list

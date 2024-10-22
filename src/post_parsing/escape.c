@@ -6,12 +6,11 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 01:43:02 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/21 02:25:41 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/22 00:37:49 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_d.h"
-#include <stdio.h>
 
 void	remove_backslashs_in_cmds_tab3(char **str, int index)
 {

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/21 02:30:32 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/22 00:59:46 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ int	main(int ac, char **av, char **envp)
 		expand_env_vars_in_cmds_tab(&cmds);
 		remove_backslashs_in_cmds_tab(&cmds);
 		remove_backslashs_in_words(&cmds);
+		type_to_file_in_args1(&cmds);
 		shell->cmds = cmds;
 		print_all_commands(cmds);
 		exec_it(shell);

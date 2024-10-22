@@ -1,0 +1,14 @@
+total 100
+drwxr-xr-x 2 dmathis 2024_paris    82 Oct 21 12:18 includes
+drwxr-xr-x 2 dmathis 2024_paris  4096 Oct 20 09:01 libft
+drwxr-xr-x 4 dmathis 2024_paris    64 Oct 20 09:01 Libft
+-rw-r--r-- 1 dmathis 2024_paris  3243 Oct 21 12:18 main.c
+-rw-r--r-- 1 dmathis 2024_paris  1164 Oct 20 09:01 Makefile
+-rwxr-xr-x 1 dmathis 2024_paris 59072 Oct 21 21:39 minishell
+-rwxr-xr-x 1 dmathis 2024_paris 17112 Oct 20 09:01 minishell_parsing
+-rw-r--r-- 1 dmathis 2024_paris     0 Oct 20 10:26 o.txt
+-rw-r--r-- 1 dmathis 2024_paris   140 Oct 20 09:01 outfile
+-rw-r--r-- 1 dmathis 2024_paris   200 Oct 20 09:01 output
+drwxr-xr-x 6 dmathis 2024_paris    66 Oct 21 12:18 src
+drwxr-xr-x 2 dmathis 2024_paris     6 Oct 22 00:32 test
+-rw-r--r-- 1 dmathis 2024_paris     0 Oct 22 00:49 teste
