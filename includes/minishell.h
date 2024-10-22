@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 19:18:08 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 00:46:50 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 # include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdio.h>
 
 # include "libft.h"
 # include "minishell_d.h"
 # include "pipex.h"
 # include "minishell_m.h"
+
+# define STDIN 0
+# define STDOUT 1
 
 // Utils
 void	print_command(t_cmd *cmd);
@@ -30,9 +34,9 @@ void	free_cmd(t_cmd *cmd);
 int		len_cmd(t_cmd *cmd);
 int		count_cmd(t_cmd *cmd);
 int		count_arguments(char **args);
+int	count_arguments_for_t_arg(t_arg *args);
 char	**convert_args_to_argv(t_arg *args);
 void	print_args(t_arg *args);
-void	find_and_add_type_cmd(t_arg *args, char **envp);
 
 int	looking_for_here_doc(t_cmd *cmds, t_pipex *pipex);
 int handle_output_redirection(t_cmd *cmds, t_pipex *pipex);

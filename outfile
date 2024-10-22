@@ -1,14 +1,1 @@
-total 100
-drwxr-xr-x 2 mblanc 2024_paris    82 Oct 20 16:35 includes
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 16:57 infile
-drwxr-xr-x 2 mblanc 2024_paris  4096 Oct 20 11:29 libft
-drwxr-xr-x 4 mblanc 2024_paris    64 Oct 20 11:28 Libft
--rw-r--r-- 1 mblanc 2024_paris  2025 Oct 20 16:57 main.c
--rw-r--r-- 1 mblanc 2024_paris  1164 Oct 20 11:28 Makefile
--rwxr-xr-x 1 mblanc 2024_paris 57936 Oct 20 19:28 minishell
--rwxr-xr-x 1 mblanc 2024_paris 17112 Oct 20 11:29 minishell_parsing
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 11:29 o.txt
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 19:30 outfile
--rw-r--r-- 1 mblanc 2024_paris   200 Oct 20 11:29 output
-drwxr-xr-x 6 mblanc 2024_paris    67 Oct 20 16:35 src
--rw-r--r-- 1 mblanc 2024_paris   171 Oct 20 19:25 test
+test

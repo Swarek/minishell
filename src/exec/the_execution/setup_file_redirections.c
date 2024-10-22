@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 19:11:23 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 00:32:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int	setup_file_redirections(t_shell *shell)
 	// ft_printf("Voici redir_right : %s\n", redir_right->content);
 	if (redir_left != NULL)
 	{
-		ft_printf("< ou << n'est pas egal a NULL\n");
+		// ft_printf("< ou << n'est pas egal a NULL\n");
 		shell->infile = open(redir_left->next->content, O_RDONLY);
 		if (shell->infile < 0)
 			return (error_msg("Failed to open infile\n"));
 	}
 	if (redir_right != NULL)
 	{
-		ft_printf(">> ou > n'est pas egal a NULL\n");
+		// ft_printf(">> ou > n'est pas egal a NULL\n");
 		if (ft_strcmp(redir_right->type, "redir_right") == 0)
 			shell->outfile = open(redir_right->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (ft_strcmp(redir_right->type, "double_redir_right") == 0)
@@ -71,6 +71,12 @@ int	setup_file_redirections(t_shell *shell)
 		else if (shell->outfile < 0)
 			return (error_msg("Failed to open outfile\n"));
 	}
+	if (redir_right != NULL)
+		return (1);
+	// if (redir_left != NULL)
+	// 	shell->infile = -10;
+	// else if (redir_right != NULL)
+	// 	shell->outfile = -10;
 	return (0);
 }
 

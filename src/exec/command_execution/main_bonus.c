@@ -6,36 +6,36 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 11:35:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 03:00:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	wait_and_cleanup(t_pipex *pipex)
-{
-	int	i;
-	int	status;
-	int	exit_code;
+// void	wait_and_cleanup(t_shell *shell)
+// {
+// 	int	i;
+// 	int	status;
+// 	int	exit_code;
 
-	exit_code = 0;
-	i = 0;
-	while (i < pipex->cmd_count)
-	{
-		if (waitpid(pipex->child_pids[i], &status, 0) == -1)
-		{
-			error_msg("Waitpid failed\n");
-			exit_code = 1;
-		}
-		i++;
-	}
-	cleanup(pipex, NULL, pipex->nbr_pipes);
-	if (pipex->infile != -1)
-		close(pipex->infile);
-	if (pipex->outfile != -1)
-		close(pipex->outfile);
-	exit(exit_code);
-}
+// 	exit_code = 0;
+// 	i = 0;
+// 	while (i < shell->total_cmd_count)
+// 	{
+// 		if (waitpid(shell->child_pids[i], &status, 0) == -1)
+// 		{
+// 			error_msg("Waitpid failed\n");
+// 			exit_code = 1;
+// 		}
+// 		i++;
+// 	}
+// 	cleanup(shell, NULL);
+// 	if (shell->infile != -1)
+// 		close(shell->infile);
+// 	if (shell->outfile != -1)
+// 		close(shell->outfile);
+// 	exit(exit_code);
+// }
 
 // Il faut aussi une fonction speciale si len_cmd > 1 mais qu'il n'y a pas de pipe
 // Par exemple si on fait ls -l > outfile

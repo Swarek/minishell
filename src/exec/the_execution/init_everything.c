@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 15:00:50 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 02:09:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,12 @@ int	init_child_pids(t_shell *shell)
 
 int	init_shell_structure(t_shell *shell)
 {
-	shell->total_cmd_count = count_cmd(shell->cmds);
 	shell->nbr_pipes = count_pipe(shell->cmds);
+	shell->total_cmd_count = shell->nbr_pipes + 1;
 	shell->pipes = NULL;
 	shell->child_pids = NULL;
+	shell->there_is_redir_out = 0;
+	shell->n_th_cmd = 0;
 	return (0);
 }
 

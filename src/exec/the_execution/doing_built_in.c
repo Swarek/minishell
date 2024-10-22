@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 01:59:53 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 21:04:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 21:48:16 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,25 @@ int	is_built_in(char **args)
 	if (ft_strcmp(args[0], "unset") == 0)
 		return (1);
 	if (ft_strcmp(args[0], "exit") == 0)
+		return (1);
+	return (0);
+}
+
+int	is_built_in_t_args(t_arg *args)
+{
+	if (ft_strcmp(args->content, "echo") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "cd") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "export") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "env") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "unset") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "exit") == 0)
 		return (1);
 	return (0);
 }

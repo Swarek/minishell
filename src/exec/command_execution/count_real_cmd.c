@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 21:35:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 22:20:04 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 00:44:53 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	count_real_cmd(t_shell *shell)
 	tmp = shell->cmds;
 	while (tmp)
 	{
-		if (is_built_in(tmp->args) == 1)
+		if (is_built_in(tmp->cmd_arg_stdin) == 1)
 			nbr_cmds += add_type_cmd(tmp);
 		else if (is_absolute_or_relative_path(tmp->args->content))
 		{

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 21:01:32 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 03:07:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ typedef struct s_shell
 	int		nbr_pipes;		// Nbr total of pipes
 	int		infile;			// infile de la commande actuelle
 	int		outfile;		// outfile de la commande actuelle
+	int		input_pipe;		// If the input is a pipe. 0 if no, 1 if yes
+	int		there_is_redir_out; // 0 if no, 1 if yes
+	int		n_th_cmd;		// The xth command in the list
 	int		**pipes;		// Les pipes (fd[2])
 	pid_t	*child_pids;	// ID des processus enfants
 }	t_shell;
@@ -37,7 +40,7 @@ typedef struct s_pipex
 	int		cmd_count;
 	int		nbr_pipes;
 	int		infile;
-	int		outfile;
+	int		outfile; 
 	char	**envp;
 	int		fd[2];
 	t_cmd	*cmds;
@@ -56,6 +59,7 @@ int		ft_exit(t_shell *shell, t_arg *args);
 char	*reading_line(int color);
 int		exec_it(t_shell *shell);
 int		is_built_in(char **args);
+int		is_built_in_t_args(t_arg *args);
 int		execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp);
 int		do_the_execution(t_cmd *cmd, char **envp);
 int		execute_solo(t_shell *shell);
@@ -68,23 +72,25 @@ int	setup_file_redirections(t_shell *shell);
 void	find_and_add_type_cmd(t_arg *args, char **envp);
 int		is_redir(t_arg *arg);
 int	cut_the_cmd_plus_args(t_cmd *cmd);
+void	initiates_type_cmd(t_shell *shell);
+int	a_pipe_is_coming(t_shell *shell);
+int	execute_solo_in_pipe(t_shell *shell);
 
 // Functions Pipex
 
 // Leaks, closes and errors
-void	wait_and_cleanup(t_pipex *pipex);
+void	wait_and_cleanup(t_shell *shell);
 void	close_both(int to_close1, int to_close2);
-void	cleanup(t_pipex *pipex, char **cmd, int max_pipes);
+void	cleanup(t_shell *shell, char **cmd);
 
 // Here_doc
 int		here_doc_management(char *limiter);
 int		handle_here_doc(int *argc, char **argv);
 
 // Processes
-int		fork_process(t_pipex *pipex);
 void	child_process(t_pipex *pipex, int cmd_index);
-int		parent_process(t_pipex *pipex, pid_t pid, int cmd_index);
-int		setup_redirection(t_pipex *pipex, int cmd_index);
+int		parent_process(t_shell *shell, pid_t pid);
+int		setup_redirection(t_shell *shell);
 
 // Inits
 int		init_pipes(t_shell *shell);
@@ -103,7 +109,7 @@ char	**remove_quotes(char **cmd);
 char	**special_split(const char *s, char delimiter);
 
 // No bonus
-int		fork_process(t_pipex *pipex);
-void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2);
+int	fork_process(t_shell *shell);
+// void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2);
 
 #endif
