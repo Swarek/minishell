@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:48:53 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 02:45:13 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:31:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ int	execute_solo_in_pipe(t_shell *shell)
 	// ft_printf("Apres strcmpr\n");
 	if (is_built_in(shell->cmds->cmd_arg_stdin))
 	{
-		// ft_printf("\nPassage built-in\n");
 		shell->last_exit_status = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
-		return (shell->last_exit_status);
+		exit(0);
 	}
 	else
 	{

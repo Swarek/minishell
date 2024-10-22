@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:21:11 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 20:58:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:08:23 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void print_all_commands(t_cmd *cmds)
 {
     int i = 0;
     while (cmds) {
-		ft_print_array(cmds->cmd_arg_stdin);
+		// ft_print_array(cmds->cmd_arg_stdin);
         printf("Command %d:\n", i++);
 		print_command(cmds);
         cmds = cmds->next;

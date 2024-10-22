@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 02:54:25 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:09:01 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	one_cmd(t_shell *shell)
 
 int	exec_it(t_shell *shell)
 {
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+		return (-1);
 	initiates_type_cmd(shell);
 	if (shell->total_cmd_count == 1) // Plus tard plutot faire une verif que ya pas de pipes
 		return (setup_file_redirections(shell), one_cmd(shell)); // Comme ca au lieu de one_cmd c'est "no_pipe_cmd" et on gere si ya plusieurs ;

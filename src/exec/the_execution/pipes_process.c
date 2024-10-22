@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 05:32:27 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:28:03 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,9 @@ int	fork_process(t_shell *shell)
 				execute_solo_in_pipe(shell);
 			}
 			else
+			{
 				handling_pipes(shell);
-			// else if (is_there_a_pipes_coming(shell))
-			// {
-			// 	ft_printf("passage");
-			// 	handling_pipes(shell);
-			// }
-			// else
-			// {
-			// 	ft_printf("Passage dans le else du fork_process\n");
-			// 	// single_cmd(shell);
-			// }
-			// child_process(shell, cmd_index);
+			}
 		}
 		else
 			parent_process(shell, pid);
