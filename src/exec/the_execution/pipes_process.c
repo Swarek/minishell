@@ -6,15 +6,27 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 04:30:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 04:53:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// int	parent_process(t_shell *shell, pid_t pid)
+// {
+// 	shell->child_pids[shell->n_th_cmd] = pid;
+// 	return (0);
+// }
+
 int	parent_process(t_shell *shell, pid_t pid)
 {
 	shell->child_pids[shell->n_th_cmd] = pid;
+	// if (shell->n_th_cmd == 0)
+	// 	close(shell->pipes[shell->n_th_cmd][1]);
+	// else if (shell->n_th_cmd == shell->total_cmd_count - 1)
+	// 	close(shell->pipes[shell->n_th_cmd - 1][0]);
+	// else
+	// 	close_both(shell->pipes[shell->n_th_cmd - 1][0], shell->pipes[shell->n_th_cmd][1]);
 	return (0);
 }
 
@@ -50,13 +62,16 @@ int	parent_process(t_shell *shell, pid_t pid)
 // 	exit(0);
 // }
 
-// This function will do all the forks and call the execute_child_process
-// It will also close the pipes in the parent process
-// This function need as arguments :
-// - t_pipex *pipex, with all pipes malloced of len cmd_count -1 and inited,
-//			cmd_count, infile, outfile and envp initialized
-// - char **argv as : infile cmd1 cmd2 ... cmdN outfile
-// - pid_t *child as malloced array of pid_t, of len cmd_count
+void close_pipes(t_shell *shell)
+{
+	int i;
+
+	for (i = 0; i < shell->total_cmd_count - 1; i++)
+	{
+		close(shell->pipes[i][0]); // Ferme l'extrémité de lecture du pipe
+		close(shell->pipes[i][1]); // Ferme l'extrémité d'écriture du pipe
+	}
+}
 
 // cd > test | cat, dans ce cas, cd est toujours dans un fork
 // Donc tjr dans cette fonction on ouvre un fork pour les commandes
@@ -107,6 +122,7 @@ int	fork_process(t_shell *shell)
 		}
     	else
         	break; // Exit if there are no more commands
-}
+	}
+	close_pipes(shell);
 	return (0);
 }

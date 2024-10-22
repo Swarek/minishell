@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 03:07:49 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 04:52:24 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	cut_the_cmd_plus_args(t_cmd *cmd);
 void	initiates_type_cmd(t_shell *shell);
 int	a_pipe_is_coming(t_shell *shell);
 int	execute_solo_in_pipe(t_shell *shell);
-
+void close_pipes(t_shell *shell);
 // Functions Pipex
 
 // Leaks, closes and errors

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 19:39:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 22:25:50 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 04:54:02 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ int	count_pipe(t_cmd *cmd)
 	int	nbr_pipe;
 
 	nbr_pipe = 0;
-	while (cmd && ft_strcmp(cmd->args->type, "semicolon") == 0)
-		cmd = cmd->next;
+	while (cmd && ft_strcmp(cmd->args->type, "semicolon") != 0)
 	{
 		if (ft_strcmp(cmd->args->type, "pipe") == 0)
 			nbr_pipe++;
