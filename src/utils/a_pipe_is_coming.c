@@ -6,31 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 03:14:41 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 04:31:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void close_all_pipes(t_shell *shell)
-{
-    int i;
-
-    for (i = 0; i < shell->nbr_pipes; i++)
-    {
-        if (shell->pipes[i][0] != -1)
-        {
-            close(shell->pipes[i][0]);
-            shell->pipes[i][0] = -1;
-        }
-        if (shell->pipes[i][1] != -1)
-        {
-            close(shell->pipes[i][1]);
-            shell->pipes[i][1] = -1;
-        }
-    }
-}
-
 
 int	setup_redirection(t_shell *shell)
 {
@@ -53,7 +33,6 @@ int	setup_redirection(t_shell *shell)
 			|| dup2(shell->pipes[shell->n_th_cmd][1], STDOUT_FILENO) == -1)
 			return (-1);
 	}
-	close_all_pipes(shell);
 	return (0);
 }
 

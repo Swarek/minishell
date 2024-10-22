@@ -6,29 +6,16 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 03:14:53 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 04:30:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int parent_process(t_shell *shell, pid_t pid)
+int	parent_process(t_shell *shell, pid_t pid)
 {
-    shell->child_pids[shell->n_th_cmd] = pid;
-
-    // Close pipe ends in the parent that are not needed
-    if (shell->n_th_cmd > 0)
-    {
-        close(shell->pipes[shell->n_th_cmd - 1][0]);
-        shell->pipes[shell->n_th_cmd - 1][0] = -1;
-    }
-    if (shell->n_th_cmd < shell->nbr_pipes)
-    {
-        close(shell->pipes[shell->n_th_cmd][1]);
-        shell->pipes[shell->n_th_cmd][1] = -1;
-    }
-
-    return (0);
+	shell->child_pids[shell->n_th_cmd] = pid;
+	return (0);
 }
 
 // This function will call to setup_redirection with dup2
