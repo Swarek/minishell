@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 18:57:01 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 01:28:40 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,12 @@ int	execute_solo(t_shell *shell)
 	else
 	{
 		waitpid(pid, &status, 0);
-		if (status % 256 == 0) // Vérifie si les bits de poids faible sont à 0
-			shell->exit_status = status / 256; // Récupère le code de sortie normal
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
 		else
-			shell->exit_status = 128 + status; // Récupère le signal qui a tué le processus
+			shell->exit_status = 1;
 	}
 	return (0);
 }

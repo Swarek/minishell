@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 23:33:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 01:31:38 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ int	main(int ac, char **av, char **envp)
 		// initiates_type_cmd(shell);
 		// print_all_commands(cmds);
 		exec_it(shell);
+		ft_printf("Exit status: %d\n", shell->exit_status);
 		cmds = NULL;
 		color++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:49:55 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 23:37:52 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 01:31:08 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,23 @@ void	wait_and_cleanup(t_shell *shell)
 			error_msg("Waitpid failed\n");
 			exit_code = 1;
 		}
+		else
+		{
+			if (WIFEXITED(status))
+				exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				exit_code = 128 + WTERMSIG(status);
+		}
 		i++;
 	}
+	shell->exit_status = exit_code;
 	cleanup(shell, NULL);
 	if (shell->infile != -1)
 		close(shell->infile);
 	if (shell->outfile != -1)
 		close(shell->outfile);
 }
+
 
 void	cleanup(t_shell *shell, char **cmd)
 {
