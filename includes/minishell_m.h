@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 05:25:21 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:44:39 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 typedef struct s_shell
 {
 	int		last_exit_status;	// To save the exit status ($?) to exit	// Nbr of cmd in the list
+	int		exit_status;	// To save the exit status ($?) to exit	// Nbr of cmd in the list
 	char	**envp;			// Environment
 	t_cmd	*cmds;			// List of cmds
 	// Redirections :
@@ -61,13 +62,13 @@ int		exec_it(t_shell *shell);
 int		is_built_in(char **args);
 int		is_built_in_t_args(t_arg *args);
 int		execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp);
-int		do_the_execution(t_cmd *cmd, char **envp);
+int		do_the_execution(t_shell *shell, t_cmd *cmd, char **envp);
 int	handling_pipes(t_shell *shell);
 int		execute_solo(t_shell *shell);
 int		execution(t_shell *shell);
 int		count_pipe(t_cmd *cmd);
 int		try_all_redirection(t_cmd *cmds, t_pipex *pipex);
-char	*find_command_path(char *command, char **envp);
+char	*find_command_path(t_shell *shell, char *command, char **envp);
 int	single_cmd(t_shell *shell);
 int	setup_file_redirections(t_shell *shell);
 void	find_and_add_type_cmd(t_arg *args, char **envp);
@@ -78,6 +79,7 @@ int	a_pipe_is_coming(t_shell *shell);
 int	execute_solo_in_pipe(t_shell *shell);
 void close_pipes(t_shell *shell);
 int	is_there_a_pipes_coming(t_shell *shell);
+void clean_all(t_shell *shell);
 
 // Functions Pipex
 
@@ -104,7 +106,7 @@ int		all_init(t_shell *shell);
 int		opening_files(t_pipex *pipex, char *infile, char *outfile, int output_mode);
 
 // Execution
-int		do_the_execution(t_cmd *cmd, char **envp);
+int		do_the_execution(t_shell *shell, t_cmd *cmd, char **envp);
 int		is_absolute_or_relative_path(char *command);
 char	*handle_absolute_or_relative_path(char *command);
 int		execute_with_shell(char *path, char **cmd, char **envp, int cmd_count);

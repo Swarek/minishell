@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 01:59:53 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 17:31:10 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:38:27 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ int	execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp)
 		return (ft_unset(shell->cmds->args, envp), 0);
 	if (ft_strcmp(cmd_arg_stdin[0], "exit") == 0)
 		return (ft_exit(shell, shell->cmds->args));
-	return (-1);
+	return (127);
 }

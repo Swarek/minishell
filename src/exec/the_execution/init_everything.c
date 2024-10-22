@@ -6,11 +6,36 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 04:54:15 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:31:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	clean_up_for_error_init(t_shell *shell, int pipe_count)
+{
+	int	i;
+
+	if (shell->pipes)
+	{
+		i = 0;
+		while (i < pipe_count)
+		{
+			if (shell->pipes[i])
+				free(shell->pipes[i]);
+			i++;
+		}
+		free(shell->pipes);
+		shell->pipes = NULL;
+	}
+
+	// Libérer les PID alloués
+	if (shell->child_pids)
+	{
+		free(shell->child_pids);
+		shell->child_pids = NULL;
+	}
+}
 
 int	init_pipes(t_shell *shell)
 {
@@ -19,19 +44,19 @@ int	init_pipes(t_shell *shell)
 	i = 0;
 	shell->pipes = malloc(sizeof(int *) * (shell->nbr_pipes));
 	if (!shell->pipes)
-		return (error_msg("Memory allocation failed\n"));
+		return (error_msg("Memory allocation failed\n"), -1);
 	while (i < shell->nbr_pipes)
 	{
 		shell->pipes[i] = malloc(2 * sizeof(int));
 		if (!shell->pipes[i])
 		{
-			// cleanup(shell, NULL, i);
-			return (error_msg("Memory allocation failed\n"));
+			clean_up_for_error_init(shell, i);  // Nettoyer les pipes alloués partiellement
+			return (error_msg("Memory allocation failed\n"), -1);
 		}
 		if (pipe(shell->pipes[i]) == -1)
 		{
-			// cleanup(shell, NULL, i);
-			return (error_msg("Pipe creation failed\n"));
+			clean_up_for_error_init(shell, i);  // Nettoyer les pipes alloués partiellement
+			return (error_msg("Pipe creation failed\n"), -1);
 		}
 		i++;
 	}
@@ -43,8 +68,8 @@ int	init_child_pids(t_shell *shell)
 	shell->child_pids = malloc(sizeof(pid_t) * shell->total_cmd_count);
 	if (!shell->child_pids)
 	{
-		// cleanup(shell, NULL, shell->nbr_pipes);
-		return (error_msg("Memory allocation failed\n"));
+		clean_up_for_error_init(shell, shell->nbr_pipes); // Nettoyer les pipes en cas d'échec d'allocation des PID
+		return (error_msg("Memory allocation failed\n"), -1);
 	}
 	return (0);
 }

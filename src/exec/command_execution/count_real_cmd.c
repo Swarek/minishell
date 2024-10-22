@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 21:35:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 00:44:53 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:43:54 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	count_real_cmd(t_shell *shell)
 			if (handle_absolute_or_relative_path(tmp->args->content) != NULL)
 				nbr_cmds += add_type_cmd(tmp);
 		}
-		else if (find_command_path(tmp->args->content, shell->envp) != NULL)
+		else if (find_command_path(shell, tmp->args->content, shell->envp) != NULL)
 			nbr_cmds += add_type_cmd(tmp);
 		
 		tmp = tmp->next;

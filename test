@@ -1,23 +1,26 @@
-total 152
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 22 01:03 !
--rw-r--r-- 1 mblanc 2024_paris  1156 Oct 22 00:34 "aaaaaaa"
--rw-r--r-- 1 mblanc 2024_paris  1096 Oct 22 00:34 aaaaaaa
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 19:31 file
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 19:42 ici
-drwxr-xr-x 2 mblanc 2024_paris    82 Oct 20 16:35 includes
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 21 23:21 infile
-drwxr-xr-x 2 mblanc 2024_paris  4096 Oct 20 11:29 libft
-drwxr-xr-x 4 mblanc 2024_paris    64 Oct 20 11:28 Libft
--rw-r--r-- 1 mblanc 2024_paris  2057 Oct 22 00:29 main.c
--rw-r--r-- 1 mblanc 2024_paris  1164 Oct 20 11:28 Makefile
--rwxr-xr-x 1 mblanc 2024_paris 93888 Oct 22 04:31 minishell
--rwxr-xr-x 1 mblanc 2024_paris 17112 Oct 20 11:29 minishell_parsing
--rw-r--r-- 1 mblanc 2024_paris    14 Oct 22 00:57 next
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 11:29 o.txt
--rw-r--r-- 1 mblanc 2024_paris     5 Oct 21 17:54 outfile
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 20 20:30 output
-drwxr-xr-x 6 mblanc 2024_paris    67 Oct 20 16:35 src
--rw-r--r-- 1 mblanc 2024_paris     0 Oct 22 04:31 test
--rw-r--r-- 1 mblanc 2024_paris   200 Oct 22 01:01 test2
--rw-r--r-- 1 mblanc 2024_paris   156 Oct 22 02:48 testls
--rw-r--r-- 1 mblanc 2024_paris    35 Oct 21 18:49 testtt
+!
+"aaaaaaa"
+aaaaaaa
+cat
+cate
+file
+ici
+includes
+infile
+libft
+Libft
+main.c
+Makefile
+minishell
+minishell_parsing
+next
+o.txt
+outfile
+output
+src
+t
+test
+test2
+testls
+testtt
+text

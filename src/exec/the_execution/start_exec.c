@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 17:09:01 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:37:26 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,17 @@ int	single_cmd(t_shell *shell)
 
 	while (ft_strcmp(shell->cmds->args->type, "command") != 0)
 		shell->cmds->args = shell->cmds->args->next;
+	if (!shell->cmds->args)
+		return (shell->exit_status = 127, -1);
 	if (is_built_in(shell->cmds->cmd_arg_stdin))
 	{
-		return_value = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
-		return (return_value);
+		shell->exit_status = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
+		return (shell->exit_status);
 	}
 	else
 	{
 		return_value = execute_solo(shell);
-		return (return_value);
+		return (shell->exit_status);
 	}
 }
 
@@ -78,11 +80,11 @@ int	one_cmd(t_shell *shell)
 	i = 0;
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (-1);
-	if (setup_file_redirections(shell) == -1) // Attention ca se fera dans la boucle
-		return(error_msg("OHH L'ERREUR\n"));  // Et si ca fail il faudra juste que s'il y a un pipe apres on lui envoie NULL
-	all_init(shell);
+	if (setup_file_redirections(shell) == -1)
+		return(-1);
+	if (all_init(shell) == -1)
+		return (shell->exit_status = 1, -1);
 	cut_the_cmd_plus_args(shell->cmds);
-	// print_all_commands(shell->cmds);
 	single_cmd(shell);
 	return (0);
 }
@@ -91,16 +93,17 @@ int	exec_it(t_shell *shell)
 {
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (-1);
+	all_init(shell);
 	initiates_type_cmd(shell);
-	if (shell->total_cmd_count == 1) // Plus tard plutot faire une verif que ya pas de pipes
-		return (setup_file_redirections(shell), one_cmd(shell)); // Comme ca au lieu de one_cmd c'est "no_pipe_cmd" et on gere si ya plusieurs ;
+	if (shell->total_cmd_count == 1)
+	{
+		if (one_cmd(shell) == -1)
+			return (-1);
+	}
 	else if (shell->total_cmd_count > 1)
 	{
-		all_init(shell);
 		fork_process(shell);
 		wait_and_cleanup(shell);
 	}
-	// ft_printf("shell->total_cmd_count : %d\n", shell->total_cmd_count);
-	// print_all_commands(shell->cmds);
 	return (0);
 }

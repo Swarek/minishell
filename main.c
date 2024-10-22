@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 17:05:50 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:07:10 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,28 @@ char	**env_copy(char **env)
 	new_env[i] = NULL;
 	return (new_env);
 }
-t_shell	*init_struct_shell(char **envp)
+
+t_shell *init_struct_shell(char **envp)
 {
-	t_shell *shell;
-	
-	shell = malloc(sizeof(t_shell));
-	if (!shell)
-		return (NULL);
-	shell->last_exit_status = 0;
-	shell->envp = env_copy(envp);
-	shell->cmds = NULL;
-	return (shell);
+    t_shell *shell;
+
+    shell = malloc(sizeof(t_shell));
+    if (!shell)
+        return (NULL);
+    shell->last_exit_status = 0;
+    shell->envp = env_copy(envp);
+    shell->cmds = NULL;
+    // Initialize all other members
+    shell->total_cmd_count = 0;
+    shell->nbr_pipes = 0;
+    shell->infile = 0;
+    shell->outfile = 0;
+    shell->input_pipe = 0;
+    shell->there_is_redir_out = 0;
+    shell->n_th_cmd = 0;
+    shell->pipes = NULL;
+    shell->child_pids = NULL;
+    return (shell);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -61,6 +72,8 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	line = NULL;
+	cmds = NULL;
 	shell = init_struct_shell(envp);
 	if (!shell)
 		return (-1);

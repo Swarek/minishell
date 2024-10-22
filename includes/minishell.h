@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 00:46:50 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:15:40 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,5 @@ int		count_arguments(char **args);
 int	count_arguments_for_t_arg(t_arg *args);
 char	**convert_args_to_argv(t_arg *args);
 void	print_args(t_arg *args);
-
-int	looking_for_here_doc(t_cmd *cmds, t_pipex *pipex);
-int handle_output_redirection(t_cmd *cmds, t_pipex *pipex);
-int handle_append_redirection(t_cmd *cmds, t_pipex *pipex);
-int	handle_input_redirection(t_cmd *cmds, t_pipex *pipex);
 
 #endif

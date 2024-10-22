@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 11:34:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 00:33:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:57:37 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	find_arg_add_type_cmd(t_arg *args, char **envp)
+static void	find_arg_add_type_cmd(t_shell *shell, t_arg *args, char **envp)
 {
 	t_arg	*tmp;
 
@@ -28,7 +28,7 @@ static void	find_arg_add_type_cmd(t_arg *args, char **envp)
 			if (handle_absolute_or_relative_path(tmp->content) != NULL)
 				tmp->type = "command";
 		}
-		else if (find_command_path(tmp->content, envp) != NULL)
+		else if (find_command_path(shell, tmp->content, envp) != NULL)
 		{
 			tmp->type = "command";
 		}
@@ -47,7 +47,7 @@ void	initiates_type_cmd(t_shell *shell)
 		return ;
 	while (tmp)
 	{
-		find_arg_add_type_cmd(tmp->args, shell->envp);
+		find_arg_add_type_cmd(shell, tmp->args, shell->envp);
 		tmp = tmp->next;
 	}
 	shell->total_cmd_count = count_cmd(shell->cmds);
