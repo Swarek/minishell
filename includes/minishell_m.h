@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 04:52:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 05:25:21 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		is_built_in(char **args);
 int		is_built_in_t_args(t_arg *args);
 int		execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp);
 int		do_the_execution(t_cmd *cmd, char **envp);
+int	handling_pipes(t_shell *shell);
 int		execute_solo(t_shell *shell);
 int		execution(t_shell *shell);
 int		count_pipe(t_cmd *cmd);
@@ -76,6 +77,8 @@ void	initiates_type_cmd(t_shell *shell);
 int	a_pipe_is_coming(t_shell *shell);
 int	execute_solo_in_pipe(t_shell *shell);
 void close_pipes(t_shell *shell);
+int	is_there_a_pipes_coming(t_shell *shell);
+
 // Functions Pipex
 
 // Leaks, closes and errors

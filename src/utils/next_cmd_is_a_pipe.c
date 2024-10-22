@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   a_pipe_is_coming.c                                 :+:      :+:    :+:   */
+/*   next_cmd_is_a_pipe.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 05:30:31 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/22 04:58:44 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/22 05:13:35 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// return 1 if a pipe is coming, 0 otherwise
-int	is_there_a_pipes_coming(t_shell *shell)
+int	next_cmd_is_a_pipe(t_shell *shell)
 {
-	t_cmd	*tmp;
+	int i;
 
-	tmp = shell->cmds;
-	while (tmp && ft_strcmp(tmp->args->type, "semicolon") != 0)
-	{
-		if (ft_strcmp(tmp->args->type, "pipe") == 0)
-			return (1);
-		tmp = tmp->next;
-	}
+	i = 0;
+	while (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") != 0
+		&& ft_strcmp(shell->cmds->args->type, "semicolon") != 0)
+		shell->cmds = shell->cmds->next;
+	if (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") == 0)
+		return (1);
 	return (0);
 }
