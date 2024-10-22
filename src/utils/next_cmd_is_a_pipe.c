@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   next_cmd_is_a_pipe.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 05:55:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 02:37:03 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/22 04:58:44 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/22 05:13:35 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_shell *shell)
+int	next_cmd_is_a_pipe(t_shell *shell)
 {
-	char	cwd[PATH_MAX];
+	int i;
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	{
-		ft_putstr_fd(cwd, shell->outfile);
-		ft_putchar_fd('\n', shell->outfile);
-	}
-	else
-		return (error_msg("pwd: error retrieving current directory\n"), -1);
+	i = 0;
+	while (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") != 0
+		&& ft_strcmp(shell->cmds->args->type, "semicolon") != 0)
+		shell->cmds = shell->cmds->next;
+	if (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") == 0)
+		return (1);
 	return (0);
 }

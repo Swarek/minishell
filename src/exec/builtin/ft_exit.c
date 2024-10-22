@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 09:07:45 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 09:25:01 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 21:05:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,13 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-int	ft_exit(t_arg *args)
+int	ft_exit(t_shell *shell, t_arg *args)
 {
 	int exit_code;
-	int	global_last_exit_status;
 
-	global_last_exit_status = 0;
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	if (!args->next)
-		exit(global_last_exit_status);
+	(void)shell;
+	if (!shell->cmds->cmd_arg_stdin[1])
+		exit(-1); // A terme utiliser le shell->last_exit_status
 	args = args->next;
 	if (!is_numeric(args->content))
 	{

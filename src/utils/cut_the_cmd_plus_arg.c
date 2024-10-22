@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 15:11:30 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 15:57:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 20:58:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ int	cut_the_cmd_plus_args(t_cmd *cmd)
 		current = current->next;
 	}
 	cmd_plus_args[i] = NULL;
-	cmd->only_cmd_and_args = cmd_plus_args;
+	cmd->cmd_arg_stdin = cmd_plus_args;
 	return (0);
 }

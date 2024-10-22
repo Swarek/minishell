@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   a_pipe_is_coming.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 05:55:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 02:37:03 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/22 05:30:31 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_shell *shell)
+// return 1 if a pipe is coming, 0 otherwise
+int	is_there_a_pipes_coming(t_shell *shell)
 {
-	char	cwd[PATH_MAX];
+	t_cmd	*tmp;
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	tmp = shell->cmds;
+	while (tmp && ft_strcmp(tmp->args->type, "semicolon") != 0)
 	{
-		ft_putstr_fd(cwd, shell->outfile);
-		ft_putchar_fd('\n', shell->outfile);
+		if (ft_strcmp(tmp->args->type, "pipe") == 0)
+			return (1);
+		tmp = tmp->next;
 	}
-	else
-		return (error_msg("pwd: error retrieving current directory\n"), -1);
 	return (0);
 }

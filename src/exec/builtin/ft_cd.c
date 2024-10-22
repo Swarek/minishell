@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 10:02:47 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/20 20:58:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,27 @@ static int	go_home(void)
 	return (0);
 }
 
-int	ft_cd(t_arg *args)
+int	ft_cd(t_shell *shell)
 {
-	t_arg	*arg;
+	char	**arg;
 	char	*cwd;
 
-	arg = args->next;
-	if (arg && arg->next)
-		return (error_msg("cd: too many arguments\n"), -1);
-	if (!arg)
+	if (shell->cmds->cmd_arg_stdin[2] != NULL)
+		return (error_msg("too much parameters\n"), -1);
+	arg = shell->cmds->cmd_arg_stdin;
+	if (!(arg[1]))
 	{
 		if (go_home() != 0)
 			return (-1);
 	}
-	else if (arg->content[0] == '-' && arg->content[1] == '\0')
+	else if (arg[1][0] == '-' && arg[1][1] == '\0')
 	{
 		if (go_last_place() != 0)
 			return (-1);
 	}
 	else
 	{
-		if (chdir(arg->content) == -1)
+		if (chdir(arg[1]) == -1)
 			return (perror("cd"), -1);
 	}
 	cwd = getcwd(NULL, 0);

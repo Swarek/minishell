@@ -1,7 +1,0 @@
-Parent process
-Parent process
-cmd_count = 2
-Child process
-Child process
--rwxr-xr-x 1 mblanc 2024_paris 52976 Oct 18 22:20 minishell
--rwxr-xr-x 1 mblanc 2024_paris 17112 Oct 18 20:37 minishell_parsing

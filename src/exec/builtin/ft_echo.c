@@ -6,34 +6,81 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:35:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/17 23:28:40 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:55:09 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_echo(t_arg *args)
+// Return 0 if iarg_stdin[1] is not a -n(n xtimes)
+// Return 1 if iarg_stdin[1] is a -n(n xtimes)
+int	handle_multiple_n_echo(t_shell *shell)
+{
+	int	i;
+
+	i = 2;
+	if (!(shell->cmds->cmd_arg_stdin[1][0] == '-')
+		|| !(shell->cmds->cmd_arg_stdin[1][1] == 'n'))
+		return (ft_printf("passage ici\n"), 0);
+	while (shell->cmds->cmd_arg_stdin[1][i] != '\0'
+		&& shell->cmds->cmd_arg_stdin[1][i] == 'n')
+		i++;
+	if (shell->cmds->cmd_arg_stdin[1][i] == '\0')
+		return (1);
+	return (0);
+}
+
+int	ft_echo(t_shell *shell)
 {
 	int	no_newline;
 	int	i;
 
 	no_newline = 0;
 	i = 1;
-	args = args->next;
-	if (ft_strcmp(args->content, "-n") == 0)
+	if (!shell->cmds->cmd_arg_stdin[1])
+		return (ft_putchar_fd('\n', shell->outfile), 0);
+	if (handle_multiple_n_echo(shell) == 1)
 	{
 		no_newline = 1;
-		args = args->next;
+		i = 2;
 	}
-	if (args->content == NULL)
+	else
+		i = 1;
+	while (shell->cmds->cmd_arg_stdin[i] != NULL)
 	{
-		ft_putstr("");
-		if (!no_newline)
-			ft_putchar_fd('\n', 1);
-		return (0);
+		ft_putstr_fd(shell->cmds->cmd_arg_stdin[i], shell->outfile);
+		if (shell->cmds->cmd_arg_stdin[i + 1] != NULL)
+			ft_putchar_fd(' ', shell->outfile);
+		i++;
 	}
-	ft_putstr(args->content);
 	if (!no_newline)
-		ft_putchar('\n');
+		ft_putchar_fd('\n', shell->outfile);
 	return (0);
 }
+
+// int	ft_echo(t_shell *shell)
+// {
+// 	int	no_newline;
+// 	int	i;
+
+// 	no_newline = 0;
+// 	i = 1;
+// 	if (shell->cmds->cmd_arg_stdin[1] != NULL
+// 		&& ft_strcmp(shell->cmds->cmd_arg_stdin[1], "-n") == 0) // piege quand en parametre -nnnnnnn
+// 	{
+// 		no_newline = 1;
+// 		i = 2;
+// 	}
+// 	else
+// 		i = 1;
+// 	while (shell->cmds->cmd_arg_stdin[i] != NULL)
+// 	{
+// 		ft_putstr_fd(shell->cmds->cmd_arg_stdin[i], shell->outfile);
+// 		if (shell->cmds->cmd_arg_stdin[i + 1] != NULL)
+// 			ft_putchar_fd(' ', shell->outfile);
+// 		i++;
+// 	}
+// 	if (!no_newline)
+// 		ft_putchar_fd('\n', shell->outfile);
+// 	return (0);
+// }

@@ -6,39 +6,45 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 11:44:16 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/22 18:57:01 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*verify_a_path(char *path, char *command)
+static char	*verify_a_path(t_shell *shell, char *path, char *command)
 {
 	char	*command_path;
 	char	*temp;
 
 	if (!path)
-		return (NULL);
+		return (shell->exit_status = 127, NULL);
 	if (path[ft_strlen(path) - 1] != '/')
 	{
 		temp = ft_strjoin(path, "/");
 		if (!temp)
-			return (free(path), NULL);
+			return (free(path), shell->exit_status = 12, NULL);
 		command_path = ft_strjoin(temp, command);
+		if (command_path == NULL)
+			return (free(path), free(temp), shell->exit_status = 12, NULL);
 		free(temp);
 	}
 	else
 		command_path = ft_strjoin(path, command);
 	if (command_path == NULL)
-		return (free(path), NULL);
+		return (free(path), shell->exit_status = 12, NULL);
 	free(path);
 	if (access(command_path, X_OK) == 0)
 		return (command_path);
+	if (access(command_path, F_OK) == 0)
+		shell->exit_status = 126;
+	else
+		shell->exit_status = 127;
 	free(command_path);
 	return (NULL);
 }
 
-char	*find_command_path(char *command, char **envp)
+char	*find_command_path(t_shell *shell, char *command, char **envp)
 {
 	int		i;
 	char	**paths;
@@ -59,12 +65,12 @@ char	*find_command_path(char *command, char **envp)
 	i = -1;
 	while (paths[++i])
 	{
-		command_path = verify_a_path(ft_strdup(paths[i]), command);
+		command_path = verify_a_path(shell, ft_strdup(paths[i]), command);
 		if (command_path)
 			return (safe_free_all_strings(&paths), command_path);
 	}
 	safe_free_all_strings(&paths);
-	return (NULL);
+	return (shell->exit_status = 127, NULL);
 }
 
 int	execute_solo(t_shell *shell)
@@ -76,44 +82,46 @@ int	execute_solo(t_shell *shell)
 	if (pid == -1)
 	{
 		error_msg("Fork failed\n");
+		shell->exit_status = 1;
 		return (-1);
 	}
 	if (pid == 0)
 	{
-		if (do_the_execution(shell->cmds->args, shell->envp) == -1)
+		dup2(shell->infile, STDIN_FILENO);
+		dup2(shell->outfile, STDOUT_FILENO);
+		if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
 			exit(1);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
-		// if (WIFEXITED(status))
-		// 	shell->last_exit_status = WEXITSTATUS(status);
+		if (status % 256 == 0) // Vérifie si les bits de poids faible sont à 0
+			shell->exit_status = status / 256; // Récupère le code de sortie normal
+		else
+			shell->exit_status = 128 + status; // Récupère le signal qui a tué le processus
 	}
 	return (0);
 }
 
-int	do_the_execution(t_arg *args, char **envp)
+int	do_the_execution(t_shell *shell, t_cmd *cmd, char **envp)
 {
-	char	**cmd;
 	char	*path;
 	int		nbr_args;
 	int		access_result;
 
-	path = find_command_path(args->content, envp);
+	path = find_command_path(shell, cmd->args->content, envp);
 	if (!path)
 		return (-1);
-	nbr_args = count_arguments(args);
-	cmd = convert_args_to_argv(args);
-	if (execve(path, cmd, envp) == -1)
+	nbr_args = count_arguments(cmd->cmd_arg_stdin);
+	if (execve(path, cmd->cmd_arg_stdin, envp) == -1)
 	{
 		access_result = access(path, X_OK);
 		if (access_result == 0)
-			execute_with_shell(path, cmd, envp, nbr_args);
+			execute_with_shell(path, cmd->cmd_arg_stdin, envp, nbr_args);
 		else
 			perror("execve error");
 		free(path);
 		error_msg("Command execution failed\n");
-		safe_free_all_strings(&cmd);
 		return (-1);
 	}
 	free(path);

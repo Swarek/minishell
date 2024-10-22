@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 00:59:46 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/22 23:33:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	print_all_commands(t_cmd *cmds)
 	i = 0;
 	while (cmds)
 	{
-		ft_print_array(cmds->only_cmd_and_args);
 		printf("Command %d:\n", i++);
 		print_command(cmds);
 		cmds = cmds->next;
@@ -105,15 +104,25 @@ char	**env_copy(char **env)
 
 t_shell	*init_struct_shell(char **envp)
 {
-	t_shell	*shell;
+    t_shell *shell;
 
-	shell = malloc(sizeof(t_shell));
-	if (!shell)
-		return (NULL);
-	shell->last_exit_status = 0;
-	shell->envp = env_copy(envp);
-	shell->cmds = NULL;
-	return (shell);
+    shell = malloc(sizeof(t_shell));
+    if (!shell)
+        return (NULL);
+    shell->last_exit_status = 0;
+    shell->envp = env_copy(envp);
+    shell->cmds = NULL;
+    // Initialize all other members
+    shell->total_cmd_count = 0;
+    shell->nbr_pipes = 0;
+    shell->infile = 0;
+    shell->outfile = 0;
+    shell->input_pipe = 0;
+    shell->there_is_redir_out = 0;
+    shell->n_th_cmd = 0;
+    shell->pipes = NULL;
+    shell->child_pids = NULL;
+    return (shell);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -125,6 +134,8 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	line = NULL;
+	cmds = NULL;
 	shell = init_struct_shell(envp);
 	if (!shell)
 		return (-1);
@@ -148,7 +159,8 @@ int	main(int ac, char **av, char **envp)
 		remove_backslashs_in_words(&cmds);
 		type_to_file_in_args1(&cmds);
 		shell->cmds = cmds;
-		print_all_commands(cmds);
+		// initiates_type_cmd(shell);
+		// print_all_commands(cmds);
 		exec_it(shell);
 		cmds = NULL;
 		color++;

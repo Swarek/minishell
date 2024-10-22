@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:25:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 02:12:55 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/22 23:43:14 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	check_parentheses(char *input)
 	return (parentheses_count != 0);
 }
 
-bool	check_pipe_position(char *input)
+int	check_pipe_position(char *input)
 {
 	int		i;
 	bool	found_a_space;
@@ -41,17 +41,18 @@ bool	check_pipe_position(char *input)
 	found_a_space = false;
 	while (input[i])
 	{
+		i++;
 		if (input[i] == ' ' && input[i] == '\t')
 			found_a_space = true;
 		if (input[i] == '|')
 		{
 			if (!found_a_space || input[i + 1] == '\0')
-				return (true);
+				return (-1);
 			found_a_space = false;
 		}
 		i++;
 	}
-	return (false);
+	return (0);
 }
 
 int	is_valid_char(char str)
@@ -95,7 +96,7 @@ int	precheck(char *input)
 {
 	if (check_parentheses(input))
 		return (1);
-	if (check_pipe_position(input))
+	if (check_pipe_position(input) == -1)
 		return (2);
 	if (check_file_name(input) == -1)
 		return (3);
