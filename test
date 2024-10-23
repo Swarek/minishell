@@ -1,11 +1,998 @@
-a
-ici
-includes
-libft
-Libft
-lol.c
-main.c
-Makefile
-minishell
-src
-test
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/20 01:59:53 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 12:03:20 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+int	is_built_in(char **args)
+{
+	if (ft_strcmp(args[0], "echo") == 0)
+		return (1);
+	if (ft_strcmp(args[0], "cd") == 0)
+		return (1);
+	if (ft_strcmp(args[0], "pwd") == 0)
+		return (1);
+	if (ft_strcmp(args[0], "export") == 0)
+		return (1);
+	if (ft_strcmp(args[0], "env") == 0)
+		return (1);
+	if (ft_strcmp(args[0], "unset") == 0)
+		return (1);
+	if (ft_strcmp(args[0], "exit") == 0)
+		return (1);
+	return (0);
+}
+
+int	is_built_in_t_args(t_arg *args)
+{
+	if (ft_strcmp(args->content, "echo") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "cd") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "export") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "env") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "unset") == 0)
+		return (1);
+	if (ft_strcmp(args->content, "exit") == 0)
+		return (1);
+	return (0);
+}
+
+int	execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp)
+{
+	if (ft_strcmp(cmd_arg_stdin[0], "echo") == 0)
+		return (ft_echo(shell));
+	if (ft_strcmp(cmd_arg_stdin[0], "cd") == 0)
+		return (ft_cd(shell));
+	if (ft_strcmp(cmd_arg_stdin[0], "pwd") == 0)
+		return (ft_pwd(shell));
+	if (ft_strcmp(cmd_arg_stdin[0], "export") == 0)
+		return (ft_export(shell->cmds->args, envp)); 		// A bien faire a la fin
+	if (ft_strcmp(cmd_arg_stdin[0], "env") == 0)
+		return (ft_env(*envp, shell), 0);
+	if (ft_strcmp(cmd_arg_stdin[0], "unset") == 0)			// A bien faire a la fin
+		return (ft_unset(shell->cmds->args, envp), 0);
+	if (ft_strcmp(cmd_arg_stdin[0], "exit") == 0)
+		return (ft_exit(shell, shell->cmds->args));
+	return (127);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_cmd_pipe.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/21 22:48:53 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 10:36:09 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+int	execute_solo_in_pipe(t_shell *shell)
+{
+	// ft_printf("Entree execute_solo_in_pipe\nshell->infile : %d\nshell->outfile : %d\n", shell->infile, shell->outfile);
+	// ft_printf("Avant strcmpr\n");
+	while (shell->cmds->args != NULL && ft_strcmp(shell->cmds->args->type, "command") != 0)
+		shell->cmds->args = shell->cmds->args->next;
+	if (shell->cmds->args == NULL)
+		exit(130); // 127
+	// ft_printf("Apres strcmpr\n");
+	if (is_built_in(shell->cmds->cmd_arg_stdin))
+	{
+		shell->exit_status = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
+		exit(0);
+	}
+	else
+	{
+		// ft_printf("\nPassage no built-in\n");
+		if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
+			exit(1);
+	}
+	return (0);
+}
+
+// int	redir_to_pipe(t_shell *shell)
+// {
+// 	int	pipe_fd[2];
+// 	int	status;
+
+// 	if (pipe(pipe_fd) == -1)
+// 		return (error_msg("Pipe failed\n"));
+// 	shell->outfile = pipe_fd[1];
+// 	status = execute_solo_in_pipe(shell);
+// 	close(pipe_fd[1]);
+// 	shell->infile = pipe_fd[0];
+// 	return (status);
+// }
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 10:26:57 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+static char	*verify_a_path(t_shell *shell, char *path, char *command)
+{
+	char	*command_path;
+	char	*temp;
+
+	if (!path)
+		return (shell->exit_status = 127, NULL);
+	if (path[ft_strlen(path) - 1] != '/')
+	{
+		temp = ft_strjoin(path, "/");
+		if (!temp)
+			return (free(path), shell->exit_status = 12, NULL);
+		command_path = ft_strjoin(temp, command);
+		if (command_path == NULL)
+			return (free(path), free(temp), shell->exit_status = 12, NULL);
+		free(temp);
+	}
+	else
+		command_path = ft_strjoin(path, command);
+	if (command_path == NULL)
+		return (free(path), shell->exit_status = 12, NULL);
+	free(path);
+	if (access(command_path, X_OK) == 0)
+		return (command_path);
+	if (access(command_path, F_OK) == 0)
+		shell->exit_status = 126;
+	else
+		shell->exit_status = 127;
+	free(command_path);
+	return (NULL);
+}
+
+char	*find_command_path(t_shell *shell, char *command, char **envp)
+{
+	int		i;
+	char	**paths;
+	char	*command_path;
+
+	if (!command || *command == '\0' || ft_str_is_whitespace(command))
+		return (NULL);
+	if (is_absolute_or_relative_path(command))
+		return (handle_absolute_or_relative_path(command));
+	i = 0;
+	while (envp[i] != NULL && ft_strncmp(envp[i], "PATH=", 5) != 0)
+		i++;
+	if (!envp[i])
+		return (NULL);
+	paths = ft_split(envp[i] + 5, ':');
+	if (paths == NULL)
+		return (NULL);
+	i = -1;
+	while (paths[++i])
+	{
+		command_path = verify_a_path(shell, ft_strdup(paths[i]), command);
+		if (command_path)
+			return (safe_free_all_strings(&paths), command_path);
+	}
+	safe_free_all_strings(&paths);
+	return (shell->exit_status = 127, NULL);
+}
+
+int	execute_solo(t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		error_msg("Fork failed\n");
+		shell->exit_status = 1;
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		setup_child_signals();
+		dup2(shell->infile, STDIN_FILENO);
+		dup2(shell->outfile, STDOUT_FILENO);
+		if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
+			exit(1);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
+		else
+			shell->exit_status = 1;
+	}
+	return (0);
+}
+
+int	do_the_execution(t_shell *shell, t_cmd *cmd, char **envp)
+{
+	char	*path;
+	int		nbr_args;
+	int		access_result;
+
+	ft_printf("Testtttttt\n");
+	if (!cmd->args->content)
+	{
+		perror("Command content is NULL");
+		exit(127);
+	}
+	path = find_command_path(shell, cmd->args->content, envp);
+	if (!path || !cmd || !cmd->args)
+	{
+		perror("execve error");
+		exit(127);
+	}
+	if (!cmd->cmd_arg_stdin)
+	{
+		perror("Command arguments are NULL");
+		exit(127);
+	}
+	nbr_args = count_arguments(cmd->cmd_arg_stdin);
+	if (execve(path, cmd->cmd_arg_stdin, envp) == -1)
+	{
+		access_result = access(path, X_OK);
+		if (access_result == 0)
+		{
+			if (execute_with_shell(path, cmd->cmd_arg_stdin, envp, nbr_args) == -1)
+			{
+				free(path);
+				perror("execve error");
+				exit(127);
+			}
+			free(path);
+			perror("execve error");
+			exit(1);
+		}
+		else
+		{
+			free(path);
+			perror("execve error");
+			exit(126);
+		}
+		free(path);
+		error_msg("Command execution failed\n");
+		return (-1);
+	}
+	free(path);
+	return (0);
+}
+
+// int	execute(char *argv, char **envp)
+// {
+// 	char	**cmd;
+// 	char	*path;
+
+// 	cmd = special_split(argv, ' ');
+// 	if (!cmd || are_strings_white_spaces(cmd) == 1)
+// 	{
+// 		error_msg("Command split failed\n");
+// 		return (-1);
+// 	}
+// 	cmd = remove_quotes(cmd);
+// 	if (!cmd || !cmd[0] || ft_strcmp(cmd[0], " ") == 0)
+// 	{
+// 		safe_free_all_strings(&cmd);
+// 		error_msg("Empty command\n");
+// 		return (-1);
+// 	}
+// 	path = find_command_path(cmd[0], envp);
+// 	if (!path)
+// 	{
+// 		error_msg("Command not found\n");
+// 		safe_free_all_strings(&cmd);
+// 		return (-1);
+// 	}
+// 	if (execve(path, cmd, envp) == -1)
+// 	{
+// 		error_msg("Command execution failed\n");
+// 		safe_free_all_strings(&cmd);
+// 		return (-1);
+// 	}
+// 	return (0);
+// }
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handling_pipe.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 10:33:06 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+int setup_redirection(t_shell *shell)
+{
+	// Première commande
+	if (shell->n_th_cmd == 0)
+	{
+		if (dup2(shell->infile, STDIN_FILENO) == -1
+			|| dup2(shell->pipes[shell->n_th_cmd][1], STDOUT_FILENO) == -1)
+			return (-1);
+	}
+	// Dernière commande
+	else if (shell->n_th_cmd == shell->total_cmd_count - 1)
+	{
+		if (dup2(shell->pipes[shell->n_th_cmd - 1][0], STDIN_FILENO) == -1
+			|| dup2(shell->outfile, STDOUT_FILENO) == -1)
+			return (-1);
+	}
+	// Commandes intermédiaires
+	else
+	{
+		if (dup2(shell->pipes[shell->n_th_cmd - 1][0], STDIN_FILENO) == -1
+			|| dup2(shell->pipes[shell->n_th_cmd][1], STDOUT_FILENO) == -1)
+			return (-1);
+	}	
+	return (0);
+}
+
+
+// return 1 if a pipe is coming, 0 otherwise
+int	handling_pipes(t_shell *shell)
+{
+	t_cmd *cmd;
+
+	cmd = shell->cmds;
+	// print_all_commands(shell->cmds);
+	setup_redirection(shell);
+	close_pipes(shell);
+	execute_solo_in_pipe(shell);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/20 06:28:11 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/20 06:31:00 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+// Le but ici est de parcourir toutes les commandes et de verifier si il y a des here_doc
+// On les executera tous et on creera un fichier temporaire pour chacun
+// On remplacera le arg du here_doc qui dit le nom du EOF par le nom du fichier temporaire
+// Ensuite a voir si on stock dans un tableau les noms des fichiers temporaires pour les supprimer a la fin
+// Ou si juste pour les supprimer a la fin on parcours les commandes et on supprime les fichiers temporaires.
+
+// int	verif_here_doc(t_cmd *cmd)
+// {
+// 	void (*f)(t_cmd *cmd);
+// }
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc_management.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/18 16:38:21 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
+
+static int	write_to_temp(int fd, char *line)
+{
+	if (write(fd, line, ft_strlen(line)) == -1)
+		return (error_msg("Problem writing to temp.txt"),
+			free(line), close(fd), -1);
+	if (write(fd, "\n", 1) == -1)
+		return (error_msg("Problem writing newline to temp.txt"),
+			free(line), close(fd), -1);
+	return (0);
+}
+
+int	here_doc_management(char *limiter)
+{
+	int		fd;
+	char	*line;
+	size_t	len;
+
+	fd = open("temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd == -1)
+		return (error_msg("Problem opening temp.txt"));
+	while (1)
+	{
+		write(1, "> ", 2);
+		line = get_next_line(0);
+		if (!line)
+			break ;
+		len = ft_strlen(line);
+		if (len > 0 && line[len - 1] == '\n')
+			line[len - 1] = '\0';
+		if (ft_strcmp(line, limiter) == 0 || len == 0)
+			break ;
+		if (write_to_temp(fd, line) == -1)
+			return (-1);
+		free(line);
+	}
+	free(line);
+	close(fd);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_everything.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/22 18:31:43 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+void	clean_up_for_error_init(t_shell *shell, int pipe_count)
+{
+	int	i;
+
+	if (shell->pipes)
+	{
+		i = 0;
+		while (i < pipe_count)
+		{
+			if (shell->pipes[i])
+				free(shell->pipes[i]);
+			i++;
+		}
+		free(shell->pipes);
+		shell->pipes = NULL;
+	}
+
+	// Libérer les PID alloués
+	if (shell->child_pids)
+	{
+		free(shell->child_pids);
+		shell->child_pids = NULL;
+	}
+}
+
+int	init_pipes(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	shell->pipes = malloc(sizeof(int *) * (shell->nbr_pipes));
+	if (!shell->pipes)
+		return (error_msg("Memory allocation failed\n"), -1);
+	while (i < shell->nbr_pipes)
+	{
+		shell->pipes[i] = malloc(2 * sizeof(int));
+		if (!shell->pipes[i])
+		{
+			clean_up_for_error_init(shell, i);  // Nettoyer les pipes alloués partiellement
+			return (error_msg("Memory allocation failed\n"), -1);
+		}
+		if (pipe(shell->pipes[i]) == -1)
+		{
+			clean_up_for_error_init(shell, i);  // Nettoyer les pipes alloués partiellement
+			return (error_msg("Pipe creation failed\n"), -1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	init_child_pids(t_shell *shell)
+{
+	shell->child_pids = malloc(sizeof(pid_t) * shell->total_cmd_count);
+	if (!shell->child_pids)
+	{
+		clean_up_for_error_init(shell, shell->nbr_pipes); // Nettoyer les pipes en cas d'échec d'allocation des PID
+		return (error_msg("Memory allocation failed\n"), -1);
+	}
+	return (0);
+}
+
+int	init_shell_structure(t_shell *shell)
+{
+	shell->nbr_pipes = count_pipe(shell->cmds);
+	shell->total_cmd_count = shell->nbr_pipes + 1;
+	shell->pipes = NULL;
+	shell->child_pids = NULL;
+	shell->there_is_redir_out = 0;
+	shell->n_th_cmd = 0;
+	return (0);
+}
+
+int	all_init(t_shell *shell)
+{
+	if (init_shell_structure(shell) == -1)
+		return (-1);
+	if (init_pipes(shell) == -1)
+		return (-1);
+	if (init_child_pids(shell) == -1)
+		return (-1);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes_process.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 09:49:05 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+// int	parent_process(t_shell *shell, pid_t pid)
+// {
+// 	shell->child_pids[shell->n_th_cmd] = pid;
+// 	return (0);
+// }
+
+int	parent_process(t_shell *shell, pid_t pid)
+{
+	shell->child_pids[shell->n_th_cmd] = pid;
+	// if (shell->n_th_cmd == 0)
+	// 	close(shell->pipes[shell->n_th_cmd][1]);
+	// else if (shell->n_th_cmd == shell->total_cmd_count - 1)
+	// 	close(shell->pipes[shell->n_th_cmd - 1][0]);
+	// else
+	// 	close_both(shell->pipes[shell->n_th_cmd - 1][0], shell->pipes[shell->n_th_cmd][1]);
+	return (0);
+}
+
+// This function will call to setup_redirection with dup2
+// and call the execute function with the cmd and envp
+// It will also close the pipes in the parent process
+// This function need as arguments :
+// - t_pipex *pipex, with all pipes malloced of len cmd_count -1 and inited,
+//			cmd_count, infile, outfile and envp initialized
+// - char **argv as : infile cmd1 cmd2 ... cmdN outfile
+// - int cmd_index as the index of the command to execute
+// void	child_process(t_pipex *pipex, int cmd_index)
+// {
+// 	int	j;
+
+// 	if (setup_redirection(pipex, cmd_index) == -1)
+// 	{
+// 		cleanup(pipex, NULL, pipex->nbr_pipes);
+// 		error_msg("Redirection failed\n");
+// 		exit(1);
+// 	}
+// 	j = 0;
+// 	while (j < pipex->nbr_pipes)
+// 	{
+// 		close(pipex->pipes[j][0]);
+// 		close(pipex->pipes[j][1]);
+// 		j++;
+// 	}
+// 	close(pipex->infile);
+// 	close(pipex->outfile);
+// 	if (do_the_execution(pipex->cmds->args, pipex->envp) == -1)
+// 		exit(1);
+// 	exit(0);
+// }
+
+void close_pipes(t_shell *shell)
+{
+	int i;
+
+	for (i = 0; i < shell->total_cmd_count - 1; i++)
+	{
+		close(shell->pipes[i][0]); // Ferme l'extrémité de lecture du pipe
+		close(shell->pipes[i][1]); // Ferme l'extrémité d'écriture du pipe
+	}
+}
+
+// cd > test | cat, dans ce cas, cd est toujours dans un fork
+// Donc tjr dans cette fonction on ouvre un fork pour les commandes
+int	fork_process(t_shell *shell)
+{
+	pid_t	pid;
+
+	// all_init(shell); // Il sortira le nombre de pipes a executer
+	shell->infile = dup(STDIN);
+	shell->outfile = dup(STDOUT);
+	while (shell->cmds)
+	{
+		pid = fork();
+		if (pid == -1)
+			return (error_msg("Fork failed\n"), -1);
+		if (pid == 0)
+		{
+			setup_child_signals();
+			shell->there_is_redir_out = setup_file_redirections(shell);
+			if (shell->there_is_redir_out < 0)
+				return(error_msg("Error setup redirection\n"));
+			cut_the_cmd_plus_args(shell->cmds);
+			if (shell->there_is_redir_out)
+			{
+				dup2(shell->infile, STDIN_FILENO);
+				dup2(shell->outfile, STDOUT_FILENO);
+				execute_solo_in_pipe(shell);
+			}
+			else
+			{
+				handling_pipes(shell);
+			}
+		}
+		else
+			parent_process(shell, pid);
+		shell->n_th_cmd++;
+		if (shell->cmds->args)
+		{
+    		while (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") != 0)
+        		shell->cmds = shell->cmds->next; // Move until a pipe is found
+    		if (shell->cmds)
+        	shell->cmds = shell->cmds->next; // Move to the next command
+		}
+    	else
+        	break; // Exit if there are no more commands
+	}
+	close_pipes(shell);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   relative_absolute_path.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 09:45:33 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
+
+static char	**build_new_cmd(char *path, char **cmd, int args_count)
+{
+	char	**new_cmd;
+	int		j;
+
+	new_cmd = malloc(sizeof(char *) * (args_count + 2));
+	if (!new_cmd)
+		return (NULL);
+	new_cmd[0] = ft_strdup("/bin/sh");
+	new_cmd[1] = ft_strdup(path);
+	j = 1;
+	while (j < args_count)
+	{
+		new_cmd[j + 1] = ft_strdup(cmd[j]);
+		j++;
+	}
+	new_cmd[args_count + 1] = NULL;
+	return (new_cmd);
+}
+
+int	execute_with_shell(char *path, char **cmd, char **envp, int args_count)
+{
+	char	**new_cmd;
+	int		j;
+
+	new_cmd = build_new_cmd(path, cmd, args_count);
+	if (!new_cmd)
+	{
+		perror("malloc error");
+		exit(12);
+	}
+	execve("/bin/sh", new_cmd, envp);
+	perror("execve error");
+	j = 0;
+	while (new_cmd[j])
+	{
+		free(new_cmd[j]);
+		j++;
+	}
+	free(new_cmd);
+	return (-1);
+}
+
+int	is_absolute_or_relative_path(char *command)
+{
+	if (!command)
+		return (0);
+	return (command[0] == '/' || (command[0] == '.' && command[1] == '/')
+		|| (command[0] == '.' && command[1] == '.' && command[2] == '/'));
+}
+
+char	*handle_absolute_or_relative_path(char *command)
+{
+	if (access(command, X_OK) == 0)
+		return (ft_strdup(command));
+	return (NULL);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup_file_redirections.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 09:33:07 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+t_arg	*last_redir_left(t_arg *args)
+{
+	t_arg	*last_redir_left;
+
+	last_redir_left = NULL;
+	while (args)
+	{
+		if (ft_strcmp(args->type, "redir_left") == 0)
+			last_redir_left = args;
+		if (ft_strcmp(args->type, "double_redir_left") == 0)
+			last_redir_left = args;
+		args = args->next;
+	}
+	return (last_redir_left);
+}
+
+t_arg	*last_redir_right(t_arg *args)
+{
+	t_arg	*last_redir_right;
+
+	last_redir_right = NULL;
+	while (args)
+	{
+		if (ft_strcmp(args->type, "redir_right") == 0)
+			last_redir_right = args;
+		if (ft_strcmp(args->type, "double_redir_right") == 0)
+			last_redir_right = args;
+		args = args->next;
+	}
+	return (last_redir_right);
+}
+
+static int	handle_input_redirection(t_shell *shell, t_arg *redir_left)
+{
+	if (redir_left != NULL)
+	{
+		if (ft_strcmp(redir_left->type, "double_redir_left") == 0)
+		{
+			here_doc_management(redir_left->next->content);
+			shell->infile = open("temp.txt", O_RDONLY);
+		}
+		else
+			shell->infile = open(redir_left->next->content, O_RDONLY);
+		if (shell->infile < 0)
+		{
+			shell->exit_status = 1; // Code de sortie pour une erreur d'ouverture du fichier d'entrée
+			error_msg("Failed to open infile\n");
+			return (-1);
+		}
+	}
+	else
+	{
+		shell->infile = STDIN_FILENO;
+	}
+	return (0);
+}
+
+static int	handle_output_redirection(t_shell *shell, t_arg *redir_right)
+{
+	if (redir_right != NULL)
+	{
+		if (ft_strcmp(redir_right->type, "redir_right") == 0)
+			shell->outfile = open(redir_right->next->content,
+								  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (ft_strcmp(redir_right->type, "double_redir_right") == 0)
+			shell->outfile = open(redir_right->next->content,
+								  O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (shell->outfile < 0)
+		{
+			shell->exit_status = 1;
+			error_msg("Failed to open outfile\n");
+			return (-1);
+		}
+	}
+	else
+	{
+		shell->outfile = STDOUT_FILENO;
+	}
+	return (0);
+}
+
+int	setup_file_redirections(t_shell *shell)
+{
+	t_arg	*redir_left;
+	t_arg	*redir_right;
+
+	// print_all_commands(shell->cmds);
+	redir_left = last_redir_left(shell->cmds->args);
+	redir_right = last_redir_right(shell->cmds->args);
+	if (handle_input_redirection(shell, redir_left) == -1)
+		return (-1);
+	if (handle_output_redirection(shell, redir_right) == -1)
+	{
+		if (redir_left != NULL && shell->infile != STDIN_FILENO)
+			close(shell->infile);
+		return (-1);
+	}
+	return (0);
+}
+
+
+// int	setup_file_redirections(t_shell *shell)
+// {
+// 	t_arg	*redir_left;
+// 	t_arg	*redir_right;
+
+// 	shell->infile = STDIN_FILENO;
+// 	shell->outfile = STDOUT_FILENO;
+// 	redir_left = last_redir_left(shell->cmds->args);
+// 	redir_right = last_redir_right(shell->cmds->args);
+// 	// ft_printf("Voici redir_right : %s\n", redir_right->content);
+// 	if (redir_left != NULL)
+// 	{
+// 		// ft_printf("< ou << n'est pas egal a NULL\n");
+// 		shell->infile = open(redir_left->next->content, O_RDONLY);
+// 		if (shell->infile < 0)
+// 			return (error_msg("Failed to open infile\n"));
+// 	}
+// 	if (redir_right != NULL)
+// 	{
+// 		// ft_printf(">> ou > n'est pas egal a NULL\n");
+// 		if (ft_strcmp(redir_right->type, "redir_right") == 0)
+// 			shell->outfile = open(redir_right->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 		else if (ft_strcmp(redir_right->type, "double_redir_right") == 0)
+// 			shell->outfile = open(redir_right->next->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 		if (shell->outfile < 0 && redir_left != NULL)
+// 			return (close(shell->infile), error_msg("Failed to open outfile\n"));
+// 		else if (shell->outfile < 0)
+// 			return (error_msg("Failed to open outfile\n"));
+// 	}
+// 	if (redir_right != NULL)
+// 		return (1);
+// 	// if (redir_left != NULL)
+// 	// 	shell->infile = -10;
+// 	// else if (redir_right != NULL)
+// 	// 	shell->outfile = -10;
+// 	return (0);
+// }
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   start_exec.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 10:38:15 by mblanc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+// typedef struct s_arg
+// {
+// 	char		*content;
+// 	char		*type;
+// 	struct s_arg *next;
+// }				t_arg;
+
+// typedef struct s_cmd
+// {
+//     t_arg *args;
+//     struct s_cmd *next;
+// } t_cmd;
+
+// typedef struct s_pipex
+// {
+// 	int		**pipes;
+// 	int		cmd_count;
+// 	int		nbr_pipes;
+// 	int		infile;
+// 	int		outfile;
+// 	char	**envp;
+// 	t_cmd	*cmds;
+// }	t_pipex;
+
+// typedef struct s_shell
+// {
+// 	int		last_exit_status;	// To save the exit status ($?) to exit	// Nbr of cmd in the list
+// 	char	**envp;			// Environment
+// 	t_cmd	*cmds;			// List of cmds
+// 	t_arg	*args;			// Liste of args of a cmd (including the cmd)
+// 	// Redirections :
+// 	int		total_cmd_count;// Nbr total de cmd
+// 	int		nbr_pipes;		// Nbr total of pipes
+// 	int		infile;			// infile de la commande actuelle
+// 	int		outfile;		// outfile de la commande actuelle
+// 	int		**pipes;		// Les pipes (fd[2])
+// 	pid_t	*child_pids;	// ID des processus enfants
+// }	t_shell;
+
+
+// Enfaite meme avec les pipes j'utiliserai ca mais avec les std differents
+int	single_cmd(t_shell *shell)
+{
+	int	return_value;
+
+	while (ft_strcmp(shell->cmds->args->type, "command") != 0)
+		shell->cmds->args = shell->cmds->args->next;
+	if (!shell->cmds->args)
+		return (shell->exit_status = 127, -1);
+	if (is_built_in(shell->cmds->cmd_arg_stdin))
+	{
+		shell->exit_status = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
+		return (shell->exit_status);
+	}
+	else
+	{
+		return_value = execute_solo(shell);
+		return (shell->exit_status);
+	}
+}
+
+int	one_cmd(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+		return (-1);
+	if (setup_file_redirections(shell) == -1)
+		return(-1);
+	if (all_init(shell) == -1)
+		return (shell->exit_status = 1, -1);
+	if (cut_the_cmd_plus_args(shell->cmds) == -1)
+		return (shell->exit_status = 127, -1);
+	single_cmd(shell);
+	return (0);
+}
+
+int	exec_it(t_shell *shell)
+{
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+		return (-1);
+	all_init(shell);
+	initiates_type_cmd(shell);
+	if (shell->nbr_pipes == 0)
+	{
+		if (one_cmd(shell) == -1)
+			return (-1);
+	}
+	else if (shell->nbr_pipes >= 1)
+	{
+		fork_process(shell);
+		wait_and_cleanup(shell);
+	}
+	return (0);
+}

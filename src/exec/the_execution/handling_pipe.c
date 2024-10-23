@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 17:31:58 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 10:33:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	handling_pipes(t_shell *shell)
 	t_cmd *cmd;
 
 	cmd = shell->cmds;
+	// print_all_commands(shell->cmds);
 	setup_redirection(shell);
 	close_pipes(shell);
 	execute_solo_in_pipe(shell);

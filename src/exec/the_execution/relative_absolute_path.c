@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 10:49:39 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 09:45:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	execute_with_shell(char *path, char **cmd, char **envp, int args_count)
 	if (!new_cmd)
 	{
 		perror("malloc error");
-		return (-1);
+		exit(12);
 	}
 	execve("/bin/sh", new_cmd, envp);
 	perror("execve error");

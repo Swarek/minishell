@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 02:19:53 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 09:49:05 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	fork_process(t_shell *shell)
 	// all_init(shell); // Il sortira le nombre de pipes a executer
 	shell->infile = dup(STDIN);
 	shell->outfile = dup(STDOUT);
-	while (shell->cmds && ft_strcmp(shell->cmds->args->type, "semicolon") != 0)
+	while (shell->cmds)
 	{
 		pid = fork();
 		if (pid == -1)

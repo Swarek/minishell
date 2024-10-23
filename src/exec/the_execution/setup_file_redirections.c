@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 05:09:25 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 09:33:07 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	setup_file_redirections(t_shell *shell)
 	t_arg	*redir_right;
 
 	// print_all_commands(shell->cmds);
-	ft_printf("Passage dans setup_file_redirections\n");
 	redir_left = last_redir_left(shell->cmds->args);
 	redir_right = last_redir_right(shell->cmds->args);
 	if (handle_input_redirection(shell, redir_left) == -1)

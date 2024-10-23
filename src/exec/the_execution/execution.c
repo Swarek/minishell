@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 02:19:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 12:20:25 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,25 @@ char	*find_command_path(t_shell *shell, char *command, char **envp)
 	char	*command_path;
 
 	if (!command || *command == '\0' || ft_str_is_whitespace(command))
-		return (NULL);
+		return (shell->exit_status = 127, NULL);
 	if (is_absolute_or_relative_path(command))
-		return (handle_absolute_or_relative_path(command));
+	{
+		if (access(command, F_OK) == 0 && access(command, X_OK) != 0)
+			return (shell->exit_status = 126, NULL); // Fichier existe mais pas exécutable
+		if (access(command, X_OK) == 0)
+			return (ft_strdup(command)); // Fichier accessible et exécutable
+		return (shell->exit_status = 127, NULL); // Fichier introuvable ou autre erreur
+	}
+	
+	// Chercher dans les chemins du PATH
 	i = 0;
 	while (envp[i] != NULL && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
-		return (NULL);
+		return (shell->exit_status = 127, NULL);
 	paths = ft_split(envp[i] + 5, ':');
 	if (paths == NULL)
-		return (NULL);
+		return (shell->exit_status = 12, NULL);
 	i = -1;
 	while (paths[++i])
 	{
@@ -70,7 +78,7 @@ char	*find_command_path(t_shell *shell, char *command, char **envp)
 			return (safe_free_all_strings(&paths), command_path);
 	}
 	safe_free_all_strings(&paths);
-	return (shell->exit_status = 127, NULL);
+	return (shell->exit_status = 127, NULL); // Commande introuvable
 }
 
 int	execute_solo(t_shell *shell)
@@ -110,22 +118,42 @@ int	do_the_execution(t_shell *shell, t_cmd *cmd, char **envp)
 {
 	char	*path;
 	int		nbr_args;
-	int		access_result;
 
+	if (!cmd || !cmd->args || !cmd->args->content)
+	{
+		perror("Command content is NULL");
+		exit(127);
+	}
+
+	// Rechercher le chemin de la commande
 	path = find_command_path(shell, cmd->args->content, envp);
 	if (!path)
-		return (-1);
+	{
+		perror("execve error");
+		exit(shell->exit_status);
+	}
+	// Vérifier les arguments de la commande
+	if (!cmd->cmd_arg_stdin)
+	{
+		perror("Command arguments are NULL");
+		free(path);
+		exit(127);
+	}
+
+	// Tenter d'exécuter la commande avec execve
 	nbr_args = count_arguments(cmd->cmd_arg_stdin);
 	if (execve(path, cmd->cmd_arg_stdin, envp) == -1)
 	{
-		access_result = access(path, X_OK);
-		if (access_result == 0)
-			execute_with_shell(path, cmd->cmd_arg_stdin, envp, nbr_args);
-		else
+		// Vérifier si l'erreur vient d'un problème de permissions
+		if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
+		{
+			free(path);
 			perror("execve error");
+			exit(126); // Code 126 pour permission refusée
+		}
 		free(path);
-		error_msg("Command execution failed\n");
-		return (-1);
+		perror("execve error");
+		exit(127); // Code 127 pour commande introuvable ou autre erreur
 	}
 	free(path);
 	return (0);

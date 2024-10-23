@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:49:55 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 01:31:08 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 09:55:38 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,31 @@ void	wait_and_cleanup(t_shell *shell)
 {
 	int	i;
 	int	status;
-	int	exit_code;
 
-	exit_code = 0;
 	i = 0;
 	while (i < shell->total_cmd_count)
 	{
 		if (waitpid(shell->child_pids[i], &status, 0) == -1)
 		{
 			error_msg("Waitpid failed\n");
-			exit_code = 1;
+			shell->exit_status = 1;
 		}
-		else
+		else if (i == shell->total_cmd_count - 1)
 		{
 			if (WIFEXITED(status))
-				exit_code = WEXITSTATUS(status);
+			{
+				shell->exit_status = WEXITSTATUS(status);
+				ft_printf("shell->exit_status = %d\n", shell->exit_status);
+			}
 			else if (WIFSIGNALED(status))
-				exit_code = 128 + WTERMSIG(status);
+			{
+				shell->exit_status = 128 + WTERMSIG(status);
+				ft_printf("shell->exit_status = %d\n", shell->exit_status);
+			}
 		}
 		i++;
 	}
-	shell->exit_status = exit_code;
+	ft_printf("shell->exit_status = %d\n", shell->exit_status);
 	cleanup(shell, NULL);
 	if (shell->infile != -1)
 		close(shell->infile);

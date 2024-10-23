@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 11:34:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 03:13:42 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 09:52:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ void	initiates_type_cmd(t_shell *shell)
 	}
 	// ft_printf("cmds:\n");
 	// print_all_commands(shell->cmds);
-	shell->total_cmd_count = count_cmd(shell->cmds);
+	// shell->total_cmd_count = count_cmd(shell->cmds);
 }

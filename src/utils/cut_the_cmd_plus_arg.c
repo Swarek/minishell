@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 15:11:30 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/20 20:58:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 10:38:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ int	cut_the_cmd_plus_args(t_cmd *cmd)
 	int	i;
 
 	current = cmd->args;
-	i = 0;
 	cmd_plus_args = malloc(sizeof(char *) * (how_many_args(current) + 1));
 	if (cmd_plus_args == NULL)
 		return (-1);
 	i = 0;
 	while (current && ft_strcmp(current->type, "command") != 0)
 		current = current->next;
+	if (current == NULL)
+		return (-1);
 	while (current && is_redir(current) == 0)
 	{
 		cmd_plus_args[i++] = current->content;

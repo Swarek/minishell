@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 05:02:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 12:14:01 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,13 @@
 // Enfaite meme avec les pipes j'utiliserai ca mais avec les std differents
 int	single_cmd(t_shell *shell)
 {
-	int	return_value;
+	t_arg	*current;
 
-	while (ft_strcmp(shell->cmds->args->type, "command") != 0)
-		shell->cmds->args = shell->cmds->args->next;
-	if (!shell->cmds->args)
-		return (shell->exit_status = 127, -1);
+	current = shell->cmds->args;
+	while (current && ft_strcmp(current->type, "command") != 0)
+		current = current->next;
+	if (!current)
+		return (execute_solo(shell));
 	if (is_built_in(shell->cmds->cmd_arg_stdin))
 	{
 		shell->exit_status = execute_built_in(shell, shell->cmds->cmd_arg_stdin, &shell->envp);
@@ -68,7 +69,7 @@ int	single_cmd(t_shell *shell)
 	}
 	else
 	{
-		return_value = execute_solo(shell);
+		execute_solo(shell);
 		return (shell->exit_status);
 	}
 }
@@ -95,13 +96,12 @@ int	exec_it(t_shell *shell)
 		return (-1);
 	all_init(shell);
 	initiates_type_cmd(shell);
-	print_all_commands(shell->cmds);
-	if (shell->total_cmd_count == 1)
+	if (shell->nbr_pipes == 0)
 	{
 		if (one_cmd(shell) == -1)
 			return (-1);
 	}
-	else if (shell->total_cmd_count > 1)
+	else if (shell->nbr_pipes >= 1)
 	{
 		fork_process(shell);
 		wait_and_cleanup(shell);
