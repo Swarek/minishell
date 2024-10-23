@@ -6,12 +6,11 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 01:17:35 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/23 02:01:36 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_d.h"
-#include <stdio.h>
 
 void	replace_env_var(t_arg *current_arg, int start, int end,
 		const char *value)
@@ -63,22 +62,32 @@ void	process_env_var(t_arg *current_arg, int *i)
 		*i = j - 1;
 }
 
-void	expand_env_vars(t_arg *current_arg)
+void	expand_env_vars(t_arg *current_arg, int dolls)
 {
 	int	i;
 
 	i = 0;
 	while (current_arg->content[i])
 	{
-		if (i == 0 && current_arg->content[i] == '$' && current_arg->content[i
-			+ 1])
-			process_env_var(current_arg, &i);
-		else
-			i += 1;
-		if (current_arg->content[i] == '$' && current_arg->content[i + 1]
-			&& current_arg->content[i - 1] != '\\')
-			process_env_var(current_arg, &i);
+		if (current_arg->content[i] == '$')
+			dolls++;
 		i++;
+	}
+	while (dolls >= 0)
+	{
+		i = 0;
+		while (current_arg->content[i])
+		{
+			if (i == 0 && current_arg->content[i] == '$' && current_arg->content[i
+				+ 1])
+				process_env_var(current_arg, &i);
+			else
+				i += 1;
+			if (current_arg->content[i] == '$' && current_arg->content[i + 1])
+				process_env_var(current_arg, &i);
+			i++;
+		}
+		dolls--;
 	}
 }
 
@@ -94,10 +103,8 @@ void	expand_env_vars_in_cmds_tab(t_cmd **cmds)
 		while (current_arg)
 		{
 			if (ft_strncmp(current_arg->type, "word", 4) == 0
-				|| ft_strncmp(current_arg->type, "double_quoted", 13) == 0
-				|| ft_strncmp(current_arg->type, "unfinished_double_quoted",
-					24) == 0)
-				expand_env_vars(current_arg);
+				|| ft_strncmp(current_arg->type, "double_quoted", 13) == 0)
+				expand_env_vars(current_arg, 0);
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pre_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:25:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 23:43:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 00:59:50 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 bool	check_parentheses(char *input)
 {
@@ -35,21 +36,17 @@ bool	check_parentheses(char *input)
 int	check_pipe_position(char *input)
 {
 	int		i;
-	bool	found_a_space;
 
 	i = 0;
-	found_a_space = false;
+	if (input[0] == '|')
+		return (-1);
+	i++;
 	while (input[i])
 	{
-		i++;
-		if (input[i] == ' ' && input[i] == '\t')
-			found_a_space = true;
-		if (input[i] == '|')
-		{
-			if (!found_a_space || input[i + 1] == '\0')
-				return (-1);
-			found_a_space = false;
-		}
+		if (input[i] == '|' && (input[i - 1] != ' ' && input[i - 1] != '\t'))
+			return (-1);
+		if (input[i] == '|' && input[i + 1] == '\0')
+			return (-1);
 		i++;
 	}
 	return (0);

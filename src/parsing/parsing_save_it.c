@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:29 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/20 22:11:58 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/23 01:49:00 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	save_it_word(char *str, int i, t_arg **args)
 	t_arg	*new_arg;
 
 	j = i;
-	while (str[j] && !ft_strchr(" ;><'\"", str[j]))
+	while (str[j] && !ft_strchr(" ><'\"", str[j]))
 		j++;
 	to_save = ft_substr(str, i, j - i);
 	new_arg = create_arg(to_save, "word");
@@ -28,50 +28,41 @@ int	save_it_word(char *str, int i, t_arg **args)
 	return (j - 1);
 }
 
-int	save_it_quoted(char *str, int i, t_arg **args)
+int	save_it_double_quoted(char *str, int i, t_arg **args)
 {
-	int			j;
-	t_arg		*arg;
-	char		*to_save;
-	t_exclude	exclude;
+	int		j;
+	t_arg	*arg;
+	char	*to_save;
+	int		ndbq;
 
 	j = i + 1;
-	exclude.count = 0;
-	while (str[j])
-	{
-		if (str[j] == str[i] && str[j - 1] != '\\')
-			break ;
-		if (str[j] == str[i] && str[j - 1] == '\\')
-		{
-			exclude.indices[exclude.count] = j - 1;
-			exclude.count++;
-		}
+	ndbq = 0;
+	while (str[j] && (str[j] != '"'))
 		j++;
-	}
-	to_save = copy_string_exclude(str, i + 1, j - 1, &exclude);
-	if (str[i] == '"')
-		arg = create_arg(to_save, "double_quoted");
-	else
-		arg = create_arg(to_save, "single_quoted");
+	if (!str[j])
+		return (-2);
+	to_save = ft_substr(str, i + 1, j - i - 1);
+	arg = create_arg(to_save, "double_quoted");
 	free(to_save);
 	add_arg(args, arg);
 	return (j);
 }
 
-int	save_it_unfinished(char *str, int i, t_arg **args)
+int	save_it_single_quoted(char *str, int i, t_arg **args)
 {
 	int		j;
 	t_arg	*arg;
 	char	*to_save;
 
 	j = i + 1;
-	while (str[j])
+	while (str[j] != '\0' && (str[j] != '\''))
+	{
 		j++;
-	to_save = ft_substr(str, i + 1, j - i);
-	if (str[i] == '"')
-		arg = create_arg(to_save, "unfinished_double_quoted");
-	else
-		arg = create_arg(to_save, "unfinished_single_quoted");
+	}
+	if (str[j] == '\0')
+		return (-2);
+	to_save = ft_substr(str, i + 1, j - i - 1);
+	arg = create_arg(to_save, "single_quoted");
 	free(to_save);
 	add_arg(args, arg);
 	return (j);

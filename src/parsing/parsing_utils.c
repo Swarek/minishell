@@ -64,9 +64,7 @@ void	add_command(t_cmd **cmds, t_arg **current_args)
 	new_cmd->args = *current_args;
 	new_cmd->next = NULL;
 	if (!*cmds)
-	{
 		*cmds = new_cmd;
-	}
 	else
 	{
 		last_cmd = *cmds;
