@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 17:28:03 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 02:19:53 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	fork_process(t_shell *shell)
 			return (error_msg("Fork failed\n"), -1);
 		if (pid == 0)
 		{
+			setup_child_signals();
 			shell->there_is_redir_out = setup_file_redirections(shell);
 			if (shell->there_is_redir_out < 0)
 				return(error_msg("Error setup redirection\n"));

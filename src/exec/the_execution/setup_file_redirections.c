@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 18:25:23 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 02:22:55 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_arg	*last_redir_left(t_arg *args)
 	while (args)
 	{
 		if (ft_strcmp(args->type, "redir_left") == 0)
+			last_redir_left = args;
+		if (ft_strcmp(args->type, "double_redir_left") == 0)
 			last_redir_left = args;
 		args = args->next;
 	}
@@ -46,6 +48,12 @@ static int	handle_input_redirection(t_shell *shell, t_arg *redir_left)
 {
 	if (redir_left != NULL)
 	{
+		// if (ft_strcmp(redir_left->type, "double_redir_left"))
+		// {
+		// 	here_doc_management(redir_left->next->content);
+		// 	shell->infile = open("temp.txt", O_RDONLY);
+		// }
+		// else
 		shell->infile = open(redir_left->next->content, O_RDONLY);
 		if (shell->infile < 0)
 		{
@@ -90,6 +98,7 @@ int	setup_file_redirections(t_shell *shell)
 	t_arg	*redir_left;
 	t_arg	*redir_right;
 
+	print_all_commands(shell->cmds);
 	redir_left = last_redir_left(shell->cmds->args);
 	redir_right = last_redir_right(shell->cmds->args);
 	if (handle_input_redirection(shell, redir_left) == -1)
