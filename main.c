@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 02:09:48 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/23 03:00:38 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	print_all_commands(t_cmd *cmds)
 	int	i;
 
 	i = 0;
+	ft_printf("Total command count: %d\n", count_cmd(cmds));
 	while (cmds)
 	{
 		printf("Command %d:\n", i++);
@@ -73,6 +74,8 @@ void	sigint_handler(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	// clean_all(shell);
+	exit(130);
 }
 
 void	setup_signals(void)
@@ -152,8 +155,11 @@ int	main(int ac, char **av, char **envp)
 	{
 		g_sigint_received = 0;
 		line = reading_line(color);
-		if (!line)
-			break ;
+		if (!line || g_sigint_received)
+    	{
+			clean_all(shell);
+			break;
+    	}
 		if (g_sigint_received || parse_it(line, &cmds) != 0)
 		{
 			free(line);
@@ -164,7 +170,6 @@ int	main(int ac, char **av, char **envp)
 		if (error_if_impair_single_quotes(&cmds) == -1)
 			return (ft_printf("Odd number of single quotes"));
 		type_to_file_in_args1(&cmds);
-		print_all_commands(cmds);
 		shell->cmds = cmds;
 		exec_it(shell);
 		ft_printf("Exit status: %d\n", shell->exit_status);

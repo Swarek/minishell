@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 02:22:44 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 05:02:09 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	exec_it(t_shell *shell)
 		return (-1);
 	all_init(shell);
 	initiates_type_cmd(shell);
+	print_all_commands(shell->cmds);
 	if (shell->total_cmd_count == 1)
 	{
 		if (one_cmd(shell) == -1)
