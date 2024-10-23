@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 23:33:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 01:52:23 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void	print_all_commands(t_cmd *cmds)
 		cmds = cmds->next;
 	}
 	printf("\n");
+}
+
+void	setup_child_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	free_shell(t_shell *shell)
@@ -104,25 +110,25 @@ char	**env_copy(char **env)
 
 t_shell	*init_struct_shell(char **envp)
 {
-    t_shell *shell;
+	t_shell	*shell;
 
-    shell = malloc(sizeof(t_shell));
-    if (!shell)
-        return (NULL);
-    shell->last_exit_status = 0;
-    shell->envp = env_copy(envp);
-    shell->cmds = NULL;
-    // Initialize all other members
-    shell->total_cmd_count = 0;
-    shell->nbr_pipes = 0;
-    shell->infile = 0;
-    shell->outfile = 0;
-    shell->input_pipe = 0;
-    shell->there_is_redir_out = 0;
-    shell->n_th_cmd = 0;
-    shell->pipes = NULL;
-    shell->child_pids = NULL;
-    return (shell);
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return (NULL);
+	shell->last_exit_status = 0;
+	shell->envp = env_copy(envp);
+	shell->cmds = NULL;
+	// Initialize all other members
+	shell->total_cmd_count = 0;
+	shell->nbr_pipes = 0;
+	shell->infile = 0;
+	shell->outfile = 0;
+	shell->input_pipe = 0;
+	shell->there_is_redir_out = 0;
+	shell->n_th_cmd = 0;
+	shell->pipes = NULL;
+	shell->child_pids = NULL;
+	return (shell);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -155,12 +161,11 @@ int	main(int ac, char **av, char **envp)
 		}
 		free(line);
 		expand_env_vars_in_cmds_tab(&cmds);
-		remove_backslashs_in_cmds_tab(&cmds);
-		remove_backslashs_in_words(&cmds);
+		if (error_if_impair_single_quotes(&cmds) == -1)
+			return (ft_printf("Odd number of single quotes"));
 		type_to_file_in_args1(&cmds);
+		print_all_commands(cmds);
 		shell->cmds = cmds;
-		// initiates_type_cmd(shell);
-		// print_all_commands(cmds);
 		exec_it(shell);
 		cmds = NULL;
 		color++;

@@ -6,37 +6,19 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:02 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 01:54:22 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/23 01:49:17 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_if_another_quote(char *str, int i)
-{
-	int	j;
-
-	j = i + 1;
-	while (str[j])
-	{
-		if (str[j] == str[i] && str[j - 1] != '\\')
-		{
-			return (1);
-		}
-		j++;
-	}
-	return (0);
-}
 
 int	handle_special_char(char *str, int i, t_arg **current_args)
 {
-	if (str[i] == '\'' || str[i] == '"')
-	{
-		if (check_if_another_quote(str, i) == 1)
-			return (save_it_quoted(str, i, current_args) + 1);
-		else
-			return (save_it_unfinished(str, i, current_args));
-	}
+	if (str[i] == '\'')
+		return (save_it_single_quoted(str, i, current_args) + 1);
+	if (str[i] == '"')
+		return (save_it_double_quoted(str, i, current_args) + 1);
 	else if (str[i] == '>')
 		return (save_it_redir_right(str, i, current_args) + 1);
 	else if (str[i] == '<')
@@ -47,7 +29,7 @@ int	handle_special_char(char *str, int i, t_arg **current_args)
 
 int	parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
 {
-	while (str[i] && str[i] != '|' && str[i] != ';')
+	while (str[i] && str[i] != '|')
 	{
 		if (str[i] == ' ' || str[i] == '\t')
 			i++;
@@ -55,7 +37,7 @@ int	parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
 		{
 			i = handle_special_char(str, i, current_args);
 			if (i == -1)
-				return (-1);
+				return (ft_printf("Odd number of quotes\n"), -1);
 		}
 	}
 	add_command(cmds, current_args);
@@ -95,12 +77,6 @@ int	parse_it(char *str, t_cmd **cmds)
 				add_command(cmds, &current_args);
 				i++;
 			}
-		}
-		else if (str[i] == ';')
-		{
-			add_arg(&current_args, create_arg(";", "semicolon"));
-			add_command(cmds, &current_args);
-			i++;
 		}
 	}
 	return (0);
