@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 01:58:33 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/23 03:11:34 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ Si c'est un pipe ça sera une commande de type = "pipe" et de content "|"
 Si c'est une ">" ça sera une commande de type = "redir_right" et de content = ">"
 Si c'est une ">>" ça sera une commande de type = "double_redir_right" et de content = ">>"
 Si c'est une "<" ça sera une commande de type = "redir_left" et de content = "<"
+Si c'est une "<<" ça sera une commande de type = "double_redir_left" et de content = "<"
 
 Pour les arguments les types sont :
 
@@ -107,5 +108,6 @@ void				type_to_file_in_args1(t_cmd **cmds);
 void				type_to_file_in_args2(t_arg *current_arg);
 
 int					error_if_impair_single_quotes(t_cmd **cmds);
+int					error_in_filename(t_cmd **cmds);
 
 #endif

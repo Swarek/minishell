@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 02:09:48 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/23 03:09:02 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,8 @@ int	main(int ac, char **av, char **envp)
 		if (error_if_impair_single_quotes(&cmds) == -1)
 			return (ft_printf("Odd number of single quotes"));
 		type_to_file_in_args1(&cmds);
+		if (error_in_filename(&cmds) == -1)
+			return (-1);
 		print_all_commands(cmds);
 		shell->cmds = cmds;
 		exec_it(shell);
