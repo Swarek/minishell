@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 11:34:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 09:52:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 21:29:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	find_arg_add_type_cmd(t_shell *shell, t_arg *args, char **envp)
+void	find_arg_add_type_cmd(t_shell *shell, t_arg *args, char **envp)
 {
 	t_arg	*tmp;
 
@@ -41,21 +41,3 @@ static void	find_arg_add_type_cmd(t_shell *shell, t_arg *args, char **envp)
 	}
 }
 
-void	initiates_type_cmd(t_shell *shell)
-{
-	int		i;
-	t_cmd	*tmp;
-	
-	i = 0;
-	if (shell == NULL)
-		return ;
-	tmp = shell->cmds;
-	while (tmp)
-	{
-		find_arg_add_type_cmd(shell, tmp->args, shell->envp);
-		tmp = tmp->next;
-	}
-	// ft_printf("cmds:\n");
-	// print_all_commands(shell->cmds);
-	// shell->total_cmd_count = count_cmd(shell->cmds);
-}

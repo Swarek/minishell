@@ -6,80 +6,35 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 09:49:05 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 21:27:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	parent_process(t_shell *shell, pid_t pid)
-// {
-// 	shell->child_pids[shell->n_th_cmd] = pid;
-// 	return (0);
-// }
-
 int	parent_process(t_shell *shell, pid_t pid)
 {
 	shell->child_pids[shell->n_th_cmd] = pid;
-	// if (shell->n_th_cmd == 0)
-	// 	close(shell->pipes[shell->n_th_cmd][1]);
-	// else if (shell->n_th_cmd == shell->total_cmd_count - 1)
-	// 	close(shell->pipes[shell->n_th_cmd - 1][0]);
-	// else
-	// 	close_both(shell->pipes[shell->n_th_cmd - 1][0], shell->pipes[shell->n_th_cmd][1]);
 	return (0);
 }
-
-// This function will call to setup_redirection with dup2
-// and call the execute function with the cmd and envp
-// It will also close the pipes in the parent process
-// This function need as arguments :
-// - t_pipex *pipex, with all pipes malloced of len cmd_count -1 and inited,
-//			cmd_count, infile, outfile and envp initialized
-// - char **argv as : infile cmd1 cmd2 ... cmdN outfile
-// - int cmd_index as the index of the command to execute
-// void	child_process(t_pipex *pipex, int cmd_index)
-// {
-// 	int	j;
-
-// 	if (setup_redirection(pipex, cmd_index) == -1)
-// 	{
-// 		cleanup(pipex, NULL, pipex->nbr_pipes);
-// 		error_msg("Redirection failed\n");
-// 		exit(1);
-// 	}
-// 	j = 0;
-// 	while (j < pipex->nbr_pipes)
-// 	{
-// 		close(pipex->pipes[j][0]);
-// 		close(pipex->pipes[j][1]);
-// 		j++;
-// 	}
-// 	close(pipex->infile);
-// 	close(pipex->outfile);
-// 	if (do_the_execution(pipex->cmds->args, pipex->envp) == -1)
-// 		exit(1);
-// 	exit(0);
-// }
 
 void close_pipes(t_shell *shell)
 {
 	int i;
 
-	for (i = 0; i < shell->total_cmd_count - 1; i++)
+	i = 0;
+	while (i < shell->total_cmd_count - 1)
 	{
-		close(shell->pipes[i][0]); // Ferme l'extrémité de lecture du pipe
-		close(shell->pipes[i][1]); // Ferme l'extrémité d'écriture du pipe
+		close(shell->pipes[i][0]);
+		close(shell->pipes[i][1]);
+		i++;
 	}
 }
 
-// cd > test | cat, dans ce cas, cd est toujours dans un fork
-// Donc tjr dans cette fonction on ouvre un fork pour les commandes
 int	fork_process(t_shell *shell)
 {
 	pid_t	pid;
 
-	// all_init(shell); // Il sortira le nombre de pipes a executer
 	shell->infile = dup(STDIN);
 	shell->outfile = dup(STDOUT);
 	while (shell->cmds)

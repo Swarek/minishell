@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/22 23:29:03 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 21:30:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int		execution(t_shell *shell);
 int		count_pipe(t_cmd *cmd);
 int		try_all_redirection(t_cmd *cmds, t_pipex *pipex);
 char	*find_command_path(t_shell *shell, char *command, char **envp);
-int	single_cmd(t_shell *shell);
 int	setup_file_redirections(t_shell *shell);
 void	find_and_add_type_cmd(t_arg *args, char **envp);
 int		is_redir(t_arg *arg);
@@ -79,6 +78,8 @@ int	execute_solo_in_pipe(t_shell *shell);
 void close_pipes(t_shell *shell);
 int	is_there_a_pipes_coming(t_shell *shell);
 void clean_all(t_shell *shell);
+int	starting_one_cmd(t_shell *shell);
+void	find_arg_add_type_cmd(t_shell *shell, t_arg *args, char **envp);
 
 // Functions Pipex
 

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 18:31:43 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 21:25:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	clean_up_for_error_init(t_shell *shell, int pipe_count)
 		free(shell->pipes);
 		shell->pipes = NULL;
 	}
-
-	// Libérer les PID alloués
 	if (shell->child_pids)
 	{
 		free(shell->child_pids);
@@ -74,7 +72,23 @@ int	init_child_pids(t_shell *shell)
 	return (0);
 }
 
-int	init_shell_structure(t_shell *shell)
+void	initiates_type_cmd(t_shell *shell)
+{
+	int		i;
+	t_cmd	*tmp;
+	
+	i = 0;
+	if (shell == NULL)
+		return ;
+	tmp = shell->cmds;
+	while (tmp)
+	{
+		find_arg_add_type_cmd(shell, tmp->args, shell->envp);
+		tmp = tmp->next;
+	}
+}
+
+int	all_init(t_shell *shell)
 {
 	shell->nbr_pipes = count_pipe(shell->cmds);
 	shell->total_cmd_count = shell->nbr_pipes + 1;
@@ -82,16 +96,10 @@ int	init_shell_structure(t_shell *shell)
 	shell->child_pids = NULL;
 	shell->there_is_redir_out = 0;
 	shell->n_th_cmd = 0;
-	return (0);
-}
-
-int	all_init(t_shell *shell)
-{
-	if (init_shell_structure(shell) == -1)
-		return (-1);
 	if (init_pipes(shell) == -1)
 		return (-1);
 	if (init_child_pids(shell) == -1)
 		return (-1);
+	initiates_type_cmd(shell);
 	return (0);
 }
