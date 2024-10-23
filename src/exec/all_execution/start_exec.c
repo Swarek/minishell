@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   count_cmd.c                                        :+:      :+:    :+:   */
+/*   start_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 10:44:54 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 05:04:28 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/23 22:11:37 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_cmd(t_cmd *cmd)
+int	exec_it(t_shell *shell)
 {
-	int	nbr_cmd;
-	t_arg	*tmp;
-
-	nbr_cmd = 0;
-	while (cmd)
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+		return (-1);
+	all_init(shell);
+	if (shell->nbr_pipes == 0)
 	{
-		tmp = cmd->args;
-		while (tmp != NULL)
-		{
-			if (ft_strcmp(tmp->type, "command") == 0)
-			{
-				nbr_cmd++;
-				break ;
-			}
-			tmp = tmp->next;
-		}
-		cmd = cmd->next;
+		if (starting_one_cmd(shell) == -1)
+			return (-1);
 	}
-	return (nbr_cmd);
+	else if (shell->nbr_pipes >= 1)
+	{
+		fork_process(shell);
+		wait_and_cleanup(shell);
+	}
+	return (0);
 }

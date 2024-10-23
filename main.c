@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 03:00:38 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 22:48:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_all_commands(t_cmd *cmds)
 	int	i;
 
 	i = 0;
-	ft_printf("Total command count: %d\n", count_cmd(cmds));
+	ft_print_array(cmds->cmd_arg_stdin);
 	while (cmds)
 	{
 		printf("Command %d:\n", i++);

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 21:25:44 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 22:19:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ int	starting_one_cmd(t_shell *shell)
 	i = 0;
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (-1);
-	if (setup_file_redirections(shell) == -1)
+	if (handle_io_redirections(shell) == -1)
 		return(-1);
 	if (all_init(shell) == -1)
 		return (shell->exit_status = 1, -1);
+	print_all_commands(shell->cmds);
 	cut_the_cmd_plus_args(shell->cmds);
 	single_cmd(shell);
 	return (0);

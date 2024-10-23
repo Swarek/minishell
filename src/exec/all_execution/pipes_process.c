@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 21:27:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 22:10:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,41 @@ void close_pipes(t_shell *shell)
 	}
 }
 
+void	child_process(t_shell *shell)
+{
+	setup_child_signals();
+	shell->there_is_redir_out = handle_io_redirections(shell);
+	if (shell->there_is_redir_out < 0)
+	{
+		error_msg("Error setup redirection\n");
+		exit(EXIT_FAILURE);
+	}
+	cut_the_cmd_plus_args(shell->cmds);
+	if (shell->there_is_redir_out)
+	{
+		dup2(shell->infile, STDIN_FILENO);
+		dup2(shell->outfile, STDOUT_FILENO);
+	}
+	else
+		handle_pipe_without_out_redirection(shell);
+	if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
+			exit(1);
+}
+
+int	advance_to_next_command(t_shell *shell)
+{
+	if (shell->cmds->args)
+	{
+		while (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") != 0)
+			shell->cmds = shell->cmds->next;
+		if (shell->cmds)
+			shell->cmds = shell->cmds->next;
+	}
+	else
+		return (-1);
+	return (0);
+}
+
 int	fork_process(t_shell *shell)
 {
 	pid_t	pid;
@@ -43,36 +78,14 @@ int	fork_process(t_shell *shell)
 		if (pid == -1)
 			return (error_msg("Fork failed\n"), -1);
 		if (pid == 0)
-		{
-			setup_child_signals();
-			shell->there_is_redir_out = setup_file_redirections(shell);
-			if (shell->there_is_redir_out < 0)
-				return(error_msg("Error setup redirection\n"));
-			cut_the_cmd_plus_args(shell->cmds);
-			if (shell->there_is_redir_out)
-			{
-				dup2(shell->infile, STDIN_FILENO);
-				dup2(shell->outfile, STDOUT_FILENO);
-				execute_solo_in_pipe(shell);
-			}
-			else
-			{
-				handling_pipes(shell);
-			}
-		}
+			child_process(shell);
 		else
 			parent_process(shell, pid);
 		shell->n_th_cmd++;
-		if (shell->cmds->args)
-		{
-    		while (shell->cmds && ft_strcmp(shell->cmds->args->type, "pipe") != 0)
-        		shell->cmds = shell->cmds->next; // Move until a pipe is found
-    		if (shell->cmds)
-        	shell->cmds = shell->cmds->next; // Move to the next command
-		}
-    	else
-        	break; // Exit if there are no more commands
+		if (advance_to_next_command(shell) == -1)
+			break;
 	}
 	close_pipes(shell);
 	return (0);
 }
+
