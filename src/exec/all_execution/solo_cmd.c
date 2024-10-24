@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 22:19:42 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 03:43:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,28 @@ static int	single_cmd(t_shell *shell)
 }
 
 // Iniatiate all needed and call single_cmd to exec
-int	starting_one_cmd(t_shell *shell)
+int starting_one_cmd(t_shell *shell)
 {
-	int	i;
+    int i;
 
-	i = 0;
-	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
-		return (-1);
-	if (handle_io_redirections(shell) == -1)
-		return(-1);
-	if (all_init(shell) == -1)
-		return (shell->exit_status = 1, -1);
-	print_all_commands(shell->cmds);
-	cut_the_cmd_plus_args(shell->cmds);
-	single_cmd(shell);
-	return (0);
+    i = 0;
+    if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+        return (-1);
+    if (handle_io_redirections(shell) == -1)
+        return (-1);
+    if (all_init(shell) == -1)
+    {
+        shell->exit_status = 1;
+        clean_all(shell); // Nettoyer en cas d'échec d'initialisation
+        return (-1);
+    }
+    // print_all_commands(shell->cmds);
+    cut_the_cmd_plus_args(shell->cmds);
+    if (single_cmd(shell) == -1)
+    {
+        clean_all(shell); // Nettoyer en cas d'erreur dans single_cmd
+        return (-1);
+    }
+    return (0);
 }
+

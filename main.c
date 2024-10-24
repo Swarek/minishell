@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 22:48:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 03:43:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_all_commands(t_cmd *cmds)
 	int	i;
 
 	i = 0;
-	ft_print_array(cmds->cmd_arg_stdin);
+	// ft_print_array(cmds->cmd_arg_stdin);
 	while (cmds)
 	{
 		printf("Command %d:\n", i++);
@@ -134,48 +134,55 @@ t_shell	*init_struct_shell(char **envp)
 	return (shell);
 }
 
-int	main(int ac, char **av, char **envp)
+int main(int ac, char **av, char **envp)
 {
-	char	*line;
-	t_cmd	*cmds;
-	t_shell	*shell;
-	int		color;
+    char    *line;
+    t_cmd   *cmds;
+    t_shell *shell;
+    int     color;
 
-	(void)ac;
-	(void)av;
-	line = NULL;
-	cmds = NULL;
-	shell = init_struct_shell(envp);
-	if (!shell)
-		return (-1);
-	cmds = NULL;
-	color = 0;
-	setup_signals();
-	while (1)
-	{
-		g_sigint_received = 0;
-		line = reading_line(color);
-		if (!line || g_sigint_received)
-    	{
-			clean_all(shell);
-			break;
-    	}
-		if (g_sigint_received || parse_it(line, &cmds) != 0)
-		{
-			free(line);
-			continue ;
-		}
-		free(line);
-		expand_env_vars_in_cmds_tab(&cmds);
-		if (error_if_impair_single_quotes(&cmds) == -1)
-			return (ft_printf("Odd number of single quotes"));
-		type_to_file_in_args1(&cmds);
-		shell->cmds = cmds;
-		exec_it(shell);
-		ft_printf("Exit status: %d\n", shell->exit_status);
-		cmds = NULL;
-		color++;
-	}
-	free_shell(shell);
-	return (0);
+    (void)ac;
+    (void)av;
+    line = NULL;
+    cmds = NULL;
+    shell = init_struct_shell(envp);
+    if (!shell)
+        return (-1);
+    cmds = NULL;
+    color = 0;
+    setup_signals();
+    while (1)
+    {
+        g_sigint_received = 0;
+        line = reading_line(color);
+        if (!line || g_sigint_received)
+            break;
+        if (g_sigint_received || parse_it(line, &cmds) != 0)
+        {
+            free(line);
+            continue;
+        }
+        free(line);
+        expand_env_vars_in_cmds_tab(&cmds);
+        if (error_if_impair_single_quotes(&cmds) == -1)
+        {
+            ft_printf("Odd number of single quotes\n");
+            clean_all(shell); // Assurer le nettoyage avant de quitter
+            return (-1);
+        }
+        type_to_file_in_args1(&cmds);
+        shell->cmds = cmds;
+        if (exec_it(shell) == -1)
+        {
+            clean_all(shell); // Nettoyer en cas d'erreur d'exécution
+            return (-1);
+        }
+        ft_printf("Exit status: %d\n", shell->exit_status);
+        cmds = NULL;
+        color++;
+    }
+    clean_all(shell);
+    return (0);
 }
+
+

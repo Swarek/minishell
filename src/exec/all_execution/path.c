@@ -6,61 +6,68 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 22:32:29 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 22:43:33 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 03:53:21 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Fonction auxiliaire pour créer le chemin complet de la commande
-static char	*create_command_path(char *path, char *command)
+static char *create_command_path(char *path, char *command)
 {
-	char	*temp;
+    char *temp;
+    char *full_path;
 
-	if (path == NULL)
-		return (NULL);
-	if (path[strlen(path) - 1] != '/')
-	{
-		temp = ft_strjoin(path, "/");
-		if (!temp)
-			return (NULL);
-	}
-	else
-		temp = ft_strdup(path);
-	if (!temp)
-		return (NULL);
-	return (ft_strjoin(temp, command));
+    if (path == NULL)
+        return (NULL);
+    if (path[strlen(path) - 1] != '/')
+    {
+        temp = ft_strjoin(path, "/");
+        if (!temp)
+            return (NULL);
+    }
+    else
+    {
+        temp = ft_strdup(path);
+    }
+    if (!temp)
+        return (NULL);
+    full_path = ft_strjoin(temp, command);
+    free(temp); // Free temp after use
+    return (full_path);
 }
 
 // Fonction auxiliaire pour vérifier l'accès au chemin de la commande
-static char	*verify_command_access(t_shell *shell, char *path, char *command)
+static char *verify_command_access(t_shell *shell, char *path, char *command)
 {
-	char	*command_path;
+    char *command_path;
 
-	if (!path)
-	{
-		shell->exit_status = 127;
-		return (NULL);
-	}
-	command_path = create_command_path(path, command);
-	if (!command_path)
-	{
-		free(path);
-		shell->exit_status = 12;
-		return (NULL);
-	}
-	if (access(command_path, X_OK) == 0)
-	{
-		free(path);
-		return (command_path);
-	}
-	if (access(command_path, F_OK) == 0)
-		shell->exit_status = 126;
-	else
-		shell->exit_status = 127;
-	free(command_path);
-	return (NULL);
+    if (!path)
+    {
+        shell->exit_status = 127;
+        return (NULL);
+    }
+    command_path = create_command_path(path, command);
+    if (!command_path)
+    {
+        free(path);
+        shell->exit_status = 12;
+        return (NULL);
+    }
+    if (access(command_path, X_OK) == 0)
+    {
+        free(path);
+        return (command_path);
+    }
+    if (access(command_path, F_OK) == 0)
+        shell->exit_status = 126;
+    else
+        shell->exit_status = 127;
+    free(command_path);
+    free(path); // Ensure path is freed in all cases
+    return (NULL);
 }
+
 
 // Nouvelle fonction pour rechercher la commande dans PATH
 static char	*search_in_path(t_shell *shell, char *command, char **paths)
