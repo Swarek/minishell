@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   count_cmd.c                                        :+:      :+:    :+:   */
+/*   start_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 10:44:54 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/21 23:18:03 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/24 05:17:29 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_cmd(t_cmd *cmd)
+int	exec_it(t_shell *shell)
 {
-	int	nbr_cmd;
-
-	nbr_cmd = 0;
-	while (cmd)
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+		return (-1);
+	all_init(shell);
+	if (shell->nbr_pipes == 0)
 	{
-		if (ft_strcmp(cmd->args->type, "command") == 0)
-			nbr_cmd++;
-		cmd = cmd->next;
+		if (starting_one_cmd(shell) == -1)
+			return (-1);
 	}
-	return (nbr_cmd);
+	else if (shell->nbr_pipes >= 1)
+	{
+		fork_process(shell);
+		wait_and_cleanup(shell);
+	}
+	return (0);
 }

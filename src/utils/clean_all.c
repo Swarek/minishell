@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:57:08 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 18:00:52 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 04:47:37 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,20 @@ void free_args(t_arg *args)
     {
         next_arg = current_arg->next;
         ft_safe_free((void**)&(current_arg->content));
-        ft_safe_free((void**)&(current_arg->type));
-        ft_safe_free((void**)&current_arg);
+        if (current_arg->type && 
+            (strcmp(current_arg->type, "command") != 0 &&
+             strcmp(current_arg->type, "file") != 0 &&
+             strcmp(current_arg->type, "redir_right") != 0 &&
+             strcmp(current_arg->type, "double_redir_right") != 0 &&
+             strcmp(current_arg->type, "redir_left") != 0 &&
+             strcmp(current_arg->type, "double_redir_left") != 0 &&
+             strcmp(current_arg->type, "here_doc") != 0 &&
+             strcmp(current_arg->type, "pipe") != 0 &&
+             strcmp(current_arg->type, "semicolon") != 0))
+        {
+            ft_safe_free((void**)&(current_arg->type));
+        }
+        ft_safe_free((void**)&current_arg); // Free the t_arg node
         current_arg = next_arg;
     }
 }
@@ -34,6 +46,8 @@ void safe_free_cmds(t_cmd *cmds)
     t_cmd *next_cmd;
 
     current_cmd = cmds;
+	if (current_cmd->cmd_arg_stdin)
+        safe_free_all_strings(&(current_cmd->cmd_arg_stdin));
     while (current_cmd)
     {
         next_cmd = current_cmd->next;

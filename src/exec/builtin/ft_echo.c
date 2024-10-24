@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:35:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 23:55:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 02:38:55 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	handle_multiple_n_echo(t_shell *shell)
 	i = 2;
 	if (!(shell->cmds->cmd_arg_stdin[1][0] == '-')
 		|| !(shell->cmds->cmd_arg_stdin[1][1] == 'n'))
-		return (ft_printf("passage ici\n"), 0);
+		return (0);
 	while (shell->cmds->cmd_arg_stdin[1][i] != '\0'
 		&& shell->cmds->cmd_arg_stdin[1][i] == 'n')
 		i++;

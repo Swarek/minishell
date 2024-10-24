@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handling_pipe.c                                    :+:      :+:    :+:   */
+/*   handle_pipe_without_out_redirection.c              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/22 17:31:58 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/23 22:10:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int setup_redirection(t_shell *shell)
+static int setup_pipe_redirections(t_shell *shell)
 {
 	// Première commande
 	if (shell->n_th_cmd == 0)
@@ -40,13 +40,13 @@ int setup_redirection(t_shell *shell)
 
 
 // return 1 if a pipe is coming, 0 otherwise
-int	handling_pipes(t_shell *shell)
+int	handle_pipe_without_out_redirection(t_shell *shell)
 {
 	t_cmd *cmd;
 
 	cmd = shell->cmds;
-	setup_redirection(shell);
+	// print_all_commands(shell->cmds);
+	setup_pipe_redirections(shell);
 	close_pipes(shell);
-	execute_solo_in_pipe(shell);
 	return (0);
 }
