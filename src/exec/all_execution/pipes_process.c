@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 05:17:18 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:48:26 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 int	parent_process(t_shell *shell, pid_t pid)
 {
+	if (shell->infile > STDIN)
+		close(shell->infile);
+	if (shell->outfile > STDOUT)
+		close(shell->outfile);
 	shell->child_pids[shell->n_th_cmd] = pid;
 	return (0);
 }
@@ -48,6 +52,11 @@ void	child_process(t_shell *shell)
 	}
 	else
 		handle_pipe_without_out_redirection(shell);
+	close_pipes(shell);
+	if (shell->infile > STDIN)
+		close(shell->infile);
+	if (shell->outfile > STDOUT)
+		close(shell->outfile);
 	if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
 			exit(1);
 }

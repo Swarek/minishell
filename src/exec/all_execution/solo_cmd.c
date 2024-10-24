@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 03:43:45 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:36:10 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ static int	single_cmd(t_shell *shell)
 	else
 	{
 		execute_solo(shell);
+		if (shell->infile > STDIN)
+			close(shell->infile);
+		if (shell->outfile > STDOUT)
+			close(shell->outfile);
 		return (shell->exit_status);
 	}
 }

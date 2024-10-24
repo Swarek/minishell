@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/24 05:05:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 08:32:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 # define OUTPUT_REDIRECTION 0
 # define APPEND_REDIRECTION 1
 
+typedef struct s_env
+{
+	char	*line;
+	char	*name;
+	char	*value;
+	int		declared;
+	struct s_env	*next;
+}	t_env;
 typedef struct s_shell
 {
 	int		last_exit_status;	// To save the exit status ($?) to exit	// Nbr of cmd in the list
@@ -66,6 +74,13 @@ void clean_all(t_shell *shell);
 int	starting_one_cmd(t_shell *shell);
 void	find_arg_add_type_cmd(t_shell *shell, t_arg *args);
 int	handle_pipe_without_out_redirection(t_shell *shell);
+
+// for envp
+t_env   *create_t_env(char **envp);
+t_env   *add_node(t_env *head, t_env *new_node);
+t_env   *create_node(char *env_line);
+char    *get_env_value(char *env_line);
+char    *get_env_name(char *env_line);
 
 // Functions Pipex
 

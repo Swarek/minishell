@@ -6,11 +6,24 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 15:11:30 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 03:46:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 11:16:41 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	count_arguments_for_t_arg(t_arg *args)
+{
+	int	count;
+
+	count = 0;
+	while (args)
+	{
+		count++;
+		args = args->next;
+	}
+	return (count);
+}
 
 // Including the cmd
 int how_many_args(t_arg *args)

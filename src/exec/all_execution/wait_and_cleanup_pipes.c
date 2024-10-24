@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:49:55 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 05:19:52 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 11:17:40 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,10 @@ void	wait_and_cleanup(t_shell *shell)
 			else if (WIFSIGNALED(status))
 			{
 				shell->exit_status = 128 + WTERMSIG(status);
-				ft_printf("shell->exit_status = %d\n", shell->exit_status);
 			}
 		}
 		i++;
 	}
-	ft_printf("shell->exit_status = %d\n", shell->exit_status);
 	cleanup(shell, NULL);
 	if (shell->infile != -1)
 		close(shell->infile);

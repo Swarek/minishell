@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 02:19:23 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 06:44:23 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 # define STDIN 0
 # define STDOUT 1
+
 // Utils
 void	print_command(t_cmd *cmd);
 void	print_all_commands(t_cmd *cmds);

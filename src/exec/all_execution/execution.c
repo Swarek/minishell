@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 05:07:41 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:35:57 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ int	execute_solo(t_shell *shell)
 		setup_child_signals();
 		dup2(shell->infile, STDIN_FILENO);
 		dup2(shell->outfile, STDOUT_FILENO);
+		if (shell->infile > STDIN)
+			close(shell->infile);
+		if (shell->outfile > STDOUT)
+			close(shell->outfile);
 		if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
 			exit(1);
 	}
