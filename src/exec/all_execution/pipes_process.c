@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 05:48:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 11:25:21 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,9 @@ int	fork_process(t_shell *shell)
 		if (pid == -1)
 			return (error_msg("Fork failed\n"), -1);
 		if (pid == 0)
+		{
 			child_process(shell);
+		}
 		else
 			parent_process(shell, pid);
 		shell->n_th_cmd++;

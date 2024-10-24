@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 01:59:53 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 06:45:35 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 11:21:14 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	execute_built_in(t_shell *shell, char **cmd_arg_stdin, char ***envp)
 	if (ft_strcmp(cmd_arg_stdin[0], "pwd") == 0)
 		return (ft_pwd(shell));
 	if (ft_strcmp(cmd_arg_stdin[0], "export") == 0)
-		return (ft_export(shell->cmds->args, *envp)); 		// A bien faire a la fin
+		return (ft_export(shell->cmds->args, envp)); 		// A bien faire a la fin
 	if (ft_strcmp(cmd_arg_stdin[0], "env") == 0)
 		return (ft_env(*envp, shell), 0);
 	if (ft_strcmp(cmd_arg_stdin[0], "unset") == 0)			// A bien faire a la fin

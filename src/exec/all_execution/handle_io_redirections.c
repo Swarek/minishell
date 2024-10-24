@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   setup_file_redirections.c                          :+:      :+:    :+:   */
+/*   handle_io_redirections.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 21:37:21 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 11:27:23 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,7 @@ int	handle_io_redirections(t_shell *shell)
 			close(shell->infile);
 		return (-1);
 	}
+	if (redir_right != NULL)
+		return (1);
 	return (0);
 }
