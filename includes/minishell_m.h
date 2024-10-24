@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 22:46:41 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:05:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	a_pipe_is_coming(t_shell *shell);
 void close_pipes(t_shell *shell);
 void clean_all(t_shell *shell);
 int	starting_one_cmd(t_shell *shell);
-void	find_arg_add_type_cmd(t_shell *shell, t_arg *args, char **envp);
+void	find_arg_add_type_cmd(t_shell *shell, t_arg *args);
 int	handle_pipe_without_out_redirection(t_shell *shell);
 
 // Functions Pipex

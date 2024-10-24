@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 03:43:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:15:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ t_shell	*init_struct_shell(char **envp)
 		return (NULL);
 	shell->last_exit_status = 0;
 	shell->envp = env_copy(envp);
+	ft_printf("Test 0 shell->envp[0] = %s\n", shell->envp[0]);
 	shell->cmds = NULL;
 	// Initialize all other members
 	shell->total_cmd_count = 0;
@@ -156,8 +157,12 @@ int main(int ac, char **av, char **envp)
         g_sigint_received = 0;
         line = reading_line(color);
         if (!line || g_sigint_received)
+		{
+			if (line)
+				free(line);
             break;
-        if (g_sigint_received || parse_it(line, &cmds) != 0)
+		}
+		if (g_sigint_received || parse_it(line, &cmds) != 0)
         {
             free(line);
             continue;
@@ -179,8 +184,7 @@ int main(int ac, char **av, char **envp)
         }
         ft_printf("Exit status: %d\n", shell->exit_status);
         cmds = NULL;
-        color++;
-    }
+        color++;    }
     clean_all(shell);
     return (0);
 }

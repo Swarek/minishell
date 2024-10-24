@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 03:36:18 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:05:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	initiates_type_cmd(t_shell *shell)
 	tmp = shell->cmds;
 	while (tmp)
 	{
-		find_arg_add_type_cmd(shell, tmp->args, shell->envp);
+		find_arg_add_type_cmd(shell, tmp->args);
 		tmp = tmp->next;
 	}
 }

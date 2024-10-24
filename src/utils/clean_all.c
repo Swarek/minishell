@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:57:08 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 03:52:16 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 04:47:37 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void safe_free_cmds(t_cmd *cmds)
     t_cmd *next_cmd;
 
     current_cmd = cmds;
+	if (current_cmd->cmd_arg_stdin)
+        safe_free_all_strings(&(current_cmd->cmd_arg_stdin));
     while (current_cmd)
     {
         next_cmd = current_cmd->next;

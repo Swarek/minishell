@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:49:55 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 09:55:38 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/24 05:19:52 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ void	cleanup(t_shell *shell, char **cmd)
 	if (shell->outfile != -1)
 		close(shell->outfile);
 	if (shell->child_pids)
-		free(shell->child_pids);
+	{
+		ft_safe_free((void**)&(shell->child_pids));
+	}
 }
