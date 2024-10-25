@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/25 03:21:44 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/25 03:34:08 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-int		g_last_exit_status = 0;
+int g_last_exit_status = 0;
 
 void	print_command(t_cmd *cmd)
 {
@@ -45,13 +45,6 @@ void	print_all_commands(t_cmd *cmds)
 	printf("\n");
 }
 
-void	setup_child_signals(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-
 void	update_exit_status(int status)
 {
 	if (WIFEXITED(status))
@@ -60,22 +53,43 @@ void	update_exit_status(int status)
 		g_last_exit_status = 128 + WTERMSIG(status);
 }
 
-void	sigint_handler(int signum)
+void sigint_handler(int signum)
 {
-	(void)signum;
-	g_last_exit_status = 128 + 2;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	// clean_all(shell);
-	exit(130);
+    (void)signum;
+    g_last_exit_status = 128 + 2;
+    write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 
-void	setup_signals(void)
+void sigquit_handler(int signum)
 {
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
+    (void)signum;
+    write(1, "Quit: 3\n", 8);  // Mimics default behavior of quit signal
+    exit(131);
+}
+
+void setup_signals(void)
+{
+    signal(SIGINT, sigint_handler);
+    signal(SIGQUIT, SIG_IGN);  // Ignore ctrl+\ in parent
+}
+
+void setup_child_signals(void)
+{
+    signal(SIGINT, SIG_DFL);  // Default ctrl+c behavior in child
+    signal(SIGQUIT, SIG_DFL); // Default ctrl+\ behavior in child
+}
+
+void handle_ctrl_d(char *line, t_shell *shell)
+{
+    if (!line)  // rl_gets returns NULL if ctrl+d is received
+    {
+        clean_all(shell);  // Free memory properly
+        write(1, "exit\n", 5);
+        exit(g_last_exit_status);  // Exit with the last status
+    }
 }
 
 char	**env_copy(char **env)
@@ -147,6 +161,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		line = reading_line(color);
+		handle_ctrl_d(line, shell);
 		if (!line)
 			break ;
 		if (parse_it(line, &cmds) != 0)
