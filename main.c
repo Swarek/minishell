@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 11:19:03 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/25 03:21:44 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-int						g_last_exit_status = 0;
-volatile sig_atomic_t	g_sigint_received = 0;
+int		g_last_exit_status = 0;
 
 void	print_command(t_cmd *cmd)
 {
@@ -52,10 +51,6 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void	free_shell(t_shell *shell)
-{
-	(void)shell;
-}
 
 void	update_exit_status(int status)
 {
@@ -68,7 +63,6 @@ void	update_exit_status(int status)
 void	sigint_handler(int signum)
 {
 	(void)signum;
-	g_sigint_received = 1;
 	g_last_exit_status = 128 + 2;
 	write(1, "\n", 1);
 	rl_on_new_line();
@@ -121,7 +115,6 @@ t_shell	*init_struct_shell(char **envp)
 	shell->last_exit_status = 0;
 	shell->envp = env_copy(envp);
 	shell->cmds = NULL;
-	// Initialize all other members
 	shell->total_cmd_count = 0;
 	shell->nbr_pipes = 0;
 	shell->infile = 0;
@@ -134,58 +127,58 @@ t_shell	*init_struct_shell(char **envp)
 	return (shell);
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-    char    *line;
-    t_cmd   *cmds;
-    t_shell *shell;
-    int     color;
+	char	*line;
+	t_cmd	*cmds;
+	t_shell	*shell;
+	int		color;
 
-    (void)ac;
-    (void)av;
-    line = NULL;
-    cmds = NULL;
-    shell = init_struct_shell(envp);
-    if (!shell)
-        return (-1);
-    cmds = NULL;
-    color = 0;
-    setup_signals();
-    while (1)
-    {
-        g_sigint_received = 0;
-        line = reading_line(color);
-        if (!line || g_sigint_received)
+	(void)ac;
+	(void)av;
+	line = NULL;
+	cmds = NULL;
+	shell = init_struct_shell(envp);
+	if (!shell)
+		return (-1);
+	cmds = NULL;
+	color = 0;
+	setup_signals();
+	while (1)
+	{
+		line = reading_line(color);
+		if (!line)
+			break ;
+		if (parse_it(line, &cmds) != 0)
 		{
-			if (line)
-				free(line);
-            break;
+			free(line);
+			continue ;
 		}
-		if (g_sigint_received || parse_it(line, &cmds) != 0)
-        {
-            free(line);
-            continue;
-        }
-        free(line);
-        expand_env_vars_in_cmds_tab(&cmds);
-        if (error_if_impair_single_quotes(&cmds) == -1)
-        {
-            ft_printf("Odd number of single quotes\n");
-            clean_all(shell); // Assurer le nettoyage avant de quitter
-            return (-1);
-        }
-        type_to_file_in_args1(&cmds);
-        shell->cmds = cmds;
-        if (exec_it(shell) == -1)
-        {
-            clean_all(shell); // Nettoyer en cas d'erreur d'exécution
-            return (-1);
-        }
-        ft_printf("Exit status: %d\n", shell->exit_status);
-        cmds = NULL;
-        color++;    }
-    clean_all(shell);
-    return (0);
+		free(line);
+		expand_env_vars_in_cmds_tab(&cmds);
+		if (error_if_subsequent_commands(&cmds) == -1
+			|| error_if_unclosed_parentheses(&cmds) == -1
+			|| error_in_filename(&cmds))
+		{
+			ft_printf("Syntax error\n");
+			if (cmds)
+				free_args(cmds->args);
+			free(cmds);
+			clean_all(shell);
+			return (-1);
+		}
+		type_to_file_in_args1(&cmds);
+		replace_exit_status_in_cmds_tab(&cmds, shell);
+		shell->cmds = cmds;
+		if (exec_it(shell) == -1)
+		{
+			clean_all(shell);
+			return (-1);
+		}
+		ft_printf("Exit status: %d\n", shell->exit_status);
+		cmds = NULL;
+		color++;
+	}
+	clean_all(shell);
+	return (0);
 }
-
-

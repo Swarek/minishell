@@ -6,32 +6,12 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:25:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 02:52:10 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/25 02:21:49 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-bool	check_parentheses(char *input)
-{
-	int	parentheses_count;
-	int	i;
-
-	parentheses_count = 0;
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '(')
-			parentheses_count++;
-		else if (input[i] == ')')
-			parentheses_count--;
-		if (parentheses_count < 0)
-			return (true);
-		i++;
-	}
-	return (parentheses_count != 0);
-}
 
 int	check_pipe_position(char *input)
 {
@@ -54,8 +34,6 @@ int	check_pipe_position(char *input)
 
 int	precheck(char *input)
 {
-	if (check_parentheses(input))
-		return (1);
 	if (check_pipe_position(input) == -1)
 		return (2);
 	return (0);

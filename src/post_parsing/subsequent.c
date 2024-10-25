@@ -1,59 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_filename.c                                   :+:      :+:    :+:   */
+/*   subsequent.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 02:52:31 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:33:32 by dmathis          ###   ########.fr       */
+/*   Created: 2024/10/23 01:06:59 by dmathis           #+#    #+#             */
+/*   Updated: 2024/10/25 02:33:55 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_valid_char(char str)
+int	is_redirect_or_pipe(char *type)
 {
-	if (!((str >= 65 && str <= 90) || (str >= 97 && str <= 122) || (str >= 48
-				&& str <= 57) || str == 95 || str == 46 || str == 45))
-	{
-		return (-1);
-	}
-	return (1);
+	return (ft_strncmp(type, "pipe", 4) == 0 || ft_strncmp(type, "redir_left",
+			10) == 0 || ft_strncmp(type, "redir_right", 11) == 0
+		|| ft_strncmp(type, "double_redir_left", 16) == 0 || ft_strncmp(type,
+			"double_redir_right", 17) == 0);
 }
 
-int	check_file_name(char *input)
-{
-	int	i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (is_valid_char(input[i]) == -1)
-			return (-1);
-		i++;
-	}
-	return (0);
-}
-
-int	error_in_filename(t_cmd **cmds)
+int	error_if_subsequent_commands(t_cmd **cmds)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
-	int		i;
+	t_arg	*next_arg;
 
 	current_cmd = *cmds;
 	while (current_cmd)
 	{
 		current_arg = current_cmd->args;
-		while (current_arg)
+		while (current_arg && current_arg->next)
 		{
-			i = 0;
-			if (ft_strncmp(current_arg->type, "file", 4) == 0)
-			{
-				if (check_file_name(current_arg->content) == -1)
-					return (-1);
-			}
+			next_arg = current_arg->next;
+			if (is_redirect_or_pipe(current_arg->type)
+				&& is_redirect_or_pipe(next_arg->type))
+				return (-1);
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;

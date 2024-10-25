@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/25 02:33:25 by dmathis           #+#    #+#             */
+/*   Updated: 2024/10/25 02:59:03 by dmathis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-t_arg	*create_arg(char *content, char *type)
+t_arg	*create_arg(char *content, const char *type)
 {
 	t_arg	*new;
 
@@ -8,7 +20,18 @@ t_arg	*create_arg(char *content, char *type)
 	if (!new)
 		return (NULL);
 	new->content = ft_strdup(content);
-	new->type = ft_strdup(type);
+	if (!new->content)
+	{
+		free(new);
+		return (NULL);
+	}
+	if (ft_strcmp(type, "word") == 0 || ft_strcmp(type, "pipe") == 0
+		|| ft_strcmp(type, "command") == 0 || ft_strcmp(type, "file") == 0
+		|| ft_strcmp(type, "redir_right") == 0 || ft_strcmp(type,
+			"redir_left") == 0)
+		new->type = (char *)type;
+	else
+		new->type = ft_strdup(type);
 	new->next = NULL;
 	return (new);
 }

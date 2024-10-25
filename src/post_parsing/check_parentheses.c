@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   impair_quotes.c                                    :+:      :+:    :+:   */
+/*   check_parentheses.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 01:06:59 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 01:21:09 by dmathis          ###   ########.fr       */
+/*   Created: 2024/10/25 02:24:00 by dmathis           #+#    #+#             */
+/*   Updated: 2024/10/25 02:33:39 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_d.h"
+#include "minishell.h"
 
-int	error_if_impair_single_quotes(t_cmd **cmds)
+int	error_if_unclosed_parentheses(t_cmd **cmds)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
-	int		nbq;
+	int		open_parentheses;
 	int		i;
 
-	nbq = 0;
+	open_parentheses = 0;
 	current_cmd = *cmds;
 	while (current_cmd)
 	{
@@ -27,18 +27,26 @@ int	error_if_impair_single_quotes(t_cmd **cmds)
 		while (current_arg)
 		{
 			i = 0;
-			while (current_arg->content[i])
+			if (ft_strncmp(current_arg->type, "word", 4) == 0)
 			{
-				if (current_arg->content[i] == '\''
-					&& (ft_strncmp(current_arg->type, "word", 4) == 0 || ft_strncmp(current_arg->type, "single_quoted", 13) == 0))
-					nbq++;
-				i++;
+				while (current_arg->content[i])
+				{
+					if (current_arg->content[i] == '(')
+						open_parentheses++;
+					else if (current_arg->content[i] == ')')
+					{
+						open_parentheses--;
+						if (open_parentheses < 0)
+							return (-1);
+					}
+					i++;
+				}
 			}
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;
 	}
-	if (nbq % 2 != 0)
+	if (open_parentheses != 0)
 		return (-1);
 	return (0);
 }

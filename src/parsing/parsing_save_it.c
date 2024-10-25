@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:29 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 01:49:00 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/25 02:28:10 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ int	save_it_double_quoted(char *str, int i, t_arg **args)
 	int		j;
 	t_arg	*arg;
 	char	*to_save;
-	int		ndbq;
 
 	j = i + 1;
-	ndbq = 0;
 	while (str[j] && (str[j] != '"'))
 		j++;
 	if (!str[j])
@@ -56,9 +54,7 @@ int	save_it_single_quoted(char *str, int i, t_arg **args)
 
 	j = i + 1;
 	while (str[j] != '\0' && (str[j] != '\''))
-	{
 		j++;
-	}
 	if (str[j] == '\0')
 		return (-2);
 	to_save = ft_substr(str, i + 1, j - i - 1);

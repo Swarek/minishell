@@ -1,68 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_expansion.c                                    :+:      :+:    :+:   */
+/*   replace_exit_status.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:33:42 by dmathis          ###   ########.fr       */
+/*   Created: 2024/10/25 02:09:57 by dmathis           #+#    #+#             */
+/*   Updated: 2024/10/25 02:33:52 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	replace_env_var(t_arg *current_arg, int start, int end,
-		const char *value)
+void	process_exit_status(t_arg *current_arg, int *i, t_shell *shell)
 {
-	size_t	old_len;
-	size_t	val_len;
-	size_t	new_len;
+	char	*status_str;
 	char	*new_str;
+	size_t	old_len;
+	size_t	new_len;
 
+	status_str = ft_itoa(shell->exit_status);
+	if (!status_str)
+		return ;
 	old_len = ft_strlen(current_arg->content);
-	val_len = ft_strlen(value);
-	new_len = old_len - (end - start) + val_len;
+	new_len = old_len - 2 + ft_strlen(status_str);
 	new_str = malloc(new_len + 1);
 	if (!new_str)
+	{
+		free(status_str);
 		return ;
-	ft_strlcpy(new_str, current_arg->content, start + 1);
-	ft_strlcpy(new_str + start, value, val_len + 1);
-	ft_strlcpy(new_str + start + val_len, current_arg->content + end, old_len
-		- end + 1);
+	}
+	ft_strlcpy(new_str, current_arg->content, *i + 1);
+	ft_strlcpy(new_str + *i, status_str, ft_strlen(status_str) + 1);
+	ft_strlcpy(new_str + *i + ft_strlen(status_str), current_arg->content + *i
+		+ 2, old_len - *i - 1);
+	*i += ft_strlen(status_str) - 1;
 	free(current_arg->content);
+	free(status_str);
 	current_arg->content = new_str;
 }
 
-void	process_env_var(t_arg *current_arg, int *i)
-{
-	int			start;
-	int			j;
-	char		var_name[512];
-	const char	*env_value;
-
-	start = *i + 1;
-	j = *i + 2;
-	while (current_arg->content[j] && (current_arg->content[j] == '_'
-			|| (current_arg->content[j] >= 'a'
-				&& current_arg->content[j] <= 'z')
-			|| (current_arg->content[j] >= 'A'
-				&& current_arg->content[j] <= 'Z')
-			|| (current_arg->content[j] >= '0'
-				&& current_arg->content[j] <= '9')))
-		j++;
-	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
-	env_value = getenv(var_name);
-	if (env_value)
-	{
-		replace_env_var(current_arg, *i, j, env_value);
-		*i += ft_strlen(env_value) - 1;
-	}
-	else
-		*i = j - 1;
-}
-
-void	expand_env_vars(t_arg *current_arg, int dolls)
+void	replace_exit_status(t_arg *current_arg, int dolls, t_shell *shell)
 {
 	int	i;
 
@@ -81,9 +59,9 @@ void	expand_env_vars(t_arg *current_arg, int dolls)
 		while (current_arg->content && current_arg->content[i])
 		{
 			if (current_arg->content[i] == '$' && current_arg->content[i + 1]
-				&& (size_t)(i + 1) < ft_strlen(current_arg->content))
+				&& current_arg->content[i + 1] == '?')
 			{
-				process_env_var(current_arg, &i);
+				process_exit_status(current_arg, &i, shell);
 				dolls--;
 			}
 			else
@@ -92,7 +70,7 @@ void	expand_env_vars(t_arg *current_arg, int dolls)
 	}
 }
 
-void	expand_env_vars_in_cmds_tab(t_cmd **cmds)
+void	replace_exit_status_in_cmds_tab(t_cmd **cmds, t_shell *shell)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
@@ -105,7 +83,7 @@ void	expand_env_vars_in_cmds_tab(t_cmd **cmds)
 		{
 			if (ft_strncmp(current_arg->type, "word", 4) == 0
 				|| ft_strncmp(current_arg->type, "double_quoted", 13) == 0)
-				expand_env_vars(current_arg, 0);
+				replace_exit_status(current_arg, 0, shell);
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;
