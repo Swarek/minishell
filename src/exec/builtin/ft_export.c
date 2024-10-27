@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 06:35:14 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 08:32:27 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/27 18:58:52 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int	ft_export(t_arg *args, char ***envp)
 	if (count_arguments_for_t_arg(args) == 1)
 		return (declare_and_sort(env), 0);
 	args = args->next;
+	edit_args_for_export(args);
 	while (args)
 	{
 		if (is_valid_identifier(args->content) && ft_strchr(args->content, '='))

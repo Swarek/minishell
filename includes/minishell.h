@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 03:15:30 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/27 18:58:26 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ char	**convert_args_to_argv(t_arg *args);
 void	print_args(t_arg *args);
 void	find_and_add_type_cmd(t_arg *args, char **envp);
 void	setup_child_signals(void);
+void	edit_args_for_export(t_arg *args);
 
 // Build-in functions
 int		ft_pwd(t_shell *shell);
