@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/27 18:58:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/27 19:04:14 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ void	print_all_commands(t_cmd *cmds);
 void	my_print_command(t_arg *args);
 void	free_cmd(t_cmd *cmd);
 int		len_cmd(t_cmd *cmd);
-int		count_cmd(t_cmd *cmd);
 int		count_arguments(char **args);
 int		count_arguments_for_t_arg(t_arg *args);
 char	**convert_args_to_argv(t_arg *args);
@@ -164,6 +163,7 @@ void	print_args(t_arg *args);
 void	find_and_add_type_cmd(t_arg *args, char **envp);
 void	setup_child_signals(void);
 void	edit_args_for_export(t_arg *args);
+int		count_cmd(t_cmd *cmd);
 
 // Build-in functions
 int		ft_pwd(t_shell *shell);
