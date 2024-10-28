@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 23:14:18 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 00:35:49 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 # define STDOUT 1
 
 // Structures
-
-extern int			g_last_exit_status;
 
 typedef struct s_arg
 {
@@ -82,7 +80,10 @@ typedef struct s_shell
 	int n_th_cmd;           // The xth command in the list
 	int **pipes;            // Les pipes (fd[2])
 	pid_t *child_pids;      // ID des processus enfants
+	int in_child_process;
 }					t_shell;
+
+extern volatile sig_atomic_t g_received_signal;
 
 // 		Parsing
 
@@ -128,8 +129,8 @@ void				add_command(t_cmd **cmds, t_arg **current_args);
 
 void				print_args(t_arg *args);
 
-void				expand_env_vars_in_cmds_tab(t_cmd **cmds);
-void				expand_env_vars(t_arg *current_arg);
+void				expand_env_vars_in_cmds_tab(t_cmd **cmds, t_shell shell);
+void				expand_env_vars(t_arg *current_arg, t_shell shell);
 void				replace_env_var(t_arg *current_arg, int start, int end,
 						const char *value);
 

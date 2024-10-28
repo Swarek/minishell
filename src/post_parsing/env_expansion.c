@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 21:08:24 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 00:22:33 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	replace_env_var(t_arg *current_arg, int start, int end,
 	current_arg->content = new_str;
 }
 
-void	process_env_var(t_arg *current_arg, int *i)
+void	process_env_var(t_arg *current_arg, int *i, t_shell shell)
 {
 	int			start;
 	int			j;
@@ -50,7 +50,7 @@ void	process_env_var(t_arg *current_arg, int *i)
 	}
 	if (current_arg->content[start] == '?')
 	{
-		status_str = ft_itoa(g_last_exit_status);
+		status_str = ft_itoa(shell.last_exit_status);
 		if (!status_str)
 			return ;
 		replace_env_var(current_arg, *i, start + 1, status_str);
@@ -83,7 +83,7 @@ void	process_env_var(t_arg *current_arg, int *i)
 		*i = j - 1;
 }
 
-void	expand_env_vars(t_arg *current_arg)
+void	expand_env_vars(t_arg *current_arg, t_shell shell)
 {
 	int	i;
 
@@ -96,7 +96,7 @@ void	expand_env_vars(t_arg *current_arg)
 			&& (current_arg->content[i + 1] == '?' || current_arg->content[i
 				+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
 		{
-			process_env_var(current_arg, &i);
+			process_env_var(current_arg, &i, shell);
 		}
 		else
 		{
@@ -105,7 +105,7 @@ void	expand_env_vars(t_arg *current_arg)
 	}
 }
 
-void	expand_env_vars_in_cmds_tab(t_cmd **cmds)
+void	expand_env_vars_in_cmds_tab(t_cmd **cmds, t_shell shell)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
@@ -118,7 +118,7 @@ void	expand_env_vars_in_cmds_tab(t_cmd **cmds)
 		{
 			if (ft_strncmp(current_arg->type, "word", 4) == 0
 				|| ft_strncmp(current_arg->type, "double_quoted", 13) == 0)
-				expand_env_vars(current_arg);
+				expand_env_vars(current_arg, shell);
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;
