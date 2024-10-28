@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:33:42 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 17:55:44 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,25 @@ void	process_env_var(t_arg *current_arg, int *i)
 {
 	int			start;
 	int			j;
-	char		var_name[512];
-	const char	*env_value;
+	char		*status_str;
 
 	start = *i + 1;
-	j = *i + 2;
+	if (!current_arg->content[start])
+	{
+		*i = start;
+		return ;
+	}
+	if (current_arg->content[start] == '?')
+	{
+		status_str = ft_itoa(g_last_exit_status);
+		if (!status_str)
+			return ;
+		replace_env_var(current_arg, *i, start + 1, status_str);
+		*i += ft_strlen(status_str) - 1;
+		free(status_str);
+		return ;
+	}
+	j = start;
 	while (current_arg->content[j] && (current_arg->content[j] == '_'
 			|| (current_arg->content[j] >= 'a'
 				&& current_arg->content[j] <= 'z')
@@ -51,15 +65,11 @@ void	process_env_var(t_arg *current_arg, int *i)
 			|| (current_arg->content[j] >= '0'
 				&& current_arg->content[j] <= '9')))
 		j++;
-	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
-	env_value = getenv(var_name);
-	if (env_value)
+	if (j == start)
 	{
-		replace_env_var(current_arg, *i, j, env_value);
-		*i += ft_strlen(env_value) - 1;
+		*i = start;
+		return ;
 	}
-	else
-		*i = j - 1;
 }
 
 void	expand_env_vars(t_arg *current_arg, int dolls)
@@ -69,9 +79,12 @@ void	expand_env_vars(t_arg *current_arg, int dolls)
 	if (!current_arg->content)
 		return ;
 	i = 0;
+	dolls = 0;
 	while (current_arg->content[i])
 	{
-		if (current_arg->content[i] == '$')
+		if (current_arg->content[i] == '$' && current_arg->content[i + 1]
+			&& (current_arg->content[i + 1] == '?' || current_arg->content[i
+				+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
 			dolls++;
 		i++;
 	}

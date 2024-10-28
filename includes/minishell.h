@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 13:53:13 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 17:57:44 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # define STDOUT 1
 
 // Structures
+
+extern int g_last_exit_status;
 
 typedef struct s_arg
 {
