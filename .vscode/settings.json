@@ -10,6 +10,7 @@
 		"limits.h": "c",
 		"stdio.h": "c",
 		"text": "cpp",
-		"test": "cpp"
+		"test": "cpp",
+		"unistd.h": "c"
 	}
 }

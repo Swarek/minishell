@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 20:36:00 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 23:11:44 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,8 @@ void	sigint_handler(int signum)
 	(void)signum;
 	g_last_exit_status = 128 + 2;
 	write(1, "\n", 1);
-	if (rl_on_new_line() == -1)
-		return ;
-	rl_replace_line("", 0);
+	rl_replace_line("", 1); // Le 1 indique de ne pas ajouter à l'historique
+	rl_on_new_line();
 	rl_redisplay();
 }
 
@@ -75,6 +74,7 @@ void	setup_signals(void)
 {
 	struct sigaction	sa;
 
+	rl_catch_signals = 0; // Ajoutez cette ligne
 	sa.sa_handler = sigint_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -97,7 +97,8 @@ void	handle_ctrl_d(char *line, t_shell *shell)
 {
 	if (!line) // rl_gets returns NULL if ctrl+d is received
 	{
-		clean_all(shell); // Free memory properly
+		if (shell)
+			clean_all(shell); // Free memory properly
 		write(1, "exit\n", 5);
 		exit(g_last_exit_status); // Exit with the last status
 	}
@@ -192,13 +193,18 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 		str_arg_in_null(cmds);
 		expand_env_vars_in_cmds_tab(&cmds);
+		ft_printf("test 4\n");
 		if (error_if_subsequent_commands(&cmds) == -1
 			|| error_if_unclosed_parentheses(&cmds) == -1
 			|| error_in_filename(&cmds))
 		{
 			ft_printf("Syntax error\n");
 			if (cmds)
+			{
 				safe_free_cmds(cmds);
+				cmds = NULL;
+				shell->cmds = NULL;
+			}
 			clean_all(shell);
 			return (-1);
 		}
@@ -211,16 +217,20 @@ int	main(int ac, char **av, char **envp)
 			if (cmds)
 			{
 				safe_free_cmds(cmds);
+				cmds = NULL;
+				shell->cmds = NULL;
 			}
 			clean_all(shell);
 			return (-1);
 		}
 		ft_printf("Exit status: %d\n", shell->exit_status);
+		color++;
 		if (cmds)
 		{
 			safe_free_cmds(cmds);
+			cmds = NULL;
+			shell->cmds = NULL;
 		}
-		color++;
 	}
 	clean_all(shell);
 	return (0);

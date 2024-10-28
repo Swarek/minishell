@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 18:14:00 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 21:08:24 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,39 +83,24 @@ void	process_env_var(t_arg *current_arg, int *i)
 		*i = j - 1;
 }
 
-void	expand_env_vars(t_arg *current_arg, int dolls)
+void	expand_env_vars(t_arg *current_arg)
 {
 	int	i;
 
+	i = 0;
 	if (!current_arg->content)
 		return ;
-	i = 0;
 	while (current_arg->content[i])
 	{
 		if (current_arg->content[i] == '$' && current_arg->content[i + 1]
 			&& (current_arg->content[i + 1] == '?' || current_arg->content[i
 				+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
-			dolls++;
-		i++;
-	}
-	while (dolls > 0)
-	{
-		i = 0;
-		if (!current_arg->content)
-			break ;
-		while (current_arg->content[i])
 		{
-			if (current_arg->content[i] == '$' && current_arg->content[i + 1]
-				&& (current_arg->content[i + 1] == '?' || current_arg->content[i
-					+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
-			{
-				process_env_var(current_arg, &i);
-				dolls--;
-				break ;
-				i++;
-			}
-			if (current_arg->content[i] == '\0')
-				break ;
+			process_env_var(current_arg, &i);
+		}
+		else
+		{
+			i++;
 		}
 	}
 }
@@ -133,7 +118,7 @@ void	expand_env_vars_in_cmds_tab(t_cmd **cmds)
 		{
 			if (ft_strncmp(current_arg->type, "word", 4) == 0
 				|| ft_strncmp(current_arg->type, "double_quoted", 13) == 0)
-				expand_env_vars(current_arg, 0);
+				expand_env_vars(current_arg);
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;

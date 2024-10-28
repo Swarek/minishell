@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_management.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/18 16:38:21 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 21:26:52 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 static int	write_to_temp(int fd, char *line)
 {

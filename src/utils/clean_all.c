@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_all.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:57:08 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 12:10:40 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 23:02:34 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	free_args(t_arg *args)
 			free(current->content);
 			current->content = NULL;
 		}
-		// Ne libérer le type que s'il n'est pas prédéfini
 		if (current->type && ft_strcmp(current->type, "word") != 0
 			&& ft_strcmp(current->type, "pipe") != 0 && ft_strcmp(current->type,
 				"command") != 0 && ft_strcmp(current->type, "file") != 0
@@ -64,8 +63,6 @@ void	safe_free_cmds(t_cmd *cmds)
 	t_cmd	*next_cmd;
 
 	current_cmd = cmds;
-	if (current_cmd->cmd_arg_stdin)
-		safe_free_all_strings(&(current_cmd->cmd_arg_stdin));
 	while (current_cmd)
 	{
 		next_cmd = current_cmd->next;
@@ -93,8 +90,6 @@ void	free_pipes(int **pipes, int nbr_pipes)
 
 void	clean_all(t_shell *shell)
 {
-	t_cmd	*current;
-	t_cmd	*next;
 	char	**ptr;
 
 	if (!shell)
@@ -104,24 +99,17 @@ void	clean_all(t_shell *shell)
 		free(shell->child_pids);
 		shell->child_pids = NULL;
 	}
+	// Ne pas nettoyer cmds si déjà NULL
 	if (shell->cmds)
 	{
-		current = shell->cmds;
-		while (current)
-		{
-			next = current->next;
-			if (current->args)
-				free_args(current->args);
-			if (current->cmd_arg_stdin)
-				free_cmd_arg_stdin(current->cmd_arg_stdin);
-			current->args = NULL;
-			free(current);
-			current = next;
-		}
+		safe_free_cmds(shell->cmds);
 		shell->cmds = NULL;
 	}
 	if (shell->pipes)
+	{
 		free_pipes(shell->pipes, shell->nbr_pipes);
+		shell->pipes = NULL;
+	}
 	if (shell->envp)
 	{
 		ptr = shell->envp;
@@ -130,7 +118,7 @@ void	clean_all(t_shell *shell)
 		free(shell->envp);
 		shell->envp = NULL;
 	}
-    rl_cleanup_after_signal();
-    rl_deprep_terminal();
+	rl_cleanup_after_signal();
+	rl_deprep_terminal();
 	free(shell);
 }

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 20:39:01 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 23:14:18 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,14 @@
 # define APPEND_REDIRECTION 1
 
 # include "libft.h"
-# include "pipex.h"
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <sys/wait.h>
+# include <stdlib.h>
 
 # define STDIN 0
 # define STDOUT 1
@@ -126,7 +129,7 @@ void				add_command(t_cmd **cmds, t_arg **current_args);
 void				print_args(t_arg *args);
 
 void				expand_env_vars_in_cmds_tab(t_cmd **cmds);
-void				expand_env_vars(t_arg *current_arg, int dolls);
+void				expand_env_vars(t_arg *current_arg);
 void				replace_env_var(t_arg *current_arg, int start, int end,
 						const char *value);
 
@@ -247,5 +250,8 @@ void				free_args(t_arg *args);
 void				clean_up_for_error_init(t_shell *shell, int nbr_pipes);
 void				free_cmd_arg_stdin(char **cmd_arg_stdin);
 void				safe_free_cmds(t_cmd *cmds);
+void				end_clean(t_shell *shell);
+void				free_pipes(int **pipes, int nbr_pipes);
+
 
 #endif
