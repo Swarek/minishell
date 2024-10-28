@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 18:00:12 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 18:23:36 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-int g_last_exit_status = 0;
+int		g_last_exit_status = 0;
 
 void	print_command(t_cmd *cmd)
 {
@@ -53,43 +53,54 @@ void	update_exit_status(int status)
 		g_last_exit_status = 128 + WTERMSIG(status);
 }
 
-void sigint_handler(int signum)
+void	sigint_handler(int signum)
 {
-    (void)signum;
-    g_last_exit_status = 128 + 2;
-    write(1, "\n", 1);
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+	(void)signum;
+	g_last_exit_status = 128 + 2;
+	write(1, "\n", 1);
+	if (rl_on_new_line() == -1)
+		return ;
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
-void sigquit_handler(int signum)
+void	sigquit_handler(int signum)
 {
-    (void)signum;
-    write(1, "Quit: 3\n", 8);  // Mimics default behavior of quit signal
-    exit(131);
+	(void)signum;
+	write(1, "Quit: 3\n", 8); // Mimics default behavior of quit signal
+	exit(131);
 }
 
-void setup_signals(void)
+void	setup_signals(void)
 {
-    signal(SIGINT, sigint_handler);
-    signal(SIGQUIT, SIG_IGN);  // Ignore ctrl+\ in parent
+	struct sigaction	sa;
+
+	sa.sa_handler = sigint_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void setup_child_signals(void)
+void	setup_child_signals(void)
 {
-    signal(SIGINT, SIG_DFL);  // Default ctrl+c behavior in child
-    signal(SIGQUIT, SIG_DFL); // Default ctrl+\ behavior in child
+	struct sigaction	sa;
+
+	sa.sa_handler = SIG_DFL;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }
 
-void handle_ctrl_d(char *line, t_shell *shell)
+void	handle_ctrl_d(char *line, t_shell *shell)
 {
-    if (!line)  // rl_gets returns NULL if ctrl+d is received
-    {
-        clean_all(shell);  // Free memory properly
-        write(1, "exit\n", 5);
-        exit(g_last_exit_status);  // Exit with the last status
-    }
+	if (!line) // rl_gets returns NULL if ctrl+d is received
+	{
+		clean_all(shell); // Free memory properly
+		write(1, "exit\n", 5);
+		exit(g_last_exit_status); // Exit with the last status
+	}
 }
 
 char	**env_copy(char **env)
@@ -171,6 +182,8 @@ int	main(int ac, char **av, char **envp)
 	{
 		line = reading_line(color);
 		handle_ctrl_d(line, shell);
+		if (!line)
+			break ;
 		if (parse_it(line, &cmds) != 0)
 		{
 			free(line);
@@ -193,12 +206,18 @@ int	main(int ac, char **av, char **envp)
 		type_to_file_in_args1(&cmds);
 		replace_exit_status_in_cmds_tab(&cmds, shell);
 		shell->cmds = cmds;
+		print_all_commands(cmds);
 		if (exec_it(shell) == -1)
 		{
-			ft_printf("Test\n");
+			if (cmds)
+			{
+				free_args(cmds->args);
+				free(cmds);
+			}
 			clean_all(shell);
 			return (-1);
 		}
+		ft_printf("Exit status: %d\n", shell->exit_status);
 		cmds = NULL;
 		color++;
 	}

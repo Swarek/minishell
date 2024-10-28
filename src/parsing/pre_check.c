@@ -6,27 +6,30 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:25:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 14:38:43 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 18:19:10 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 int	check_pipe_position(char *input)
 {
-	int		i;
+	int	i;
 
-	i = 0;
-	if (input[0] && input[0] == '|')
+	if (!input || !*input)
+		return (0);
+	if (input[0] == '|')
 		return (-1);
-	i++;
+	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '|' && (input[i - 1] != ' ' && input[i - 1] != '\t'))
-			return (-1);
-		if (input[i] == '|' && input[i + 1] == '\0')
-			return (-1);
+		if (input[i] == '|')
+		{
+			if (i == 0 || (input[i - 1] != ' ' && input[i - 1] != '\t'))
+				return (-1);
+			if (!input[i + 1])
+				return (-1);
+		}
 		i++;
 	}
 	return (0);

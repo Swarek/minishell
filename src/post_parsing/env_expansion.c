@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 17:55:44 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 18:14:00 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	process_env_var(t_arg *current_arg, int *i)
 	int			start;
 	int			j;
 	char		*status_str;
+	char		var_name[512];
+	const char	*env_value;
 
 	start = *i + 1;
 	if (!current_arg->content[start])
@@ -70,6 +72,15 @@ void	process_env_var(t_arg *current_arg, int *i)
 		*i = start;
 		return ;
 	}
+	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
+	env_value = getenv(var_name);
+	if (env_value)
+	{
+		replace_env_var(current_arg, *i, j, env_value);
+		*i += ft_strlen(env_value) - 1;
+	}
+	else
+		*i = j - 1;
 }
 
 void	expand_env_vars(t_arg *current_arg, int dolls)
@@ -79,7 +90,6 @@ void	expand_env_vars(t_arg *current_arg, int dolls)
 	if (!current_arg->content)
 		return ;
 	i = 0;
-	dolls = 0;
 	while (current_arg->content[i])
 	{
 		if (current_arg->content[i] == '$' && current_arg->content[i + 1]
@@ -91,16 +101,21 @@ void	expand_env_vars(t_arg *current_arg, int dolls)
 	while (dolls > 0)
 	{
 		i = 0;
-		while (current_arg->content && current_arg->content[i])
+		if (!current_arg->content)
+			break ;
+		while (current_arg->content[i])
 		{
 			if (current_arg->content[i] == '$' && current_arg->content[i + 1]
-				&& (size_t)(i + 1) < ft_strlen(current_arg->content))
+				&& (current_arg->content[i + 1] == '?' || current_arg->content[i
+					+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
 			{
 				process_env_var(current_arg, &i);
 				dolls--;
-			}
-			else
+				break ;
 				i++;
+			}
+			if (current_arg->content[i] == '\0')
+				break ;
 		}
 	}
 }
