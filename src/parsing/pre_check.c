@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:25:51 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:21:49 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 14:38:43 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_pipe_position(char *input)
 	int		i;
 
 	i = 0;
-	if (input[0] == '|')
+	if (input[0] && input[0] == '|')
 		return (-1);
 	i++;
 	while (input[i])
