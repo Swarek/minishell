@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:02 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 01:49:17 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 13:49:34 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	parse_it(char *str, t_cmd **cmds)
 		{
 			if (str[i + 1] == '|')
 			{
+				current_args = NULL;
 				add_arg(&current_args, create_arg("more-than_one_pipe", "error"));
 				add_command(cmds, &current_args);
 				while (str[i] == '|')
@@ -73,6 +74,7 @@ int	parse_it(char *str, t_cmd **cmds)
 			}
 			else
 			{
+				current_args = NULL;
 				add_arg(&current_args, create_arg("|", "pipe"));
 				add_command(cmds, &current_args);
 				i++;

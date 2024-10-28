@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/27 19:04:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 13:53:13 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,17 @@ typedef struct s_shell
 /*
 
 Si c'est un pipe ça sera une commande de type = "pipe" et de content "|"
-Si c'est une ">" ça sera une commande de type = "redir_right" et de content = ">"
-Si c'est une ">>" ça sera une commande de type = "double_redir_right" et de content = ">>"
-Si c'est une "<" ça sera une commande de type = "redir_left" et de content = "<"
-Si c'est une "<<" ça sera une commande de type = "double_redir_left" et de content = "<"
+
 
 Pour les arguments les types sont :
 
 "single_quoted" : Contenu entre single quotes
 "double_quoted" : Contenu entre double quotes
-"unfinished single_quoted" : Contenu placé après une seule single quote jamais fermée
-"unfinished double_quoted" : Contenu placé après une seule double quote jamais fermée
-"word" : le reste,
-		séparés par des espaces,	c'est à dire une suite de caractères qui ne contient pas de tout ça ; > < ' " |
+"redir_right" : content = ">"
+"double_redir_right" : content = ">>"
+"redir_left" : content = "<"
+"double_redir_left" : content = "<"
+"word" : le reste, séparés par des espaces,	c'est à dire une suite de caractères qui ne contient pas de tout ça ; > < ' " |
 
 */
 
