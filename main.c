@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 12:21:20 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 17:19:30 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,6 @@ int	main(int ac, char **av, char **envp)
 	{
 		line = reading_line(color);
 		handle_ctrl_d(line, shell);
-		if (!line)
-			break ;
 		if (parse_it(line, &cmds) != 0)
 		{
 			free(line);
@@ -195,13 +193,12 @@ int	main(int ac, char **av, char **envp)
 		type_to_file_in_args1(&cmds);
 		replace_exit_status_in_cmds_tab(&cmds, shell);
 		shell->cmds = cmds;
-		print_all_commands(cmds);
 		if (exec_it(shell) == -1)
 		{
+			ft_printf("Test\n");
 			clean_all(shell);
 			return (-1);
 		}
-		ft_printf("Exit status: %d\n", shell->exit_status);
 		cmds = NULL;
 		color++;
 	}

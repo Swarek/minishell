@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/27 19:05:13 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 17:19:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@
 int	exec_it(t_shell *shell)
 {
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
-		return (-1);
+		return (0);
 	if (all_init(shell) == -1) // Un seul appel à all_init
 		return (-1);
 	if (count_cmd(shell->cmds) == 0)
 		return (0);
-	ft_printf("Count cmd : %d\n\n\n\n\n\n\n\n\n", count_cmd(shell->cmds));
-	print_all_commands(shell->cmds);
 	if (shell->nbr_pipes == 0)
 	{
 		if (starting_one_cmd(shell) == -1)
