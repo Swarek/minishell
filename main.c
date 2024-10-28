@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/27 18:50:52 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 12:21:20 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ t_shell	*init_struct_shell(char **envp)
 {
 	t_shell	*shell;
 
-	shell = malloc(sizeof(t_shell));
+	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
 		return (NULL);
 	shell->last_exit_status = 0;
@@ -139,6 +139,15 @@ t_shell	*init_struct_shell(char **envp)
 	shell->pipes = NULL;
 	shell->child_pids = NULL;
 	return (shell);
+}
+
+void	str_arg_in_null(t_cmd *cmd)
+{
+	while (cmd)
+	{
+		cmd->cmd_arg_stdin = NULL;
+		cmd = cmd->next;
+	}
 }
 
 int	main(int ac, char **av, char **envp)
@@ -170,6 +179,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		free(line);
+		str_arg_in_null(cmds);
 		expand_env_vars_in_cmds_tab(&cmds);
 		if (error_if_subsequent_commands(&cmds) == -1
 			|| error_if_unclosed_parentheses(&cmds) == -1

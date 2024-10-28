@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_all.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:57:08 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/25 03:19:46 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 12:10:40 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,6 @@ void	clean_all(t_shell *shell)
 	}
 	if (shell->pipes)
 		free_pipes(shell->pipes, shell->nbr_pipes);
-	if (shell->child_pids)
-		free(shell->child_pids);
 	if (shell->envp)
 	{
 		ptr = shell->envp;
