@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:33:25 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:59:03 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 20:38:50 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,29 +52,6 @@ void	add_arg(t_arg **head, t_arg *new_arg)
 			current = current->next;
 		}
 		current->next = new_arg;
-	}
-}
-
-void	free_cmds(t_cmd *cmds)
-{
-	t_cmd	*next_cmd;
-	t_arg	*args;
-	t_arg	*next_arg;
-
-	while (cmds)
-	{
-		next_cmd = cmds->next;
-		args = cmds->args;
-		while (args)
-		{
-			next_arg = args->next;
-			free(args->content);
-			free(args->type);
-			free(args);
-			args = next_arg;
-		}
-		free(cmds);
-		cmds = next_cmd;
 	}
 }
 

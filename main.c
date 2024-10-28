@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 18:23:36 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 20:36:00 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,8 +198,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			ft_printf("Syntax error\n");
 			if (cmds)
-				free_args(cmds->args);
-			free(cmds);
+				safe_free_cmds(cmds);
 			clean_all(shell);
 			return (-1);
 		}
@@ -211,14 +210,16 @@ int	main(int ac, char **av, char **envp)
 		{
 			if (cmds)
 			{
-				free_args(cmds->args);
-				free(cmds);
+				safe_free_cmds(cmds);
 			}
 			clean_all(shell);
 			return (-1);
 		}
 		ft_printf("Exit status: %d\n", shell->exit_status);
-		cmds = NULL;
+		if (cmds)
+		{
+			safe_free_cmds(cmds);
+		}
 		color++;
 	}
 	clean_all(shell);
