@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 00:27:07 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 00:44:10 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,17 @@ char	*reading_line(int color)
 	char	*line;
 	char	*prompt;
 
-	if (g_received_signal == SIGINT)
+	if (g_received_signal == 2 && rl_line_buffer == NULL)
 	{
 		line = readline("");
+		g_received_signal = 0;
 	}
 	else
 	{
 		prompt = get_colored_prompt(color);
 		line = readline(prompt);
 		free(prompt);
+		g_received_signal = 0;
 	}
 	if (line && *line)
 		add_history(line);
