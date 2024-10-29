@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   solo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/25 03:08:22 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 02:49:44 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	starting_one_cmd(t_shell *shell)
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (-1);
 	if (handle_io_redirections(shell) == -1)
-		return (-1);
+		return (ft_printf("handle_here_doc failed"), -1);
+	ft_printf("Passage apres handle here doc dans starting_one_cmd\n");
 	// Supprimer l'appel à all_init ici car il est déjà fait dans exec_it
 	cut_the_cmd_plus_args(shell->cmds);
 	if (single_cmd(shell) == -1)

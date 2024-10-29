@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:09:54 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:44:09 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void close_pipes(t_shell *shell)
 void	child_process(t_shell *shell)
 {
 	setup_child_signals();
-	shell->there_is_redir_out = handle_io_redirections(shell);
+	handle_io_redirections(shell);
 	if (shell->there_is_redir_out < 0)
 	{
 		error_msg("Error setup redirection\n");
@@ -46,11 +46,9 @@ void	child_process(t_shell *shell)
 	}
 	cut_the_cmd_plus_args(shell->cmds);
 	if (shell->there_is_redir_out)
-	{
-		ft_printf("There is redirection\n");
-		dup2(shell->infile, STDIN_FILENO);
 		dup2(shell->outfile, STDOUT_FILENO);
-	}
+	if (shell->there_is_redir_in)
+		dup2(shell->infile, STDIN_FILENO);
 	handle_pipe_without_out_redirection(shell);
 	close_pipes(shell);
 	if (shell->infile > STDIN)
@@ -95,8 +93,13 @@ int	fork_process(t_shell *shell)
 		shell->n_th_cmd++;
 		if (advance_to_next_command(shell) == -1)
 			break;
+		if (is_a_here_doc_in_the_cmd(shell->cmds))
+			shell->nth_here_doc++;
+		ft_printf("fin de la boucle\n");
 	}
+	ft_printf("Avant close_pipes\n");
 	close_pipes(shell);
+	ft_printf("Avant return fork_process\n");
 	return (0);
 }
 

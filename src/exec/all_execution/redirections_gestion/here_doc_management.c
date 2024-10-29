@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:30:13 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 02:47:18 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static int	write_to_temp(int fd, char *line)
 	return (0);
 }
 
-int	here_doc_management(char *limiter)
+int	here_doc_management(char *limiter, char *name_file)
 {
 	int		fd;
 	char	*line;
 	size_t	len;
 
-	fd = open("temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(name_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 		return (error_msg("Problem opening temp.txt"));
 	while (1)

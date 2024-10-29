@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:09:58 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:41:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,14 @@ t_arg	*last_redir_right(t_arg *args)
 
 static int	handle_input_redirection(t_shell *shell, t_arg *redir_left)
 {
+	char	*name_file;
+
 	if (redir_left != NULL)
 	{
 		if (ft_strcmp(redir_left->type, "double_redir_left") == 0)
 		{
-			here_doc_management(redir_left->next->content);
-			shell->infile = open("temp.txt", O_RDONLY);
+			name_file = name_files_here_doc(shell->nth_here_doc);
+			shell->infile = open(name_file, O_RDONLY);
 		}
 		else
 			shell->infile = open(redir_left->next->content, O_RDONLY);
@@ -109,7 +111,9 @@ int	handle_io_redirections(t_shell *shell)
 			close(shell->infile);
 		return (-1);
 	}
+	if (redir_left != NULL)
+		shell->there_is_redir_in = 1;
 	if (redir_right != NULL)
-		return (1);
+		shell->there_is_redir_out = 1;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 01:29:55 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:40:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,12 @@ typedef struct s_shell
 	int outfile;            // outfile de la commande actuelle
 	int input_pipe;         // If the input is a pipe. 0 if no, 1 if yes
 	int there_is_redir_out; // 0 if no, 1 if yes
+	int	there_is_redir_in;  // 0 if no, 1 if yes
 	int n_th_cmd;           // The xth command in the list
 	int **pipes;            // Les pipes (fd[2])
 	pid_t *child_pids;      // ID des processus enfants
 	int in_child_process;
+	int	nth_here_doc;
 }					t_shell;
 
 extern volatile sig_atomic_t g_received_signal;
@@ -170,6 +172,8 @@ void				find_and_add_type_cmd(t_arg *args, char **envp);
 void				setup_child_signals(void);
 void				edit_args_for_export(t_arg *args);
 int					count_cmd(t_cmd *cmd);
+char				*name_files_here_doc(int nbr);
+int					is_a_here_doc_in_the_cmd(t_cmd *cmd);
 
 // Build-in functions
 int					ft_pwd(t_shell *shell);
@@ -220,8 +224,8 @@ void				close_both(int to_close1, int to_close2);
 void				cleanup(t_shell *shell, char **cmd);
 
 // Here_doc
-int					here_doc_management(char *limiter);
-int					handle_here_doc(int *argc, char **argv);
+int					here_doc_management(char *limiter, char *name_file);
+int					handle_here_doc(t_shell *shell);
 
 // Processes
 int					parent_process(t_shell *shell, pid_t pid);
