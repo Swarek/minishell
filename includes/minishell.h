@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 07:09:42 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:06:24 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ int					delete_all_temp_files(int total_here_doc);
 int					expand_in_here_doc25(char *file_name, int last_exit_status);
 char				*ft_getenv(char **env, char *name);
 int					is_real_cmd_in_cmds(t_cmd *cmds);
+int 				setup_pipe_redirections(t_shell *shell);
 
 // Build-in functions
 int					ft_pwd(t_shell *shell);
@@ -205,7 +206,6 @@ int					setup_file_redirections(t_shell *shell);
 void				find_and_add_type_cmd(t_arg *args, char **envp);
 int					is_redir(t_arg *arg);
 int					cut_the_cmd_plus_args(t_cmd *cmd);
-void				initiates_type_cmd(t_shell *shell);
 int					a_pipe_is_coming(t_shell *shell);
 void				close_pipes(t_shell *shell);
 void				clean_all(t_shell *shell);
@@ -236,11 +236,8 @@ int					parent_process(t_shell *shell, pid_t pid);
 int					handle_io_redirections(t_shell *shell);
 
 // Inits
-int					init_pipes(t_shell *shell);
-int					init_child_pids(t_shell *shell);
-int					init_cmds(t_shell *shell, char **av);
 int					init_shell_structure(t_shell *shell);
-int					all_init(t_shell *shell);
+int					all_init_for_pipes_cmds(t_shell *shell);
 
 // Execution
 int					do_the_execution(t_shell *shell, t_cmd *cmd, char **envp);
@@ -252,7 +249,7 @@ char				**remove_quotes(char **cmd);
 char				**special_split(const char *s, char delimiter);
 
 // No bonus
-int					fork_process(t_shell *shell);
+int					pipes_process(t_shell *shell);
 
 // Free
 void				free_args(t_arg *args);

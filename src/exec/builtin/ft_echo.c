@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:35:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 10:20:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 22:42:20 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	handle_multiple_n_echo(t_shell *shell)
 			return (i);
 		i++;
 	}
+	if (is_flag_echo(shell->cmds->cmd_arg_stdin[i - 1]))
+		return (-2);
 	return (1);
 }
 
@@ -54,9 +56,8 @@ int	ft_echo(t_shell *shell)
 	if (!shell->cmds->cmd_arg_stdin[1])
 		return (ft_putchar_fd('\n', shell->outfile), 0);
 	i = handle_multiple_n_echo(shell);
-	if (i > 1)
+	if (i > 1 || i == -2)
 		no_newline = 1;
-	ft_printf("i : %d\n", i);
 	while (shell->cmds->cmd_arg_stdin[i] != NULL)
 	{
 		ft_putstr_fd(shell->cmds->cmd_arg_stdin[i], shell->outfile);

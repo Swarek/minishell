@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execution.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 07:13:34 by mblanc           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    code                                               :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#              #
+#    Updated: 2024/10/29 20:06:24 by mblanc           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 #include "minishell.h"
 
@@ -669,7 +669,7 @@ void	initiates_type_cmd(t_shell *shell)
 	}
 }
 
-int	all_init(t_shell *shell)
+int	all_init_for_pipes_cmds(t_shell *shell)
 {
 	if (shell->pipes)
 	{
@@ -915,7 +915,7 @@ int	advance_to_next_command(t_shell *shell)
 	return (0);
 }
 
-int	fork_process(t_shell *shell)
+int	pipes_process(t_shell *shell)
 {
 	pid_t	pid;
 
@@ -1372,7 +1372,7 @@ int	starting_one_cmd(t_shell *shell)
 		return (-1);
 	if (handle_io_redirections(shell) == -1)
 		return (-1);
-	// Supprimer l'appel à all_init ici car il est déjà fait dans exec_it
+	// Supprimer l'appel à all_init_for_pipes_cmds ici car il est déjà fait dans exec_it
 	cut_the_cmd_plus_args(shell->cmds);
 	if (single_cmd(shell) == -1)
 		return (-1);
@@ -1416,7 +1416,7 @@ int	exec_it(t_shell *shell)
 {
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL || any_empty_cmd(shell->cmds))
 		return (0);
-	if (all_init(shell) == -1) // Un seul appel à all_init
+	if (all_init_for_pipes_cmds(shell) == -1) // Un seul appel à all_init_for_pipes_cmds
 		return (-1);
 	if (count_cmd(shell->cmds) == 0)
 		return (0);
@@ -1432,7 +1432,7 @@ int	exec_it(t_shell *shell)
 	}
 	else if (shell->nbr_pipes >= 1)
 	{
-		fork_process(shell);
+		pipes_process(shell);
 		wait_and_cleanup(shell);
 	}
 	if (shell->nth_here_doc > 0)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_everything.c                                  :+:      :+:    :+:   */
+/*   all_init_for_pipes_cmds.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:30:18 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 19:57:25 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	clean_up_for_error_init(t_shell *shell, int pipe_count)
 	}
 }
 
-int	init_pipes(t_shell *shell)
+static int	init_pipes(t_shell *shell)
 {
 	int	i;
 
@@ -69,7 +69,7 @@ int	init_pipes(t_shell *shell)
 	return (0);
 }
 
-int	init_child_pids(t_shell *shell)
+static int	init_child_pids(t_shell *shell)
 {
 	if (shell->total_cmd_count <= 0)
 	{
@@ -85,7 +85,7 @@ int	init_child_pids(t_shell *shell)
 	return (0);
 }
 
-void	initiates_type_cmd(t_shell *shell)
+static void	initiates_type_cmd(t_shell *shell)
 {
 	int		i;
 	t_cmd	*tmp;
@@ -101,7 +101,7 @@ void	initiates_type_cmd(t_shell *shell)
 	}
 }
 
-int	all_init(t_shell *shell)
+int	all_init_for_pipes_cmds(t_shell *shell)
 {
 	if (shell->pipes)
 	{
