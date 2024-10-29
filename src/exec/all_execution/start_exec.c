@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 03:13:12 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:55:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ int	exec_it(t_shell *shell)
 		fork_process(shell);
 		wait_and_cleanup(shell);
 	}
+	ft_printf("shell->nth_here_doc = %d\n", shell->nth_here_doc);
+	delete_all_temp_files(shell->nth_here_doc + 1);
 	return (0);
 }

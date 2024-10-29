@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 05:44:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:52:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ int	fork_process(t_shell *shell)
 			shell->nth_here_doc++;
 		ft_printf("fin de la boucle\n");
 	}
-	ft_printf("Avant close_pipes\n");
 	close_pipes(shell);
-	ft_printf("Avant return fork_process\n");
 	return (0);
 }
 

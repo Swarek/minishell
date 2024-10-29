@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 02:47:18 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:48:41 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,22 @@ int	here_doc_management(char *limiter, char *name_file)
 	}
 	free(line);
 	close(fd);
+	return (0);
+}
+
+int	delete_all_temp_files(int total_here_doc)
+{
+	int		i;
+	char	*name_file;
+
+	i = 0;
+	while (i < total_here_doc)
+	{
+		name_file = name_files_here_doc(i);
+		if (unlink(name_file) == -1)
+			return (error_msg("Problem deleting temp.txt"), -1);
+		free(name_file);
+		i++;
+	}
 	return (0);
 }

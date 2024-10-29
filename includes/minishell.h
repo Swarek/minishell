@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 05:40:45 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 05:49:03 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ void				edit_args_for_export(t_arg *args);
 int					count_cmd(t_cmd *cmd);
 char				*name_files_here_doc(int nbr);
 int					is_a_here_doc_in_the_cmd(t_cmd *cmd);
+int					delete_all_temp_files(int total_here_doc);
 
 // Build-in functions
 int					ft_pwd(t_shell *shell);
