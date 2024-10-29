@@ -6,16 +6,35 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 19:50:33 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:39:02 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	any_empty_cmd(t_cmd *cmd)
+{
+	t_arg	*arg;
+
+	while (cmd)
+	{
+		arg = cmd->args;
+		if (arg == NULL)
+			return (1);
+		while (arg)
+		{
+			if (arg->content == NULL)
+				return (1);
+			arg = arg->next;
+		}
+		cmd = cmd->next;
+	}
+	return (0);
+}
 
 int	exec_it(t_shell *shell)
 {
-	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
+	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL || any_empty_cmd(shell->cmds))
 		return (0);
 	if (all_init(shell) == -1) // Un seul appel à all_init
 		return (-1);
