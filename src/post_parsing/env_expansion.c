@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 00:22:33 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 06:44:02 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	process_env_var(t_arg *current_arg, int *i, t_shell shell)
 		return ;
 	}
 	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
-	env_value = getenv(var_name);
+	env_value = ft_getenv(shell.envp, var_name);
 	if (env_value)
 	{
 		replace_env_var(current_arg, *i, j, env_value);

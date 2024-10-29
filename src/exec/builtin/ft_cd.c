@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 21:36:51 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 06:45:04 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ static int	go_last_place(t_shell *shell)
 {
 	char	*oldpwd;
 
-	oldpwd = getenv("OLDPWD");
+	oldpwd = ft_getenv(shell->envp, "OLDPWD");
 	if (!oldpwd)
 	{
 		error_msg("cd: OLDPWD not set\n");
@@ -36,7 +36,7 @@ static int	go_home(t_shell *shell)
 {
 	char	*home;
 
-	home = getenv("HOME");
+	home = ft_getenv(shell->envp, "HOME");
 	if (!home)
 	{
 		fprintf(stderr, "cd: HOME not set\n");
@@ -93,7 +93,7 @@ int	ft_cd(t_shell *shell)
 		return (shell->exit_status);
 	}
 
-	setenv("OLDPWD", getenv("PWD"), 1);
+	setenv("OLDPWD", ft_getenv(shell->envp, "PWD"), 1);
 	setenv("PWD", cwd, 1);
 	free(cwd);
 	shell->exit_status = 0;
