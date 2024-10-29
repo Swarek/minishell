@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 22:45:30 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 23:42:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ int								expand_in_here_doc25(char *file_name,
 									int last_exit_status);
 char							*ft_getenv(char **env, char *name);
 int								is_real_cmd_in_cmds(t_cmd *cmds);
+void							free_t_env(t_env *env);
 
 // Build-in functions
 int								ft_pwd(t_shell *shell);

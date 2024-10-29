@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 09:07:45 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 13:19:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 23:26:55 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ft_exit(t_shell *shell, t_arg *args)
 	if (!is_numeric(args->content))
 	{
 		ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO);
-		exit(255);
+		return (1);
 	}
 	if (args->next)
 	{

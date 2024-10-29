@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 06:35:14 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 07:02:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 00:04:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ int	ft_export(t_arg *args, char ***envp)
 	if (!env)
 		return (1);
 	if (count_arguments_for_t_arg(args) == 1)
-		return (declare_and_sort(env), 0);
+		return (declare_and_sort(env), free_t_env(env), 0);
 	args = args->next;
 	edit_args_for_export(args);
 	while (args)
@@ -199,6 +199,7 @@ int	ft_export(t_arg *args, char ***envp)
 					// Gérer l'erreur d'allocation
 					free(name);
 					free(value);
+					free_t_env(env);
 					return (1);
 				}
 				temp = ft_strjoin(temp_line, value);
@@ -208,6 +209,7 @@ int	ft_export(t_arg *args, char ***envp)
 					// Gérer l'erreur d'allocation
 					free(name);
 					free(value);
+					free_t_env(env);
 					return (1);
 				}
 				existing_node->line = temp;
@@ -225,6 +227,7 @@ int	ft_export(t_arg *args, char ***envp)
 	}
 	safe_free_all_strings(envp);
 	if (t_env_to_array(env, envp) != 0)
-		return (1);
-	return (0);
+        return (free_t_env(env), 1);
+    free_t_env(env);
+    return (0);
 }

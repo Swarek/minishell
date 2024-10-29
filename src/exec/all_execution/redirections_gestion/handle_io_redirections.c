@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 05:41:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 23:18:37 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ static int	handle_input_redirection(t_shell *shell, t_arg *redir_left)
 
 	if (redir_left != NULL)
 	{
+		if (redir_left->next == NULL)
+		{
+			shell->exit_status = 1;
+			error_msg("No file specified for redirection\n");
+			return (0);
+		}
 		if (ft_strcmp(redir_left->type, "double_redir_left") == 0)
 		{
 			name_file = name_files_here_doc(shell->nth_here_doc);
@@ -75,6 +81,12 @@ static int	handle_output_redirection(t_shell *shell, t_arg *redir_right)
 {
 	if (redir_right != NULL)
 	{
+		if (redir_right->next == NULL)
+		{
+			shell->exit_status = 1;
+			error_msg("No file specified for redirection\n");
+			return (0);
+		}
 		if (ft_strcmp(redir_right->type, "redir_right") == 0)
 			shell->outfile = open(redir_right->next->content,
 								  O_WRONLY | O_CREAT | O_TRUNC, 0644);

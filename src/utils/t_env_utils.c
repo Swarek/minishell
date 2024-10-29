@@ -6,11 +6,27 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 06:18:27 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 07:08:00 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 23:42:26 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void free_t_env(t_env *env)
+{
+    t_env *current = env;
+    t_env *next;
+
+    while (current)
+    {
+        next = current->next;
+        free(current->name);
+        free(current->value);
+        free(current->line);
+        free(current);
+        current = next;
+    }
+}
 
 char    *get_env_name(char *env_line)
 {
