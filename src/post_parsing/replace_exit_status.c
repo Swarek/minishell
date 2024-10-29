@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:09:57 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:33:52 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 01:57:46 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,16 @@ void	replace_exit_status(t_arg *current_arg, int dolls, t_shell *shell)
 	i = 0;
 	while (current_arg->content[i])
 	{
-		if (current_arg->content[i] == '$')
+		if (current_arg->content[i++] == '$')
 			dolls++;
-		i++;
 	}
 	while (dolls > 0)
 	{
 		i = 0;
 		while (current_arg->content && current_arg->content[i])
 		{
-			if (current_arg->content[i] == '$' && current_arg->content[i + 1]
-				&& current_arg->content[i + 1] == '?')
+			if (current_arg->content[i] == '$' && current_arg->content[i
+					+ 1] == '?')
 			{
 				process_exit_status(current_arg, &i, shell);
 				dolls--;
