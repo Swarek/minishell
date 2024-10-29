@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reading_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:28:15 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 00:27:07 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,16 @@ char	*reading_line(int color)
 	char	*line;
 	char	*prompt;
 
-	prompt = get_colored_prompt(color);
-	line = readline(prompt);
-	free(prompt);
+	if (g_received_signal == SIGINT)
+	{
+		line = readline("");
+	}
+	else
+	{
+		prompt = get_colored_prompt(color);
+		line = readline(prompt);
+		free(prompt);
+	}
 	if (line && *line)
 		add_history(line);
 	return (line);
