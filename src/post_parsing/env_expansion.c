@@ -3,44 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 06:44:02 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 23:34:09 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	replace_env_var(t_arg *current_arg, int start, int end,
-		const char *value)
+void	process_standard_var_env(t_arg *current_arg, int *i, int start)
 {
-	size_t	old_len;
-	size_t	val_len;
-	size_t	new_len;
-	char	*new_str;
+	char		var_name[512];
+	const char	*env_value;
+	int			j;
 
-	old_len = ft_strlen(current_arg->content);
-	val_len = ft_strlen(value);
-	new_len = old_len - (end - start) + val_len;
-	new_str = malloc(new_len + 1);
-	if (!new_str)
+	if (!current_arg->content[start] || current_arg->content[start] == ' ')
+	{
+		current_arg->content[*i] = '$';
+		*i = start;
 		return ;
-	ft_strlcpy(new_str, current_arg->content, start + 1);
-	ft_strlcpy(new_str + start, value, val_len + 1);
-	ft_strlcpy(new_str + start + val_len, current_arg->content + end, old_len
-		- end + 1);
-	free(current_arg->content);
-	current_arg->content = new_str;
+	}
+	j = get_var_name_end_env(current_arg->content, start);
+	if (j == start)
+	{
+		*i = start;
+		return ;
+	}
+	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
+	env_value = getenv(var_name);
+	if (env_value)
+	{
+		replace_env_var(current_arg, *i, j, env_value);
+		*i += ft_strlen(env_value) - 1;
+	}
+	else
+		*i = j - 1;
 }
 
 void	process_env_var(t_arg *current_arg, int *i, t_shell shell)
 {
-	int			start;
-	int			j;
-	char		*status_str;
-	char		var_name[512];
-	const char	*env_value;
+	int	start;
 
 	start = *i + 1;
 	if (!current_arg->content[start])
@@ -50,37 +53,10 @@ void	process_env_var(t_arg *current_arg, int *i, t_shell shell)
 	}
 	if (current_arg->content[start] == '?')
 	{
-		status_str = ft_itoa(shell.last_exit_status);
-		if (!status_str)
-			return ;
-		replace_env_var(current_arg, *i, start + 1, status_str);
-		*i += ft_strlen(status_str) - 1;
-		free(status_str);
+		handle_exit_status_for_env(current_arg, i, shell);
 		return ;
 	}
-	j = start;
-	while (current_arg->content[j] && (current_arg->content[j] == '_'
-			|| (current_arg->content[j] >= 'a'
-				&& current_arg->content[j] <= 'z')
-			|| (current_arg->content[j] >= 'A'
-				&& current_arg->content[j] <= 'Z')
-			|| (current_arg->content[j] >= '0'
-				&& current_arg->content[j] <= '9')))
-		j++;
-	if (j == start)
-	{
-		*i = start;
-		return ;
-	}
-	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
-	env_value = ft_getenv(shell.envp, var_name);
-	if (env_value)
-	{
-		replace_env_var(current_arg, *i, j, env_value);
-		*i += ft_strlen(env_value) - 1;
-	}
-	else
-		*i = j - 1;
+	process_standard_var_env(current_arg, i, start);
 }
 
 void	expand_env_vars(t_arg *current_arg, t_shell shell)
@@ -92,16 +68,20 @@ void	expand_env_vars(t_arg *current_arg, t_shell shell)
 		return ;
 	while (current_arg->content[i])
 	{
-		if (current_arg->content[i] == '$' && current_arg->content[i + 1]
+		if (current_arg->content[i] == '$' && (!current_arg->content[i + 1]
+				|| current_arg->content[i + 1] == ' '))
+		{
+			i++;
+			continue ;
+		}
+		else if (current_arg->content[i] == '$' && current_arg->content[i + 1]
 			&& (current_arg->content[i + 1] == '?' || current_arg->content[i
-				+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
+					+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
 		{
 			process_env_var(current_arg, &i, shell);
 		}
 		else
-		{
 			i++;
-		}
 	}
 }
 

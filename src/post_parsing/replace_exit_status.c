@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:09:57 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:33:52 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 23:46:18 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,33 +40,27 @@ void	process_exit_status(t_arg *current_arg, int *i, t_shell *shell)
 	current_arg->content = new_str;
 }
 
-void	replace_exit_status(t_arg *current_arg, int dolls, t_shell *shell)
+void	replace_exit_status(t_arg *current_arg, t_shell *shell)
 {
 	int	i;
 
 	if (!current_arg->content)
 		return ;
 	i = 0;
-	while (current_arg->content[i])
+	while (current_arg->content && current_arg->content[i])
 	{
 		if (current_arg->content[i] == '$')
-			dolls++;
-		i++;
-	}
-	while (dolls > 0)
-	{
-		i = 0;
-		while (current_arg->content && current_arg->content[i])
 		{
-			if (current_arg->content[i] == '$' && current_arg->content[i + 1]
-				&& current_arg->content[i + 1] == '?')
+			if (!current_arg->content[i + 1] || current_arg->content[i
+					+ 1] != '?')
 			{
-				process_exit_status(current_arg, &i, shell);
-				dolls--;
-			}
-			else
 				i++;
+				continue ;
+			}
+			process_exit_status(current_arg, &i, shell);
 		}
+		else
+			i++;
 	}
 }
 
@@ -83,7 +77,7 @@ void	replace_exit_status_in_cmds_tab(t_cmd **cmds, t_shell *shell)
 		{
 			if (ft_strncmp(current_arg->type, "word", 4) == 0
 				|| ft_strncmp(current_arg->type, "double_quoted", 13) == 0)
-				replace_exit_status(current_arg, 0, shell);
+				replace_exit_status(current_arg, shell);
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;
