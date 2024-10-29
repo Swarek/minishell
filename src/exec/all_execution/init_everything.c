@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 19:51:53 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:30:18 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ int	init_pipes(t_shell *shell)
 		if (!shell->pipes[i])
 		{
 			clean_up_for_error_init(shell, i);
-				// Nettoyer les pipes alloués partiellement
+			// Nettoyer les pipes alloués partiellement
 			return (error_msg("Memory allocation failed\n"), -1);
 		}
 		if (pipe(shell->pipes[i]) == -1)
 		{
 			clean_up_for_error_init(shell, i);
-				// Nettoyer les pipes alloués partiellement
+			// Nettoyer les pipes alloués partiellement
 			return (error_msg("Pipe creation failed\n"), -1);
 		}
 		i++;
@@ -103,10 +103,18 @@ void	initiates_type_cmd(t_shell *shell)
 
 int	all_init(t_shell *shell)
 {
+	if (shell->pipes)
+	{
+		free_pipes(shell->pipes, shell->nbr_pipes);
+		shell->pipes = NULL;
+	}
+	if (shell->child_pids)
+	{
+		free(shell->child_pids);
+		shell->child_pids = NULL;
+	}
 	shell->nbr_pipes = count_pipe(shell->cmds);
 	shell->total_cmd_count = shell->nbr_pipes + 1;
-	shell->pipes = NULL;
-	shell->child_pids = NULL;
 	shell->there_is_redir_out = 0;
 	shell->n_th_cmd = 0;
 	if (init_pipes(shell) == -1)

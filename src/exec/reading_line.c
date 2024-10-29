@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 23:38:35 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:28:15 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static char	*get_colored_prompt(int color)
 	return (free(colors), colored_prompt);
 }
 
-// Main function to read the line
 char	*reading_line(int color)
 {
 	char	*line;
@@ -74,8 +73,8 @@ char	*reading_line(int color)
 
 	prompt = get_colored_prompt(color);
 	line = readline(prompt);
+	free(prompt);
 	if (line && *line)
 		add_history(line);
-	free(prompt);
 	return (line);
 }

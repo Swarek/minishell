@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 23:38:04 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:28:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-int		g_last_exit_status = 0;
+volatile sig_atomic_t	g_received_signal = 0;
 
 void	print_command(t_cmd *cmd)
 {
@@ -35,7 +35,6 @@ void	print_all_commands(t_cmd *cmds)
 	int	i;
 
 	i = 0;
-	// ft_print_array(cmds->cmd_arg_stdin);
 	while (cmds)
 	{
 		printf("Command %d:\n", i++);
@@ -45,23 +44,22 @@ void	print_all_commands(t_cmd *cmds)
 	printf("\n");
 }
 
-void	update_exit_status(int status)
-{
-	if (WIFEXITED(status))
-		g_last_exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		g_last_exit_status = 128 + WTERMSIG(status);
-}
-
 void	sigint_handler(int signum)
 {
-	(void)signum;
-	g_last_exit_status = 128 + 2;
+	g_received_signal = signum;
 	write(1, "\n", 1);
-	if (rl_on_new_line() == -1)
-		return ;
-	rl_replace_line("", 0);
-	rl_redisplay();
+	// Si on était en train de lire une ligne (pas dans une commande)
+	if (rl_line_buffer && !*rl_line_buffer)
+	{
+		rl_replace_line("", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else
+	{
+		rl_replace_line("", 1);
+		rl_on_new_line();
+	}
 }
 
 void	sigquit_handler(int signum)
@@ -95,11 +93,15 @@ void	setup_child_signals(void)
 
 void	handle_ctrl_d(char *line, t_shell *shell)
 {
+	int exit_status;
+
+	exit_status = shell->last_exit_status;
 	if (!line) // rl_gets returns NULL if ctrl+d is received
 	{
-		clean_all(shell); // Free memory properly
+		if (shell)
+			clean_all(shell); // Free memory properly
 		write(1, "exit\n", 5);
-		exit(g_last_exit_status); // Exit with the last status
+		exit(exit_status); // Exit with the last status
 	}
 }
 
@@ -150,6 +152,7 @@ t_shell	*init_struct_shell(char **envp)
 	shell->n_th_cmd = 0;
 	shell->pipes = NULL;
 	shell->child_pids = NULL;
+	shell->in_child_process = 0;
 	return (shell);
 }
 
@@ -181,6 +184,15 @@ int	main(int ac, char **av, char **envp)
 	setup_signals();
 	while (1)
 	{
+		if (g_received_signal)
+		{
+			if (g_received_signal == SIGINT)
+				shell->last_exit_status = 130; // 128 + 2 (SIGINT)
+			else if (g_received_signal == SIGQUIT)
+				shell->last_exit_status = 131; // 128 + 3 (SIGQUIT)
+			g_received_signal = 0;
+			// Réinitialiser pour le prochain signal
+		}
 		line = reading_line(color);
 		handle_ctrl_d(line, shell);
 		if (!line)
@@ -192,15 +204,18 @@ int	main(int ac, char **av, char **envp)
 		}
 		free(line);
 		str_arg_in_null(cmds);
-		expand_env_vars_in_cmds_tab(&cmds);
+		expand_env_vars_in_cmds_tab(&cmds, *shell);
 		if (error_if_subsequent_commands(&cmds) == -1
 			|| error_if_unclosed_parentheses(&cmds) == -1
 			|| error_in_filename(&cmds))
 		{
 			ft_printf("Syntax error\n");
 			if (cmds)
-				free_args(cmds->args);
-			free(cmds);
+			{
+				safe_free_cmds(cmds);
+				cmds = NULL;
+				shell->cmds = NULL;
+			}
 			clean_all(shell);
 			return (-1);
 		}
@@ -211,14 +226,20 @@ int	main(int ac, char **av, char **envp)
 		{
 			if (cmds)
 			{
-				free_args(cmds->args);
-				free(cmds);
+				safe_free_cmds(cmds);
+				cmds = NULL;
+				shell->cmds = NULL;
 			}
 			clean_all(shell);
 			return (-1);
 		}
-		cmds = NULL;
 		color++;
+		if (cmds)
+		{
+			safe_free_cmds(cmds);
+			cmds = NULL;
+			shell->cmds = NULL;
+		}
 	}
 	clean_all(shell);
 	return (0);

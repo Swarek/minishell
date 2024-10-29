@@ -6,11 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:10:16 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:30:13 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 static int	write_to_temp(int fd, char *line)
 {

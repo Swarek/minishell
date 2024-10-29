@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   relative_absolute_path.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 09:45:33 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 21:27:10 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 static char	**build_new_cmd(char *path, char **cmd, int args_count)
 {
