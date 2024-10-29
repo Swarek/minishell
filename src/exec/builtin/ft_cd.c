@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 06:45:04 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 10:32:32 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ int	ft_cd(t_shell *shell)
 	char	*cwd;
 
 	arg = shell->cmds->cmd_arg_stdin;
-	if (arg[2] != NULL)
+	if (arg == NULL || arg[0] == NULL)
+        return (0);
+	if (arg[1] != NULL && arg[2] != NULL)
 	{
 		error_msg("cd: too many arguments\n");
 		shell->exit_status = 1; // Trop d'arguments

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:55:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 21:15:39 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 10:23:40 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ int	ft_pwd(t_shell *shell)
 		ft_putchar_fd('\n', shell->outfile);
 	}
 	else
-		return (error_msg("pwd: error retrieving current directory\n"), -1);
+		return (error_msg("pwd: error retrieving current directory\n"), 0);
 	return (0);
 }

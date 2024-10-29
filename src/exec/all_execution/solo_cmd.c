@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 09:14:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 10:24:48 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	single_cmd(t_shell *shell)
 	{
 		shell->exit_status = execute_built_in(shell, shell->cmds->cmd_arg_stdin,
 				&shell->envp);
+		ft_printf("TESTTT\n");
 		return (shell->exit_status);
 	}
 	else
