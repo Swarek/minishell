@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   words_to_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 00:36:43 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/23 03:12:37 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 22:58:53 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ void	type_to_file_in_args1(t_cmd **cmds)
 				flag = 1;
 			current_arg = current_arg->next;
 			if (flag == 1)
-				current_arg->type = "file";
+			{
+				if (current_arg)
+					current_arg->type = "file";
+			}
 			flag = 0;
 		}
 		current_cmd = current_cmd->next;
