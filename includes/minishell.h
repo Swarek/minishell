@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 06:41:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 07:09:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ int					is_a_here_doc_in_the_cmd(t_cmd *cmd);
 int					delete_all_temp_files(int total_here_doc);
 int					expand_in_here_doc25(char *file_name, int last_exit_status);
 char				*ft_getenv(char **env, char *name);
+int					is_real_cmd_in_cmds(t_cmd *cmds);
 
 // Build-in functions
 int					ft_pwd(t_shell *shell);

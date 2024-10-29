@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_getenv.c                                        :+:      :+:    :+:   */
+/*   is_real_cmd_in_cmds.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 06:36:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 06:49:33 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/29 07:09:10 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/29 07:09:54 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_getenv(char **env, char *name)
+int	is_real_cmd_in_cmds(t_cmd *cmds)
 {
-	int	i;
-	int	j;
+	t_arg	*arg;
 
-	i = 0;
-	while (env[i])
+	while (cmds)
 	{
-		j = 0;
-		while (name[j] && env[i][j] && name[j] == env[i][j])
-			j++;
-		if (name[j] == '\0' && env[i][j] == '=')
-			return (&env[i][j + 1]);
-		i++;
+		arg = cmds->args;
+		while (arg)
+		{
+			if (ft_strcmp(arg->type, "command") == 0)
+				return (1);
+			arg = arg->next;
+		}
+		cmds = cmds->next;
 	}
-	return (NULL);
+	return (0);
 }
-

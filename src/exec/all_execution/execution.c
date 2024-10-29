@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:30:07 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 07:13:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ static char	*prepare_execution(t_shell *shell, t_cmd *cmd)
 	if (!cmd || !cmd->args || !cmd->args->content)
 	{
 		perror("Command content is NULL");
+		exit(127);
+	}
+	if (is_real_cmd_in_cmds(cmd) == 0 || !cmd->cmd_arg_stdin)
+	{
+		perror("No command found");
 		exit(127);
 	}
 	path = find_command_path(shell, cmd->cmd_arg_stdin[0], shell->envp);

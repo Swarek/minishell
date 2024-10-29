@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 01:46:38 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 03:26:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 09:14:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	handle_here_doc(t_shell *shell)
 			cmds = cmds->next;
 		i++;
 	}
-	ft_printf("Fin de handle_here_doc\n");
 	return (0);
 }
 // Will return the name of the temp file with the nbr

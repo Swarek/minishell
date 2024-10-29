@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 06:43:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 07:07:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,6 @@ int	main(int ac, char **av, char **envp)
 		type_to_file_in_args1(&cmds);
 		replace_exit_status_in_cmds_tab(&cmds, shell);
 		shell->cmds = cmds;
-		print_all_commands(cmds);
 		if (exec_it(shell) == -1)
 		{
 			if (cmds)

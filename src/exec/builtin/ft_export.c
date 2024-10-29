@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 06:35:14 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/27 18:58:52 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 07:02:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,63 @@ int	t_env_to_array(t_env *env, char ***envp)
 	return (0);
 }
 
-// A chaque passage dans le main il faudra mettre a jour char **envp a partir de t_env
+t_env	*find_node_by_name(t_env *env, const char *name)
+{
+	t_env	*current;
+
+	current = env;
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+			return (current);
+		current = current->next;
+	}
+	return (NULL);
+}
+
+char	*extract_name(const char *content)
+{
+	int		len;
+	char	*name;
+	int		i;
+
+	len = 0;
+	while (content[len] && content[len] != '=')
+		len++;
+	name = malloc(sizeof(char) * (len + 1));
+	if (!name)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		name[i] = content[i];
+		i++;
+	}
+	name[len] = '\0';
+	return (name);
+}
+
+
+char	*extract_value(const char *content)
+{
+	char	*equal_sign;
+	char	*value;
+
+	equal_sign = ft_strchr(content, '=');
+	if (!equal_sign)
+		return (NULL);
+	value = ft_strdup(equal_sign + 1);
+	return (value);
+}
+
 int	ft_export(t_arg *args, char ***envp)
 {
 	t_env	*env;
+	t_env	*existing_node;
+	char	*name;
+	char	*value;
+	char	*temp_line;
+	char	*temp;
 
 	env = create_t_env(*envp);
 	if (!env)
@@ -129,7 +182,43 @@ int	ft_export(t_arg *args, char ***envp)
 	while (args)
 	{
 		if (is_valid_identifier(args->content) && ft_strchr(args->content, '='))
-			env = add_node(env, create_node(args->content));
+		{
+			name = extract_name(args->content);
+			value = extract_value(args->content);
+			existing_node = find_node_by_name(env, name);
+			if (existing_node)
+			{
+				free(existing_node->value);
+				existing_node->value = ft_strdup(value);
+
+				// Mettre à jour le champ line
+				free(existing_node->line);
+				temp_line = ft_strjoin(name, "=");
+				if (!temp_line)
+				{
+					// Gérer l'erreur d'allocation
+					free(name);
+					free(value);
+					return (1);
+				}
+				temp = ft_strjoin(temp_line, value);
+				free(temp_line);
+				if (!temp)
+				{
+					// Gérer l'erreur d'allocation
+					free(name);
+					free(value);
+					return (1);
+				}
+				existing_node->line = temp;
+			}
+			else
+			{
+				env = add_node(env, create_node(args->content));
+			}
+			free(name);
+			free(value);
+		}
 		else
 			error_msg("export: not a valid identifier\n");
 		args = args->next;

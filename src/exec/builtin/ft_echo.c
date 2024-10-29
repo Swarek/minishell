@@ -6,28 +6,42 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:35:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 02:38:55 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 10:04:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	is_flag_echo(char *flag)
+{
+	int	i;
+
+	i = 1;
+	if (flag == NULL)
+		return (0);
+	if (!(flag[0] == '-'))
+		return (0);
+	while (flag[i] && flag[i] == 'n')
+		i++;
+	if (flag[i] == '\0')
+		return (1);
+	return (0);
+}
+
 // Return 0 if iarg_stdin[1] is not a -n(n xtimes)
-// Return 1 if iarg_stdin[1] is a -n(n xtimes)
+// Return x as the index of the first arg which is not a flag.
 int	handle_multiple_n_echo(t_shell *shell)
 {
 	int	i;
 
-	i = 2;
-	if (!(shell->cmds->cmd_arg_stdin[1][0] == '-')
-		|| !(shell->cmds->cmd_arg_stdin[1][1] == 'n'))
-		return (0);
-	while (shell->cmds->cmd_arg_stdin[1][i] != '\0'
-		&& shell->cmds->cmd_arg_stdin[1][i] == 'n')
+	i = 1;
+	while (shell->cmds->cmd_arg_stdin[i] != NULL)
+	{
+		if (!(is_flag_echo(shell->cmds->cmd_arg_stdin[i])))
+			return (i);
 		i++;
-	if (shell->cmds->cmd_arg_stdin[1][i] == '\0')
-		return (1);
-	return (0);
+	}
+	return (1);
 }
 
 int	ft_echo(t_shell *shell)
@@ -39,13 +53,10 @@ int	ft_echo(t_shell *shell)
 	i = 1;
 	if (!shell->cmds->cmd_arg_stdin[1])
 		return (ft_putchar_fd('\n', shell->outfile), 0);
-	if (handle_multiple_n_echo(shell) == 1)
-	{
+	i = handle_multiple_n_echo(shell);
+	if (i > 1)
 		no_newline = 1;
-		i = 2;
-	}
-	else
-		i = 1;
+	ft_printf("i : %d\n", i);
 	while (shell->cmds->cmd_arg_stdin[i] != NULL)
 	{
 		ft_putstr_fd(shell->cmds->cmd_arg_stdin[i], shell->outfile);
