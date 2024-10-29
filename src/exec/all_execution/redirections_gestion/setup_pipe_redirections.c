@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:41:49 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 05:45:43 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:04:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int setup_pipe_redirections(t_shell *shell)
+int setup_pipe_redirections(t_shell *shell)
 {
 	// Première commande
 	if (shell->n_th_cmd == 0)
@@ -60,15 +60,14 @@ static int setup_pipe_redirections(t_shell *shell)
 	return (0);
 }
 
-
 // return 1 if a pipe is coming, 0 otherwise
-int	handle_pipe_without_out_redirection(t_shell *shell)
-{
-	t_cmd *cmd;
+// int	handle_pipe_without_out_redirection(t_shell *shell)
+// {
+// 	t_cmd *cmd;
 
-	cmd = shell->cmds;
-	// print_all_commands(shell->cmds);
-	setup_pipe_redirections(shell);
-	close_pipes(shell);
-	return (0);
-}
+// 	cmd = shell->cmds;
+// 	// print_all_commands(shell->cmds);
+// 	// setup_pipe_redirections(shell);
+// 	close_pipes(shell);
+// 	return (0);
+// }

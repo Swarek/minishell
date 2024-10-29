@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 14:27:01 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 22:45:30 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,26 @@ void							replace_exit_status_in_cmds_tab(t_cmd **cmds,
 int								check_file_name(char *input);
 
 // Utils
+void				print_command(t_cmd *cmd);
+void				print_all_commands(t_cmd *cmds);
+void				my_print_command(t_arg *args);
+void				free_cmd(t_cmd *cmd);
+int					len_cmd(t_cmd *cmd);
+int					count_arguments(char **args);
+int					count_arguments_for_t_arg(t_arg *args);
+char				**convert_args_to_argv(t_arg *args);
+void				print_args(t_arg *args);
+void				find_and_add_type_cmd(t_arg *args, char **envp);
+void				setup_child_signals(void);
+void				edit_args_for_export(t_arg *args);
+int					count_cmd(t_cmd *cmd);
+char				*name_files_here_doc(int nbr);
+int					is_a_here_doc_in_the_cmd(t_cmd *cmd);
+int					delete_all_temp_files(int total_here_doc);
+int					expand_in_here_doc25(char *file_name, int last_exit_status);
+char				*ft_getenv(char **env, char *name);
+int					is_real_cmd_in_cmds(t_cmd *cmds);
+int 				setup_pipe_redirections(t_shell *shell);
 void							print_command(t_cmd *cmd);
 void							print_all_commands(t_cmd *cmds);
 void							my_print_command(t_arg *args);
@@ -194,6 +214,29 @@ void							ft_env(char **envp, t_shell *shell);
 void							ft_unset(t_arg *args, char ***env);
 int								ft_exit(t_shell *shell, t_arg *args);
 
+char				*reading_line(int color);
+int					exec_it(t_shell *shell);
+int					is_built_in(char **args);
+int					is_built_in_t_args(t_arg *args);
+int					execute_built_in(t_shell *shell, char **cmd_arg_stdin,
+						char ***envp);
+int					do_the_execution(t_shell *shell, t_cmd *cmd, char **envp);
+int					handling_pipes(t_shell *shell);
+int					execute_solo(t_shell *shell);
+int					execution(t_shell *shell);
+int					count_pipe(t_cmd *cmd);
+char				*find_command_path(t_shell *shell, char *command,
+						char **envp);
+int					setup_file_redirections(t_shell *shell);
+void				find_and_add_type_cmd(t_arg *args, char **envp);
+int					is_redir(t_arg *arg);
+int					cut_the_cmd_plus_args(t_cmd *cmd);
+int					a_pipe_is_coming(t_shell *shell);
+void				close_pipes(t_shell *shell);
+void				clean_all(t_shell *shell);
+int					starting_one_cmd(t_shell *shell);
+void				find_arg_add_type_cmd(t_shell *shell, t_arg *args);
+int					handle_pipe_without_out_redirection(t_shell *shell);
 char							*reading_line(int color);
 int								exec_it(t_shell *shell);
 int								is_built_in(char **args);
@@ -212,7 +255,6 @@ int								setup_file_redirections(t_shell *shell);
 void							find_and_add_type_cmd(t_arg *args, char **envp);
 int								is_redir(t_arg *arg);
 int								cut_the_cmd_plus_args(t_cmd *cmd);
-void							initiates_type_cmd(t_shell *shell);
 int								a_pipe_is_coming(t_shell *shell);
 void							close_pipes(t_shell *shell);
 void							clean_all(t_shell *shell);
@@ -245,9 +287,8 @@ int								parent_process(t_shell *shell, pid_t pid);
 int								handle_io_redirections(t_shell *shell);
 
 // Inits
-int								init_pipes(t_shell *shell);
-int								init_child_pids(t_shell *shell);
-int								init_cmds(t_shell *shell, char **av);
+int					init_shell_structure(t_shell *shell);
+int					all_init_for_pipes_cmds(t_shell *shell);
 int								init_shell_structure(t_shell *shell);
 int								all_init(t_shell *shell);
 
@@ -262,6 +303,7 @@ char							**remove_quotes(char **cmd);
 char							**special_split(const char *s, char delimiter);
 
 // No bonus
+int					pipes_process(t_shell *shell);
 int								fork_process(t_shell *shell);
 
 // Free

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 05:52:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:06:24 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	child_process(t_shell *shell)
 		dup2(shell->outfile, STDOUT_FILENO);
 	if (shell->there_is_redir_in)
 		dup2(shell->infile, STDIN_FILENO);
-	handle_pipe_without_out_redirection(shell);
+	setup_pipe_redirections(shell);
 	close_pipes(shell);
 	if (shell->infile > STDIN)
 		close(shell->infile);
@@ -73,7 +73,7 @@ int	advance_to_next_command(t_shell *shell)
 	return (0);
 }
 
-int	fork_process(t_shell *shell)
+int	pipes_process(t_shell *shell)
 {
 	pid_t	pid;
 
@@ -95,7 +95,6 @@ int	fork_process(t_shell *shell)
 			break;
 		if (is_a_here_doc_in_the_cmd(shell->cmds))
 			shell->nth_here_doc++;
-		ft_printf("fin de la boucle\n");
 	}
 	close_pipes(shell);
 	return (0);

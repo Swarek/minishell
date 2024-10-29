@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 09:14:45 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:06:24 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	exec_it(t_shell *shell)
 {
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL || any_empty_cmd(shell->cmds))
 		return (0);
-	if (all_init(shell) == -1) // Un seul appel à all_init
+	if (all_init_for_pipes_cmds(shell) == -1) // Un seul appel à all_init_for_pipes_cmds
 		return (-1);
 	if (count_cmd(shell->cmds) == 0)
 		return (0);
@@ -46,13 +46,12 @@ int	exec_it(t_shell *shell)
 		if (starting_one_cmd(shell) == -1)
 		{
 			clean_up_for_error_init(shell, shell->nbr_pipes);
-			// Nettoyage en cas d'erreur
 			return (-1);
 		}
 	}
 	else if (shell->nbr_pipes >= 1)
 	{
-		fork_process(shell);
+		pipes_process(shell);
 		wait_and_cleanup(shell);
 	}
 	if (shell->nth_here_doc > 0)
