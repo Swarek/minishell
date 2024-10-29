@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 05:35:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 23:40:57 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	execute_solo(t_shell *shell)
 	pid_t	pid;
 	int		status;
 
+	status = -1;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -95,6 +96,8 @@ int	execute_solo(t_shell *shell)
 	else
 	{
 		waitpid(pid, &status, 0);
+		if (status == -1)
+			return (0);
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))

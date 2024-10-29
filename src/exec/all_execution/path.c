@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 22:32:29 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 05:08:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 19:56:26 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ char	*get_path_from_env(t_shell *shell, char *command, char **envp)
 
 char	*find_command_path(t_shell *shell, char *command, char **envp)
 {
-	if (!command || *command == '\0' || ft_str_is_whitespace(command))
+	if (!command || *command == '\0' || ft_str_is_whitespace(command) || envp == NULL)
 	{
 		shell->exit_status = 127;
 		return (NULL);

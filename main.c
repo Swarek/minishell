@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 18:23:36 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/28 23:38:04 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ t_shell	*init_struct_shell(char **envp)
 {
 	t_shell	*shell;
 
+	(void) envp;
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
 		return (NULL);
@@ -206,7 +207,6 @@ int	main(int ac, char **av, char **envp)
 		type_to_file_in_args1(&cmds);
 		replace_exit_status_in_cmds_tab(&cmds, shell);
 		shell->cmds = cmds;
-		print_all_commands(cmds);
 		if (exec_it(shell) == -1)
 		{
 			if (cmds)
@@ -217,7 +217,6 @@ int	main(int ac, char **av, char **envp)
 			clean_all(shell);
 			return (-1);
 		}
-		ft_printf("Exit status: %d\n", shell->exit_status);
 		cmds = NULL;
 		color++;
 	}

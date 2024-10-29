@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 17:57:44 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/29 01:10:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void	find_and_add_type_cmd(t_arg *args, char **envp);
 void	setup_child_signals(void);
 void	edit_args_for_export(t_arg *args);
 int		count_cmd(t_cmd *cmd);
+void	safe_free_cmds(t_cmd *cmds);
 
 // Build-in functions
 int		ft_pwd(t_shell *shell);
@@ -207,12 +208,12 @@ char    *get_env_name(char *env_line);
 // Functions Pipex
 
 // Leaks, closes and errors
-void	wait_and_cleanup(t_shell *shell);
+void 	wait_and_cleanup(t_shell *shell, int here_doc_count);
 void	close_both(int to_close1, int to_close2);
 void	cleanup(t_shell *shell, char **cmd);
 
 // Here_doc
-int		here_doc_management(char *limiter);
+int	here_doc_management(char *limiter);
 int		handle_here_doc(int *argc, char **argv);
 
 // Processes

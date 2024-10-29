@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/27 14:02:43 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:09:54 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ void	child_process(t_shell *shell)
 	cut_the_cmd_plus_args(shell->cmds);
 	if (shell->there_is_redir_out)
 	{
+		ft_printf("There is redirection\n");
 		dup2(shell->infile, STDIN_FILENO);
 		dup2(shell->outfile, STDOUT_FILENO);
 	}
-	else
-		handle_pipe_without_out_redirection(shell);
+	handle_pipe_without_out_redirection(shell);
 	close_pipes(shell);
 	if (shell->infile > STDIN)
 		close(shell->infile);

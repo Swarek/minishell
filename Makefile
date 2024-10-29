@@ -1,6 +1,6 @@
 # Compiler and flags
 CC			= cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes -I./Libft/includes
+CFLAGS = -Wall -Wextra -Werror -g3 -Iincludes -I./Libft/includes
 DEBUGFLAGS	= -g
 LIBFT		= ./Libft/libft.a
 

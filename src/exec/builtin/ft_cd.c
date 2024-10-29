@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 06:16:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/28 21:36:51 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,14 @@ int	ft_cd(t_shell *shell)
 	if (!cwd)
 	{
 		perror("cd");
-		shell->exit_status = 1; // Erreur si getcwd échoue
+		shell->exit_status = 1;
 		return (shell->exit_status);
 	}
 
 	setenv("OLDPWD", getenv("PWD"), 1);
 	setenv("PWD", cwd, 1);
 	free(cwd);
-	shell->exit_status = 0; // Succès
+	shell->exit_status = 0;
 	return (0);
 }
 

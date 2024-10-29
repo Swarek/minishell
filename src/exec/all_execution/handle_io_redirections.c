@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/24 11:27:23 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/29 01:09:58 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	handle_input_redirection(t_shell *shell, t_arg *redir_left)
 			shell->infile = open(redir_left->next->content, O_RDONLY);
 		if (shell->infile < 0)
 		{
-			shell->exit_status = 1; // Code de sortie pour une erreur d'ouverture du fichier d'entrée
+			shell->exit_status = 1;
 			error_msg("Failed to open infile\n");
 			return (-1);
 		}
