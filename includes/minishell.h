@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 22:45:30 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 18:36:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 # define STDIN 0
 # define STDOUT 1
+# define PATH_MAX 4096
 
 // Structures
 
@@ -204,6 +205,7 @@ int								expand_in_here_doc25(char *file_name,
 									int last_exit_status);
 char							*ft_getenv(char **env, char *name);
 int								is_real_cmd_in_cmds(t_cmd *cmds);
+t_env							*find_node_by_name(t_env *env, const char *name);
 
 // Build-in functions
 int								ft_pwd(t_shell *shell);
@@ -269,6 +271,13 @@ t_env							*add_node(t_env *head, t_env *new_node);
 t_env							*create_node(char *env_line);
 char							*get_env_value(char *env_line);
 char							*get_env_name(char *env_line);
+int								len_env(t_env *env);
+int								is_valid_identifier(char *str);
+t_env							*find_node_by_name(t_env *env, const char *name);
+void							free_env(t_env *env);
+t_env							*find_smallest_undeclared(t_env *env);
+char							*extract_value(const char *content);
+char							*extract_name(const char *content);
 
 // Functions Pipex
 

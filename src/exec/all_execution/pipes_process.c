@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 20:06:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 17:48:55 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	parent_process(t_shell *shell, pid_t pid)
 	return (0);
 }
 
-void close_pipes(t_shell *shell)
+void	close_pipes(t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < shell->total_cmd_count - 1)
@@ -56,7 +56,7 @@ void	child_process(t_shell *shell)
 	if (shell->outfile > STDOUT)
 		close(shell->outfile);
 	if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
-			exit(1);
+		exit(1);
 }
 
 int	advance_to_next_command(t_shell *shell)
@@ -92,11 +92,10 @@ int	pipes_process(t_shell *shell)
 			parent_process(shell, pid);
 		shell->n_th_cmd++;
 		if (advance_to_next_command(shell) == -1)
-			break;
+			break ;
 		if (is_a_here_doc_in_the_cmd(shell->cmds))
 			shell->nth_here_doc++;
 	}
 	close_pipes(shell);
 	return (0);
 }
-

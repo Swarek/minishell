@@ -6,11 +6,12 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 10:32:32 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 17:40:55 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 static int	go_last_place(t_shell *shell)
 {
 	char	*oldpwd;
@@ -19,13 +20,13 @@ static int	go_last_place(t_shell *shell)
 	if (!oldpwd)
 	{
 		error_msg("cd: OLDPWD not set\n");
-		shell->exit_status = 1; // Erreur spécifique si OLDPWD n'est pas défini
+		shell->exit_status = 1;
 		return (shell->exit_status);
 	}
 	if (chdir(oldpwd) == -1)
 	{
 		perror("cd");
-		shell->exit_status = 1; // Erreur si chdir échoue
+		shell->exit_status = 1;
 		return (shell->exit_status);
 	}
 	ft_printf("%s\n", oldpwd);
@@ -40,33 +41,44 @@ static int	go_home(t_shell *shell)
 	if (!home)
 	{
 		fprintf(stderr, "cd: HOME not set\n");
-		shell->exit_status = 1; // Erreur spécifique si HOME n'est pas défini
+		shell->exit_status = 1;
 		return (shell->exit_status);
 	}
 	if (chdir(home) == -1)
 	{
 		perror("cd");
-		shell->exit_status = 1; // Erreur si chdir échoue
+		shell->exit_status = 1;
 		return (shell->exit_status);
 	}
 	return (0);
 }
 
+static int	end_cd(t_shell *shell)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("cd");
+		shell->exit_status = 1;
+		return (shell->exit_status);
+	}
+	setenv("OLDPWD", ft_getenv(shell->envp, "PWD"), 1);
+	setenv("PWD", cwd, 1);
+	return (free(cwd), shell->exit_status = 0, 0);
+}
+
 int	ft_cd(t_shell *shell)
 {
 	char	**arg;
-	char	*cwd;
 
 	arg = shell->cmds->cmd_arg_stdin;
 	if (arg == NULL || arg[0] == NULL)
-        return (0);
+		return (0);
 	if (arg[1] != NULL && arg[2] != NULL)
-	{
-		error_msg("cd: too many arguments\n");
-		shell->exit_status = 1; // Trop d'arguments
-		return (shell->exit_status);
-	}
-
+		return (error_msg("cd: too many arguments\n"),
+			shell->exit_status = 1, 1);
 	if (!arg[1])
 	{
 		if (go_home(shell) != 0)
@@ -80,25 +92,7 @@ int	ft_cd(t_shell *shell)
 	else
 	{
 		if (chdir(arg[1]) == -1)
-		{
-			perror("cd");
-			shell->exit_status = 1; // Erreur si chdir échoue
-			return (shell->exit_status);
-		}
+			return (perror("cd"), shell->exit_status = 1, 1);
 	}
-
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-	{
-		perror("cd");
-		shell->exit_status = 1;
-		return (shell->exit_status);
-	}
-
-	setenv("OLDPWD", ft_getenv(shell->envp, "PWD"), 1);
-	setenv("PWD", cwd, 1);
-	free(cwd);
-	shell->exit_status = 0;
-	return (0);
+	return (end_cd(shell));
 }
-

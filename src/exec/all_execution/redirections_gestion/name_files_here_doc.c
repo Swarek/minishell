@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 01:46:38 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 09:14:34 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 17:50:10 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_a_here_doc_in_the_cmd(t_cmd *cmd)
 {
-	t_arg *tmp;
+	t_arg	*tmp;
 
 	if (!cmd)
 		return (0);
@@ -31,9 +31,9 @@ int	is_a_here_doc_in_the_cmd(t_cmd *cmd)
 	return (0);
 }
 
-int count_here_doc_separated_by_pipes(t_cmd *cmd)
+int	count_here_doc_separated_by_pipes(t_cmd *cmd)
 {
-	int 	count;
+	int		count;
 	t_arg	*tmp;
 
 	count = 0;
@@ -47,7 +47,7 @@ int count_here_doc_separated_by_pipes(t_cmd *cmd)
 				if (ft_strcmp(tmp->type, "double_redir_left") == 0)
 				{
 					count++;
-					break;
+					break ;
 				}
 			}
 			tmp = tmp->next;
@@ -90,7 +90,7 @@ int	handle_here_doc(t_shell *shell)
 	{
 		limiter = verif_here_doc_and_find_limiter(cmds->args);
 		if (!limiter)
-			continue;
+			continue ;
 		if (here_doc_management(limiter->content, name_files_here_doc(i)) == -1)
 			return (-1);
 		if (cmds->next)
@@ -103,6 +103,7 @@ int	handle_here_doc(t_shell *shell)
 	}
 	return (0);
 }
+
 // Will return the name of the temp file with the nbr
 char	*name_files_here_doc(int nbr)
 {

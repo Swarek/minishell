@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_all.c                                        :+:      :+:    :+:   */
+/*   clean_all2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:57:08 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 23:02:34 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 18:55:35 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	free_args(t_arg *args)
 			free(current->content);
 			current->content = NULL;
 		}
-		if (current->type && ft_strcmp(current->type, "word") != 0
+		if (current->type != NULL && ft_strcmp(current->type, "word") != 0
 			&& ft_strcmp(current->type, "pipe") != 0 && ft_strcmp(current->type,
 				"command") != 0 && ft_strcmp(current->type, "file") != 0
 			&& ft_strcmp(current->type, "redir_right") != 0
@@ -81,44 +81,11 @@ void	free_pipes(int **pipes, int nbr_pipes)
 
 	if (!pipes)
 		return ;
-	for (i = 0; i < nbr_pipes; i++)
+	i = 0;
+	while (i < nbr_pipes)
 	{
-		ft_safe_free((void **)&(pipes[i]));
+		ft_safe_free((void **)&pipes[i]);
+		i++;
 	}
 	ft_safe_free((void **)&pipes);
-}
-
-void	clean_all(t_shell *shell)
-{
-	char	**ptr;
-
-	if (!shell)
-		return ;
-	if (shell->child_pids)
-	{
-		free(shell->child_pids);
-		shell->child_pids = NULL;
-	}
-	// Ne pas nettoyer cmds si déjà NULL
-	if (shell->cmds)
-	{
-		safe_free_cmds(shell->cmds);
-		shell->cmds = NULL;
-	}
-	if (shell->pipes)
-	{
-		free_pipes(shell->pipes, shell->nbr_pipes);
-		shell->pipes = NULL;
-	}
-	if (shell->envp)
-	{
-		ptr = shell->envp;
-		while (*ptr)
-			free(*ptr++);
-		free(shell->envp);
-		shell->envp = NULL;
-	}
-	rl_cleanup_after_signal();
-	rl_deprep_terminal();
-	free(shell);
 }

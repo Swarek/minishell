@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 14:26:51 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 18:52:25 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	main(int ac, char **av, char **envp)
 		ret = main7(line, &cmds, shell, &color);
 		if (ret != 0)
 			return (ret);
+		// clean_all(shell); // a suppr ensuite
+		// exit(0);			// a suppr ensuite
 	}
 	clean_all(shell);
 	return (0);

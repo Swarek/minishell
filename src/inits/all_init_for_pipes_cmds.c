@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 19:57:25 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 18:22:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,8 @@ static int	init_pipes(t_shell *shell)
 {
 	int	i;
 
-	// Vérifier si le nombre de pipes est supérieur à 0
 	if (shell->nbr_pipes <= 0)
-	{
-		shell->pipes = NULL;
-		return (0);
-	}
+		return (shell->pipes = NULL, 0);
 	shell->pipes = malloc(sizeof(int *) * shell->nbr_pipes);
 	if (!shell->pipes)
 		return (error_msg("Memory allocation failed\n"), -1);
@@ -55,13 +51,11 @@ static int	init_pipes(t_shell *shell)
 		if (!shell->pipes[i])
 		{
 			clean_up_for_error_init(shell, i);
-			// Nettoyer les pipes alloués partiellement
 			return (error_msg("Memory allocation failed\n"), -1);
 		}
 		if (pipe(shell->pipes[i]) == -1)
 		{
 			clean_up_for_error_init(shell, i);
-			// Nettoyer les pipes alloués partiellement
 			return (error_msg("Pipe creation failed\n"), -1);
 		}
 		i++;

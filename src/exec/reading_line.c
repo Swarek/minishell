@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:28:15 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 18:52:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ char	*reading_line(int color)
 
 	prompt = get_colored_prompt(color);
 	line = readline(prompt);
+	// line = ft_strdup("export TEST=\"ICI\""); // a suppr ensuite
 	free(prompt);
 	if (line && *line)
 		add_history(line);
