@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 14:26:51 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 12:57:04 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	main(int ac, char **av, char **envp)
 		ret = main7(line, &cmds, shell, &color);
 		if (ret != 0)
 			return (ret);
+		g_received_signal = 0;
 	}
 	clean_all(shell);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:24:52 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 00:59:12 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 13:01:23 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,20 @@ void	setup_readline_signals(void)
 
 void	sigint_handler(int signum)
 {
-	g_received_signal = signum;    // Enregistre le signal reçu
-	write(STDOUT_FILENO, "\n", 1); // Affiche un retour à la ligne
-	// Si readline est en cours d'exécution
-	if (rl_line_buffer == NULL) // Si nous sommes dans une commande comme 'cat'
+	if (g_received_signal == 10)
 	{
-		return ; // Ne rien faire, readline gère l'affichage
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 1);
 	}
-	// Si la ligne est vide
-	if (*rl_line_buffer == '\0')
+	else
 	{
-		rl_replace_line("", 0); // Remplace la ligne par une ligne vide
-		rl_on_new_line();       // Se déplace à la nouvelle ligne
-		rl_redisplay();         // Redessine le prompt
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
 	}
-	else // Si la ligne contient du texte
-	{
-		rl_replace_line("", 0); // Efface la ligne courante
-		rl_on_new_line();       // Se déplace à la nouvelle ligne
-		rl_redisplay();         // Redessine le prompt
-	}
+	g_received_signal = signum;
 }
 
 void	sigquit_handler(int signum)
