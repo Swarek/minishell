@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 06:35:14 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 07:02:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 19:03:48 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ int	declare_and_sort(t_env *env)
 	int		len;
 
 	current = env;
-    while (current)
+	while (current)
 	{
-        current->declared = 0;
-        current = current->next;
-    }
+		current->declared = 0;
+		current = current->next;
+	}
 	len = len_env(env);
 	while (len-- > 0)
 	{
@@ -46,14 +46,16 @@ int	declare_and_sort(t_env *env)
 		smallest = NULL;
 		while (current)
 		{
-			if (current->declared == 0 && (smallest == NULL || ft_strcmp(current->name, smallest->name) < 0))
+			if (current->declared == 0 && (smallest == NULL
+					|| ft_strcmp(current->name, smallest->name) < 0))
 				smallest = current;
 			current = current->next;
 		}
 		if (smallest)
 		{
 			smallest->declared = 1;
-			ft_printf("declare -x %s=\"%s\"\n", smallest->name, smallest->value);
+			ft_printf("declare -x %s=\"%s\"\n", smallest->name,
+				smallest->value);
 		}
 	}
 	return (0);
@@ -101,12 +103,13 @@ int	t_env_to_array(t_env *env, char ***envp)
 	while (current)
 	{
 		(*envp)[i] = ft_strdup(current->line);
-		if (!(*envp)[i]) {
-            while (i-- > 0)
-                free((*envp)[i]);
-            free(*envp);
-            return (1);
-        }
+		if (!(*envp)[i])
+		{
+			while (i-- > 0)
+				free((*envp)[i]);
+			free(*envp);
+			return (1);
+		}
 		i++;
 		current = current->next;
 	}
@@ -150,7 +153,6 @@ char	*extract_name(const char *content)
 	return (name);
 }
 
-
 char	*extract_value(const char *content)
 {
 	char	*equal_sign;
@@ -163,20 +165,45 @@ char	*extract_value(const char *content)
 	return (value);
 }
 
+void	free_env_list(t_env *env)
+{
+	t_env	*current;
+	t_env	*next;
+
+	current = env;
+	while (current)
+	{
+		next = current->next;
+		if (current->line)
+			free(current->line);
+		if (current->name)
+			free(current->name);
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = next;
+	}
+}
+
 int	ft_export(t_arg *args, char ***envp)
 {
 	t_env	*env;
 	t_env	*existing_node;
 	char	*name;
 	char	*value;
-	char	*temp_line;
-	char	*temp;
+	int		ret;
+	char	*new_line;
+	t_env	*new_node;
 
 	env = create_t_env(*envp);
 	if (!env)
 		return (1);
 	if (count_arguments_for_t_arg(args) == 1)
-		return (declare_and_sort(env), 0);
+	{
+		ret = declare_and_sort(env);
+		free_env_list(env);
+		return (ret);
+	}
 	args = args->next;
 	edit_args_for_export(args);
 	while (args)
@@ -184,47 +211,59 @@ int	ft_export(t_arg *args, char ***envp)
 		if (is_valid_identifier(args->content) && ft_strchr(args->content, '='))
 		{
 			name = extract_name(args->content);
+			if (!name)
+			{
+				free_env_list(env);
+				return (1);
+			}
 			value = extract_value(args->content);
+			if (!value)
+			{
+				free(name);
+				free_env_list(env);
+				return (1);
+			}
 			existing_node = find_node_by_name(env, name);
 			if (existing_node)
 			{
-				free(existing_node->value);
-				existing_node->value = ft_strdup(value);
-
-				// Mettre à jour le champ line
+				new_line = ft_strdup(args->content);
+				if (!new_line)
+				{
+					free(name);
+					free(value);
+					free_env_list(env);
+					return (1);
+				}
+				// Libérer l'ancienne mémoire
 				free(existing_node->line);
-				temp_line = ft_strjoin(name, "=");
-				if (!temp_line)
-				{
-					// Gérer l'erreur d'allocation
-					free(name);
-					free(value);
-					return (1);
-				}
-				temp = ft_strjoin(temp_line, value);
-				free(temp_line);
-				if (!temp)
-				{
-					// Gérer l'erreur d'allocation
-					free(name);
-					free(value);
-					return (1);
-				}
-				existing_node->line = temp;
+				free(existing_node->value);
+				// Mettre à jour avec les nouvelles valeurs
+				existing_node->line = new_line;
+				existing_node->value = value;
 			}
 			else
 			{
-				env = add_node(env, create_node(args->content));
+				new_node = create_node(args->content);
+				if (!new_node)
+				{
+					free(name);
+					free(value);
+					free_env_list(env);
+					return (1);
+				}
+				env = add_node(env, new_node);
 			}
 			free(name);
-			free(value);
+			if (!existing_node)
+				// On libère value seulement si on n'a pas trouvé de node existant
+				free(value);
 		}
 		else
 			error_msg("export: not a valid identifier\n");
 		args = args->next;
 	}
 	safe_free_all_strings(envp);
-	if (t_env_to_array(env, envp) != 0)
-		return (1);
-	return (0);
+	ret = t_env_to_array(env, envp);
+	free_env_list(env);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:02 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 01:20:16 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 19:14:38 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,35 @@ int	parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
 	return (i);
 }
 
-int	parse_it_2(char *str, t_cmd **cmds, int i, t_arg *current_args)
+int	parse_it_2(char *str, t_cmd **cmds, int i, t_arg **current_args)
 {
+	t_arg	*pipe_arg;
+
 	while (str[i])
 	{
-		i = parse_one_command(str, i, &current_args, cmds);
+		i = parse_one_command(str, i, current_args, cmds);
 		if (i == -1)
 			return (-1);
 		if (str[i] == '|')
 		{
-			current_args = NULL;
+			*current_args = NULL;
 			if (str[i + 1] == '|')
 			{
-				add_arg(&current_args, create_arg("more-than_one_pipe",
-						"error"));
-				add_command(cmds, &current_args);
+				pipe_arg = create_arg("more-than_one_pipe", "error");
+				if (!pipe_arg)
+					return (-1);
+				add_arg(current_args, pipe_arg);
+				add_command(cmds, current_args);
 				while (str[i] == '|')
 					i++;
 			}
 			else
 			{
-				add_arg(&current_args, create_arg("|", "pipe"));
-				add_command(cmds, &current_args);
+				pipe_arg = create_arg("|", "pipe");
+				if (!pipe_arg)
+					return (-1);
+				add_arg(current_args, pipe_arg);
+				add_command(cmds, current_args);
 				i++;
 			}
 		}
@@ -76,6 +83,7 @@ int	parse_it(char *str, t_cmd **cmds)
 {
 	t_arg	*current_args;
 	int		i;
+	int		ret;
 
 	current_args = NULL;
 	i = 0;
@@ -85,7 +93,9 @@ int	parse_it(char *str, t_cmd **cmds)
 		return (ft_printf("Error with pipe position\n"), -1);
 	if (precheck(str) == 3)
 		return (ft_printf("Incorrect filename\n"), -1);
-	if (parse_it_2(str, cmds, i, current_args) == -1)
-		return (-1);
-	return (0);
+	ret = parse_it_2(str, cmds, i, &current_args);
+	// Si current_args contient encore des éléments non ajoutés à une commande
+	if (current_args)
+		free_args(current_args);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:19:31 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 23:43:47 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 19:18:06 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,11 @@ int	main7(char *line, t_cmd **cmds, t_shell *shell, int *color)
 
 	ret = main2(line, cmds, shell);
 	if (ret != 0)
+	{
+		safe_free_cmds(*cmds); // Ajout de la libération
+		*cmds = NULL;
 		return (0);
+	}
 	ret = main3(cmds, shell);
 	if (ret != 0)
 		return (ret);

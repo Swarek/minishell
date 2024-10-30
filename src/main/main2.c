@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:15:49 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 14:17:21 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 19:19:50 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,19 @@ int	main1(char **envp, t_shell **shell)
 
 int	main2(char *line, t_cmd **cmds, t_shell *shell)
 {
-	if (parse_it(line, cmds) != 0)
+	int	ret;
+
+	ret = parse_it(line, cmds);
+	free(line);
+	if (ret != 0)
 	{
-		free(line);
+		if (*cmds)
+		{
+			safe_free_cmds(*cmds);
+			*cmds = NULL;
+		}
 		return (1);
 	}
-	free(line);
 	str_arg_in_null(*cmds);
 	expand_env_vars_in_cmds_tab(cmds, *shell);
 	return (0);

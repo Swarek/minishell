@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:33:25 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/28 20:38:50 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 19:24:18 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,20 @@ t_arg	*create_arg(char *content, const char *type)
 	if (ft_strcmp(type, "word") == 0 || ft_strcmp(type, "pipe") == 0
 		|| ft_strcmp(type, "command") == 0 || ft_strcmp(type, "file") == 0
 		|| ft_strcmp(type, "redir_right") == 0 || ft_strcmp(type,
-			"redir_left") == 0)
+			"redir_left") == 0 || ft_strcmp(type, "double_redir_right") == 0
+		|| ft_strcmp(type, "double_redir_left") == 0 || ft_strcmp(type,
+			"double_quoted") == 0 || ft_strcmp(type, "single_quoted") == 0)
 		new->type = (char *)type;
 	else
+	{
 		new->type = ft_strdup(type);
+		if (!new->type)
+		{
+			free(new->content);
+			free(new);
+			return (NULL);
+		}
+	}
 	new->next = NULL;
 	return (new);
 }
@@ -60,7 +70,15 @@ void	add_command(t_cmd **cmds, t_arg **current_args)
 	t_cmd	*new_cmd;
 	t_cmd	*last_cmd;
 
+	if (!cmds || !current_args || !*current_args)
+		return ;
 	new_cmd = malloc(sizeof(t_cmd));
+	if (!new_cmd)
+	{
+		free_args(*current_args);
+		*current_args = NULL;
+		return ;
+	}
 	new_cmd->args = *current_args;
 	new_cmd->next = NULL;
 	if (!*cmds)

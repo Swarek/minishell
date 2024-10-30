@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:57:08 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 23:02:34 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 19:09:57 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ void	free_args(t_arg *args)
 			current->content = NULL;
 		}
 		if (current->type && ft_strcmp(current->type, "word") != 0
-			&& ft_strcmp(current->type, "pipe") != 0 && ft_strcmp(current->type,
-				"command") != 0 && ft_strcmp(current->type, "file") != 0
+			&& ft_strcmp(current->type, "pipe") != 0
+			&& ft_strcmp(current->type, "command") != 0
+			&& ft_strcmp(current->type, "file") != 0
 			&& ft_strcmp(current->type, "redir_right") != 0
-			&& ft_strcmp(current->type, "redir_left") != 0)
+			&& ft_strcmp(current->type, "redir_left") != 0
+			&& ft_strcmp(current->type, "double_redir_right") != 0
+			&& ft_strcmp(current->type, "double_redir_left") != 0)
 		{
 			free(current->type);
 			current->type = NULL;

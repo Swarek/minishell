@@ -12,6 +12,7 @@
 		"text": "cpp",
 		"test": "cpp",
 		"unistd.h": "c",
-		"TEST.C": "cpp"
+		"TEST.C": "cpp",
+		"code": "cpp"
 	}
 }

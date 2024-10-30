@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   edit_args_for_export.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 11:37:44 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/27 18:58:00 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 19:22:39 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 void	edit_args_for_export(t_arg *args)
 {
 	t_arg	*tmp;
+	char	*new_content;
 
 	while (args && args->next)
 	{
@@ -34,10 +35,17 @@ void	edit_args_for_export(t_arg *args)
 			|| ft_strcmp(args->next->type, "single_quoted") == 0)
 		{
 			tmp = args->next;
-			args->content = ft_strjoin(args->content, tmp->content);
-			args->next = tmp->next;
-			free(tmp->content);
-			free(tmp);
+			new_content = ft_strjoin(args->content, tmp->content);
+			if (new_content) // Si le join a réussi
+			{
+				free(args->content); // On libère l'ancien content
+				args->content = new_content;
+				args->next = tmp->next;
+				free(tmp->content);
+				free(tmp);
+			}
+			else
+				args = args->next; // En cas d'échec, on continue
 		}
 		else
 			args = args->next;
