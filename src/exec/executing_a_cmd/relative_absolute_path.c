@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   relative_absolute_path.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/28 21:27:10 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:42:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	is_absolute_or_relative_path(char *command)
 		|| (command[0] == '.' && command[1] == '.' && command[2] == '/'));
 }
 
-char	*handle_absolute_or_relative_path(char *command)
+char	*handle_paths(char *command)
 {
 	if (access(command, X_OK) == 0)
 		return (ft_strdup(command));

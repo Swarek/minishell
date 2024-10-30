@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 07:13:34 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 17:48:13 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,21 @@ int	do_the_execution(t_shell *shell, t_cmd *cmd, char **envp)
 	(void)envp;
 	path = prepare_execution(shell, cmd);
 	execute_command(shell, cmd, path);
-	// La fonction execve ne retourne pas si elle réussit
 	free(path);
 	return (0);
+}
+
+void	child_process_execute_solo(t_shell *shell)
+{
+	setup_child_signals();
+	dup2(shell->infile, STDIN_FILENO);
+	dup2(shell->outfile, STDOUT_FILENO);
+	if (shell->infile > STDIN)
+		close(shell->infile);
+	if (shell->outfile > STDOUT)
+		close(shell->outfile);
+	if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
+		exit(1);
 }
 
 // Fonction pour exécuter une commande seule
@@ -83,21 +95,10 @@ int	execute_solo(t_shell *shell)
 	if (pid == -1)
 	{
 		error_msg("Fork failed\n");
-		shell->exit_status = 1;
-		return (-1);
+		return (shell->exit_status = 1, -1);
 	}
 	if (pid == 0)
-	{
-		setup_child_signals();
-		dup2(shell->infile, STDIN_FILENO);
-		dup2(shell->outfile, STDOUT_FILENO);
-		if (shell->infile > STDIN)
-			close(shell->infile);
-		if (shell->outfile > STDOUT)
-			close(shell->outfile);
-		if (do_the_execution(shell, shell->cmds, shell->envp) == -1)
-			exit(1);
-	}
+		child_process_execute_solo(shell);
 	else
 	{
 		waitpid(pid, &status, 0);

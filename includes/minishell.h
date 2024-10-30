@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 12:55:05 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 00:10:47 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 
 # define STDIN 0
 # define STDOUT 1
+# define PATH_MAX 4096
 
 // Structures
 
@@ -86,24 +87,6 @@ typedef struct s_shell
 extern volatile sig_atomic_t	g_received_signal;
 
 // 		Parsing
-
-/*
-
-Si c'est un pipe ça sera une commande de type = "pipe" et de content "|"
-
-
-Pour les arguments les types sont :
-
-"single_quoted" : Contenu entre single quotes
-"double_quoted" : Contenu entre double quotes
-"redir_right" : content = ">"
-"double_redir_right" : content = ">>"
-"redir_left" : content = "<"
-"double_redir_left" : content = "<"
-"word" : le reste,
-		séparés par des espaces,	c'est à dire une suite de caractères qui ne contient pas de tout ça ; > < ' " |
-
-*/
 
 // parsing_main.c
 
@@ -212,6 +195,8 @@ int								expand_in_here_doc25(char *file_name,
 									int last_exit_status);
 char							*ft_getenv(char **env, char *name);
 int								is_real_cmd_in_cmds(t_cmd *cmds);
+t_env							*find_no_na(t_env *env, const char *name);
+char							*replace_in_charstar(char **str, t_shell *shell);
 
 // Build-in functions
 int								ft_pwd(t_shell *shell);
@@ -246,7 +231,6 @@ void							clean_all(t_shell *shell);
 int								starting_one_cmd(t_shell *shell);
 void							find_arg_add_type_cmd(t_shell *shell,
 									t_arg *args);
-int								handle_pipe_without_out_redirection(t_shell *shell);
 char							*reading_line(int color);
 int								exec_it(t_shell *shell);
 int								is_built_in(char **args);
@@ -271,7 +255,6 @@ void							clean_all(t_shell *shell);
 int								starting_one_cmd(t_shell *shell);
 void							find_arg_add_type_cmd(t_shell *shell,
 									t_arg *args);
-int								handle_pipe_without_out_redirection(t_shell *shell);
 
 // for envp
 t_env							*create_t_env(char **envp);
@@ -279,6 +262,13 @@ t_env							*add_node(t_env *head, t_env *new_node);
 t_env							*create_node(char *env_line);
 char							*get_env_value(char *env_line);
 char							*get_env_name(char *env_line);
+int								len_env(t_env *env);
+int								is_valid_identifier(char *str);
+t_env							*find_no_na(t_env *env, const char *name);
+void							free_env(t_env *env);
+t_env							*find_smallest_undeclared(t_env *env);
+char							*extract_value(const char *content);
+char							*extract_name(const char *content);
 
 // Functions Pipex
 
@@ -289,7 +279,7 @@ void							cleanup(t_shell *shell, char **cmd);
 
 // Here_doc
 int								here_doc_management(char *limiter,
-									char *name_file);
+									char *name_file, t_shell *shell);
 int								handle_here_doc(t_shell *shell);
 
 // Processes
@@ -306,7 +296,7 @@ int								all_init(t_shell *shell);
 int								do_the_execution(t_shell *shell, t_cmd *cmd,
 									char **envp);
 int								is_absolute_or_relative_path(char *command);
-char							*handle_absolute_or_relative_path(char *command);
+char							*handle_paths(char *command);
 int								execute_with_shell(char *path, char **cmd,
 									char **envp, int cmd_count);
 char							**remove_quotes(char **cmd);

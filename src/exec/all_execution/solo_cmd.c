@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 20:05:45 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 17:49:05 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	starting_one_cmd(t_shell *shell)
 		return (-1);
 	if (handle_io_redirections(shell) == -1)
 		return (-1);
-	// Supprimer l'appel à all_init_for_pipes_cmds ici car il est déjà fait dans exec_it
 	cut_the_cmd_plus_args(shell->cmds);
 	if (single_cmd(shell) == -1)
 		return (-1);

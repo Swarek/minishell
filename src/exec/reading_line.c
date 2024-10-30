@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reading_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 12:54:52 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:44:23 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ char	*reading_line(int color)
 
 	tcgetattr(STDIN_FILENO, &term);
 	if (g_received_signal == SIGINT && !(term.c_lflag & ICANON))
-		// Si mode non-canonique
 	{
 		line = readline("");
 	}

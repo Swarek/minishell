@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:33:25 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 19:24:18 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:48:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_arg	*create_arg(char *content, const char *type)
 {
 	t_arg	*new;
 
+	(void)type;
 	new = malloc(sizeof(t_arg));
 	if (!new)
 		return (NULL);
@@ -32,16 +33,6 @@ t_arg	*create_arg(char *content, const char *type)
 		|| ft_strcmp(type, "double_redir_left") == 0 || ft_strcmp(type,
 			"double_quoted") == 0 || ft_strcmp(type, "single_quoted") == 0)
 		new->type = (char *)type;
-	else
-	{
-		new->type = ft_strdup(type);
-		if (!new->type)
-		{
-			free(new->content);
-			free(new);
-			return (NULL);
-		}
-	}
 	new->next = NULL;
 	return (new);
 }

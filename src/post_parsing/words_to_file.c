@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   words_to_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 00:36:43 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 02:03:04 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:31:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	type_to_file_in_args1(t_cmd **cmds)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
-	int		flag;
 
-	flag = 0;
 	current_cmd = *cmds;
 	while (current_cmd)
 	{
@@ -29,11 +27,11 @@ void	type_to_file_in_args1(t_cmd **cmds)
 				|| ft_strncmp(current_arg->type, "double_redir_right", 18) == 0
 				|| ft_strncmp(current_arg->type, "redir_left", 10) == 0
 				|| ft_strncmp(current_arg->type, "double_redir_left", 17) == 0)
-				flag = 1;
+			{
+				if (current_arg->next)
+					current_arg->next->type = "file";
+			}
 			current_arg = current_arg->next;
-			if (flag == 1)
-				current_arg->type = "file";
-			flag = 0;
 		}
 		current_cmd = current_cmd->next;
 	}

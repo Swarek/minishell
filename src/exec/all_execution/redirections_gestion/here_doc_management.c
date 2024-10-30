@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 06:35:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 00:24:34 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,21 @@
 
 static int	write_to_temp(int fd, char *line)
 {
+	if (!line)
+	{
+		if (write(fd, "\n\n", ft_strlen(line)) == -1)
+			return (-1);
+	}
 	if (write(fd, line, ft_strlen(line)) == -1)
-		return (error_msg("Problem writing to temp.txt"),
-			free(line), close(fd), -1);
+		return (error_msg("Problem writing to temp.txt"), free(line), close(fd),
+			-1);
 	if (write(fd, "\n", 1) == -1)
-		return (error_msg("Problem writing newline to temp.txt"),
-			free(line), close(fd), -1);
+		return (error_msg("Problem writing newline to temp.txt"), free(line),
+			close(fd), -1);
 	return (0);
 }
 
-int	here_doc_management(char *limiter, char *name_file)
+int	here_doc_management(char *limiter, char *name_file, t_shell *shell)
 {
 	int		fd;
 	char	*line;
@@ -43,6 +48,8 @@ int	here_doc_management(char *limiter, char *name_file)
 			line[len - 1] = '\0';
 		if (ft_strcmp(line, limiter) == 0 || len == 0)
 			break ;
+		line = replace_in_charstar(&line, shell);
+		ft_printf("%s\n", line);
 		if (write_to_temp(fd, line) == -1)
 			return (-1);
 		free(line);

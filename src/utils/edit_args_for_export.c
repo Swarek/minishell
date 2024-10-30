@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   edit_args_for_export.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 11:37:44 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 19:22:39 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:25:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ void	edit_args_for_export(t_arg *args)
 		{
 			tmp = args->next;
 			new_content = ft_strjoin(args->content, tmp->content);
-			if (new_content) // Si le join a réussi
+			if (new_content)
 			{
-				free(args->content); // On libère l'ancien content
+				free(args->content);
 				args->content = new_content;
 				args->next = tmp->next;
 				free(tmp->content);
 				free(tmp);
 			}
 			else
-				args = args->next; // En cas d'échec, on continue
+				args = args->next;
 		}
 		else
 			args = args->next;

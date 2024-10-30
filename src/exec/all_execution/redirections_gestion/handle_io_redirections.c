@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 05:41:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 17:49:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ static int	handle_output_redirection(t_shell *shell, t_arg *redir_right)
 	{
 		if (ft_strcmp(redir_right->type, "redir_right") == 0)
 			shell->outfile = open(redir_right->next->content,
-								  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (ft_strcmp(redir_right->type, "double_redir_right") == 0)
 			shell->outfile = open(redir_right->next->content,
-								  O_WRONLY | O_CREAT | O_APPEND, 0644);
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (shell->outfile < 0)
 		{
 			shell->exit_status = 1;
@@ -100,7 +100,6 @@ int	handle_io_redirections(t_shell *shell)
 	t_arg	*redir_left;
 	t_arg	*redir_right;
 
-	// print_all_commands(shell->cmds);
 	redir_left = last_redir_left(shell->cmds->args);
 	redir_right = last_redir_right(shell->cmds->args);
 	if (handle_input_redirection(shell, redir_left) == -1)

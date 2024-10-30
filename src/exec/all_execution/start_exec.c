@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 13:01:48 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:44:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ int	any_empty_cmd(t_cmd *cmd)
 int	exec_it(t_shell *shell)
 {
 	g_received_signal = 10;
-	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL || any_empty_cmd(shell->cmds))
+	if (shell == NULL || shell->cmds == NULL
+		|| shell->cmds->args == NULL || any_empty_cmd(shell->cmds))
 		return (0);
-	if (all_init_for_pipes_cmds(shell) == -1) // Un seul appel à all_init_for_pipes_cmds
+	if (all_init_for_pipes_cmds(shell) == -1)
 		return (-1);
 	if (count_cmd(shell->cmds) == 0)
 		return (0);

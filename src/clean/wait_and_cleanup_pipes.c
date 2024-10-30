@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:49:55 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/29 01:32:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/30 23:26:29 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,9 @@ void	wait_and_cleanup(t_shell *shell)
 		else if (i == shell->total_cmd_count - 1)
 		{
 			if (WIFEXITED(status))
-			{
 				shell->exit_status = WEXITSTATUS(status);
-			}
 			else if (WIFSIGNALED(status))
-			{
 				shell->exit_status = 128 + WTERMSIG(status);
-			}
 		}
 		i++;
 	}
@@ -44,7 +40,6 @@ void	wait_and_cleanup(t_shell *shell)
 	if (shell->outfile != -1)
 		close(shell->outfile);
 }
-
 
 void	cleanup(t_shell *shell, char **cmd)
 {
@@ -70,7 +65,5 @@ void	cleanup(t_shell *shell, char **cmd)
 	if (shell->outfile != -1)
 		close(shell->outfile);
 	if (shell->child_pids)
-	{
-		ft_safe_free((void**)&(shell->child_pids));
-	}
+		ft_safe_free((void **)&(shell->child_pids));
 }

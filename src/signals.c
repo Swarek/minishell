@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:24:52 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 13:01:23 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/30 23:44:13 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	sigint_handler(int signum);
-
-void	setup_readline_signals(void)
-{
-	rl_catch_signals = 0;  // Empêche readline de gérer les signaux
-	rl_catch_sigwinch = 1; // Gère les redimensionnements de fenêtre
-	signal(SIGINT, sigint_handler);
-}
 
 void	sigint_handler(int signum)
 {
@@ -37,6 +28,13 @@ void	sigint_handler(int signum)
 		rl_redisplay();
 	}
 	g_received_signal = signum;
+}
+
+void	setup_readline_signals(void)
+{
+	rl_catch_signals = 0;
+	rl_catch_sigwinch = 1;
+	signal(SIGINT, sigint_handler);
 }
 
 void	sigquit_handler(int signum)
@@ -66,18 +64,4 @@ void	setup_child_signals(void)
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
-}
-
-void	handle_ctrl_d(char *line, t_shell *shell)
-{
-	int	exit_status;
-
-	exit_status = shell->last_exit_status;
-	if (!line)
-	{
-		if (shell)
-			clean_all(shell);
-		write(1, "exit\n", 5);
-		exit(exit_status);
-	}
 }
