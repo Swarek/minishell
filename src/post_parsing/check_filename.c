@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_filename.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 02:52:31 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/25 02:33:32 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 03:45:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	error_in_filename(t_cmd **cmds)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
-	int		i;
 
 	current_cmd = *cmds;
 	while (current_cmd)
@@ -48,7 +47,6 @@ int	error_in_filename(t_cmd **cmds)
 		current_arg = current_cmd->args;
 		while (current_arg)
 		{
-			i = 0;
 			if (ft_strncmp(current_arg->type, "file", 4) == 0)
 			{
 				if (check_file_name(current_arg->content) == -1)

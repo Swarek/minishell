@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:22:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 17:49:05 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:44:33 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ static int	single_cmd(t_shell *shell)
 // Iniatiate all needed and call single_cmd to exec
 int	starting_one_cmd(t_shell *shell)
 {
-	int	i;
-
-	i = 0;
 	if (shell == NULL || shell->cmds == NULL || shell->cmds->args == NULL)
 		return (-1);
 	if (handle_io_redirections(shell) == -1)

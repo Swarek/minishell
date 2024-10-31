@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_parentheses.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:24:00 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 01:22:30 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 03:45:59 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	error_if_unclosed_parentheses2(int *open_parentheses, t_arg *current_arg)
 		while (current_arg->content[i])
 		{
 			if (current_arg->content[i] == '(')
-				open_parentheses++;
+				(*open_parentheses)++;
 			else if (current_arg->content[i] == ')')
 			{
-				open_parentheses--;
-				if (open_parentheses < 0)
+				(*open_parentheses)--;
+				if (*open_parentheses < 0)
 					return (-1);
 			}
 			i++;
