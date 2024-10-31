@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 06:48:02 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 12:57:51 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
-# include <unistd.h>
 # include <termios.h>
+# include <unistd.h>
 
 # define STDIN 0
 # define STDOUT 1
@@ -151,6 +151,12 @@ int								get_var_name_end_env(const char *content,
 									int start);
 void							handle_exit_status_for_env(t_arg *current_arg,
 									int *i, t_shell shell);
+void							handle_empty_var_env(t_arg *curr_arg, int *i,
+									int start);
+void							handle_nonexistent_var(t_arg *curr_arg, int *i,
+									int j);
+void							handle_existing_var(t_arg *curr_arg, int *i,
+									int j, const char *env_value);
 
 // Utils
 void							print_command(t_cmd *cmd);
