@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 02:45:58 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 05:15:52 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,10 @@ char							*replace_in_charstar(char **str,
 char							*ft_getcwd(char *buf, int size, char **env);
 int								is_there_path(char **env);
 int								is_there_pwd(char **env);
+int								shlvl_incrementation(t_shell *shell);
+int								create_basic_env(t_shell *shell);
+int								ft_setenv(char *name, char *value,
+									char ***envp);
 
 // Build-in functions
 int								ft_pwd(t_shell *shell);

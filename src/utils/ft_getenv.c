@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 06:36:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 02:40:12 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:59:20 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_getenv(char **env, char *name)
 	int	i;
 	int	j;
 
+	if (!env)
+		return (NULL);
 	i = 0;
 	while (env[i])
 	{
@@ -35,6 +37,8 @@ char	*ft_getcwd(char *buf, int size, char **env)
 	int	i;
 	int	len;
 
+	if (!env)
+		return (NULL);
 	i = 0;
 	len = 3;
 	while (env[i])

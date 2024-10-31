@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 09:00:31 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 03:40:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:47:46 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,3 @@ void	ft_unset(t_arg *args, char ***env, t_shell *shell)
 	if (!error_flag)
 		shell->exit_status = 0;
 }
-

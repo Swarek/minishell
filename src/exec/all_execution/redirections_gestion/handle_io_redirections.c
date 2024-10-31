@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 00:29:10 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 05:11:21 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,27 @@ t_arg	*last_redir_left(t_arg *args)
 t_arg	*last_redir_right(t_arg *args)
 {
 	t_arg	*last_redir_right;
+	int		fd;
 
 	last_redir_right = NULL;
 	while (args)
 	{
 		if (ft_strcmp(args->type, "redir_right") == 0)
+		{
+			fd = open(args->next->content,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd != -1)
+				close(fd);
 			last_redir_right = args;
+		}
 		if (ft_strcmp(args->type, "double_redir_right") == 0)
+		{
+			fd = open(args->next->content,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd != -1)
+				close(fd);
 			last_redir_right = args;
+		}
 		args = args->next;
 	}
 	return (last_redir_right);
