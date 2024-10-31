@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 12:57:51 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 13:43:07 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int								handle_special_char(char *str, int i,
 									t_arg **current_args);
 int								parse_one_command(char *str, int i,
 									t_arg **current_args, t_cmd **cmds);
-int								parse_it(char *str, t_cmd **cmds);
+int								parse_it(char *str, t_cmd **cmds,
+									t_shell *shell);
 
 // parsing_save_it.c
 

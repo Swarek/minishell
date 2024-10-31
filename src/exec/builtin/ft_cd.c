@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 02:53:47 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:44:44 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	go_home(t_shell *shell)
 	home = ft_getenv(shell->envp, "HOME");
 	if (!home)
 	{
-		ft_printf("cd: HOME not set\n");
+		error_msg("cd: HOME not set\n");
 		shell->exit_status = 1;
 		return (shell->exit_status);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 06:36:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 03:59:20 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:47:38 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_getcwd(char *buf, int size, char **env)
 		{
 			if (buf && size > 0)
 			{
-				if ((int)strlen(env[i] + len + 1) < size)
+				if ((int)ft_strlen(env[i] + len + 1) < size)
 				{
 					ft_strcpy(buf, env[i] + len + 1);
 					return (buf);

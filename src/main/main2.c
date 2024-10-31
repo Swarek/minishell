@@ -6,7 +6,7 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:15:49 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 13:31:17 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 13:43:16 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main2(char *line, t_cmd **cmds, t_shell *shell)
 {
 	int	ret;
 
-	ret = parse_it(line, cmds);
+	ret = parse_it(line, cmds, shell);
 	free(line);
 	if (ret != 0)
 	{

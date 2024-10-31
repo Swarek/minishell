@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 20:00:37 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/23 03:15:14 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:46:04 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	print_args(t_arg *args)
 {
-	printf("[");
+	ft_printf("[");
 	while (args)
 	{
-		printf("content : '%s', type : '%s'", args->content, args->type);
+		ft_printf("content : '%s', type : '%s'", args->content, args->type);
 		if (args->next)
-			printf(", ");
+			ft_printf(", ");
 		args = args->next;
 	}
-	printf("]");
+	ft_printf("]");
 }

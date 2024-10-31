@@ -40,6 +40,7 @@ SRC_FILES	=	src/exec/all_execution/redirections_gestion/here_doc_management.c \
 				src/post_parsing/check_parentheses.c \
 				src/post_parsing/env_expansion.c \
 				src/post_parsing/env_expansion2.c \
+				src/post_parsing/env_expansion3.c \
 				src/post_parsing/replace_exit_status.c \
 				src/post_parsing/words_to_file.c \
 				src/utils/count_cmds.c \

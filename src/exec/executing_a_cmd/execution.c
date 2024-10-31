@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 07:55:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:45:50 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	execute_command(t_shell *shell, t_cmd *cmd, char *path)
 		if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
 		{
 			free(path);
-			ft_printf("error 1");
+			error_msg("error");
 			exit(126);
 		}
 		free(path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_main.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:02 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 23:36:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:45:33 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	parse_one_command(char *str, int i, t_arg **current_args, t_cmd **cmds)
 		{
 			i = handle_special_char(str, i, current_args);
 			if (i == -1)
-				return (ft_printf("Odd number of quotes\n"), -1);
+				return (error_msg("odd number of quotes\n"), -1);
 		}
 	}
 	add_command(cmds, current_args);
@@ -85,7 +85,7 @@ int	parse_it_2(char *str, t_cmd **cmds, int i, t_arg **current_args)
 	return (0);
 }
 
-int	parse_it(char *str, t_cmd **cmds)
+int	parse_it(char *str, t_cmd **cmds, t_shell *shell)
 {
 	t_arg	*current_args;
 	int		i;
@@ -94,11 +94,13 @@ int	parse_it(char *str, t_cmd **cmds)
 	current_args = NULL;
 	i = 0;
 	if (precheck(str) == 1)
-		return (ft_printf("Error with parentheses\n"), -1);
+		return (shell->exit_status = 127,
+			error_msg("error with parentheses\n"), -1);
 	if (precheck(str) == 2)
-		return (ft_printf("Error with pipe position\n"), -1);
+		return (shell->exit_status = 2,
+			error_msg("error with pipe position\n"), -1);
 	if (precheck(str) == 3)
-		return (ft_printf("Incorrect filename\n"), -1);
+		return (shell->exit_status = 2, error_msg("incorrect filename\n"), -1);
 	ret = parse_it_2(str, cmds, i, &current_args);
 	if (current_args)
 		free_args(current_args);
