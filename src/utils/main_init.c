@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:38:17 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 13:38:42 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 02:05:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_shell	*init_struct_shell(char **envp)
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
 		return (NULL);
-	shell->last_exit_status = 0;
+	shell->exit_status = 0;
 	shell->envp = env_copy(envp);
 	shell->cmds = NULL;
 	shell->total_cmd_count = 0;

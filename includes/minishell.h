@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 00:10:47 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:17:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	int							last_exit_status;
 	int							exit_status;
 	char						**envp;
 	t_cmd						*cmds;
@@ -171,7 +170,7 @@ char							*name_files_here_doc(int nbr);
 int								is_a_here_doc_in_the_cmd(t_cmd *cmd);
 int								delete_all_temp_files(int total_here_doc);
 int								expand_in_here_doc25(char *file_name,
-									int last_exit_status);
+									int exit_status);
 char							*ft_getenv(char **env, char *name);
 int								is_real_cmd_in_cmds(t_cmd *cmds);
 int								setup_pipe_redirections(t_shell *shell);
@@ -192,19 +191,22 @@ char							*name_files_here_doc(int nbr);
 int								is_a_here_doc_in_the_cmd(t_cmd *cmd);
 int								delete_all_temp_files(int total_here_doc);
 int								expand_in_here_doc25(char *file_name,
-									int last_exit_status);
+									int exit_status);
 char							*ft_getenv(char **env, char *name);
 int								is_real_cmd_in_cmds(t_cmd *cmds);
 t_env							*find_no_na(t_env *env, const char *name);
-char							*replace_in_charstar(char **str, t_shell *shell);
+char							*replace_in_charstar(char **str,
+									t_shell *shell);
 
 // Build-in functions
 int								ft_pwd(t_shell *shell);
 int								ft_echo(t_shell *shell);
 int								ft_cd(t_shell *shell);
-int								ft_export(t_arg *args, char ***envp);
+int								ft_export(t_arg *args, char ***envp,
+									t_shell *shell);
 void							ft_env(char **envp, t_shell *shell);
-void							ft_unset(t_arg *args, char ***env);
+void							ft_unset(t_arg *args, char ***env,
+									t_shell *shell);
 int								ft_exit(t_shell *shell, t_arg *args);
 
 char							*reading_line(int color);

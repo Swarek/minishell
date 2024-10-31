@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 09:07:45 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 17:41:12 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:18:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_exit(t_shell *shell, t_arg *args)
 
 	(void)shell;
 	if (!shell->cmds->cmd_arg_stdin[1])
-		exit(-1);
+		exit(shell->exit_status);
 	args = args->next;
 	if (!is_numeric(args->content))
 	{

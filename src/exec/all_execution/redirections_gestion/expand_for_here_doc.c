@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 00:02:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 00:21:31 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 00:32:28 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,5 @@ char	*replace_in_charstar(char **str, t_shell *shell)
 		else
 			new[j++] = (*str)[i++];
 	}
-	new[j] = '\0';
-	free(*str);
-	return (new);
+	return (new[j] = '\0', free(*str), new);
 }

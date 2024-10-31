@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:35:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 16:19:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:10:59 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ int	ft_echo(t_shell *shell)
 	}
 	if (!no_newline)
 		ft_putchar_fd('\n', shell->outfile);
+	shell->exit_status = 0;
 	return (0);
 }

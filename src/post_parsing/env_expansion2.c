@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 01:53:59 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 02:02:09 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 02:05:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_exit_status_for_env(t_arg *current_arg, int *i, t_shell shell)
 	int		start;
 
 	start = *i + 1;
-	status_str = ft_itoa(shell.last_exit_status);
+	status_str = ft_itoa(shell.exit_status);
 	if (!status_str)
 		return ;
 	replace_env_var(current_arg, *i, start + 1, status_str);

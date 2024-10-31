@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 01:46:38 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 00:10:35 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 00:34:46 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	handle_here_doc(t_shell *shell)
 	int		total_here_doc;
 	t_arg	*limiter;
 	t_cmd	*cmds;
+	char	*name_file;
 
 	i = 0;
 	cmds = shell->cmds;
@@ -91,12 +92,12 @@ int	handle_here_doc(t_shell *shell)
 		limiter = verif_here_doc_and_find_limiter(cmds->args);
 		if (!limiter)
 			continue ;
-		if (here_doc_management(limiter->content, name_files_here_doc(i), shell) == -1)
-			return (-1);
+		name_file = name_files_here_doc(i);
+		if (here_doc_management(limiter->content, name_file, shell) == -1)
+			return (free(name_file), -1);
+		free(name_file);
 		if (cmds->next)
-		{
 			cmds = cmds->next;
-		}
 		while (is_a_here_doc_in_the_cmd(cmds) == 0)
 			cmds = cmds->next;
 		i++;

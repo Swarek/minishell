@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 06:35:14 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:42:11 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:16:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	update_existing_node(t_env *existing_node, char *name, char *value)
 	return (0);
 }
 
-int	process_arg(t_arg *arg, t_env **env)
+int	process_arg(t_arg *arg, t_env **env, t_shell *shell)
 {
 	t_env	*existing_node;
 	char	*name;
@@ -108,33 +108,36 @@ int	process_arg(t_arg *arg, t_env **env)
 		free(value);
 	}
 	else
-		error_msg("export: not a valid identifier\n");
+		return (error_msg("export: not a valid identifier\n"),
+			shell->exit_status = 1, 1);
 	return (0);
 }
 
-int	ft_export(t_arg *args, char ***envp)
+int	ft_export(t_arg *args, char ***envp, t_shell *shell)
 {
 	t_env	*env;
+	int		error_flag;
 
 	env = create_t_env(*envp);
 	if (!env)
-		return (1);
-	if (count_arguments_for_t_arg(args) == 1)
 	{
-		declare_and_sort(env);
-		return (free_env(env), 0);
+		shell->exit_status = 1;
+		return (1);
 	}
+	if (count_arguments_for_t_arg(args) == 1)
+		return (declare_and_sort(env), free_env(env),
+			shell->exit_status = 0, 0);
 	args = args->next;
 	edit_args_for_export(args);
+	error_flag = 0;
 	while (args)
 	{
-		if (process_arg(args, &env) != 0)
-			return (free_env(env), 1);
+		if (process_arg(args, &env, shell) != 0)
+			error_flag = 1;
 		args = args->next;
 	}
 	safe_free_all_strings(envp);
 	if (t_env_to_array(env, envp) != 0)
-		return (free_env(env), 1);
-	free_env(env);
-	return (0);
+		return (free_env(env), shell->exit_status = 1, 1);
+	return (free_env(env), shell->exit_status = error_flag, shell->exit_status);
 }

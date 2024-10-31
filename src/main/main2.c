@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:15:49 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 23:13:05 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:05:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	handle_received_signal_in_main(t_shell *shell)
 {
 	if (g_received_signal == SIGINT)
-		shell->last_exit_status = 130;
+		shell->exit_status = 130;
 	else if (g_received_signal == SIGQUIT)
-		shell->last_exit_status = 131;
+		shell->exit_status = 131;
 	g_received_signal = 0;
 }
 

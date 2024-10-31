@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 06:35:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 17:49:43 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 00:29:10 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	handle_input_redirection(t_shell *shell, t_arg *redir_left)
 		{
 			name_file = name_files_here_doc(shell->nth_here_doc);
 			shell->infile = open(name_file, O_RDONLY);
+			free(name_file);
 		}
 		else
 			shell->infile = open(redir_left->next->content, O_RDONLY);

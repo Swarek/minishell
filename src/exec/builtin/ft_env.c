@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 09:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/27 18:59:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:11:15 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ void	ft_env(char **envp, t_shell *shell)
 		ft_putchar_fd('\n', shell->outfile);
 		i++;
 	}
+	shell->exit_status = 0;
 }
