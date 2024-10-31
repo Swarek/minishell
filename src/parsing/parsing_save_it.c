@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_save_it.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:53:29 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 19:07:54 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 06:20:13 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	save_it_word(char *str, int i, t_arg **args)
 		j++;
 	to_save = ft_substr(str, i, j - i);
 	if (!to_save)
-		return (-1);
+		return (error_msg("Memory allocation failed in save_it_word\n"), -1);
 	new_arg = create_arg(to_save, "word");
 	free(to_save);
 	if (!new_arg)
@@ -45,7 +45,8 @@ int	save_it_double_quoted(char *str, int i, t_arg **args)
 		return (-2);
 	to_save = ft_substr(str, i + 1, j - i - 1);
 	if (!to_save)
-		return (-1);
+		return (error_msg("Memory allocation failed in save_it_double_quoted\n"),
+			-1);
 	arg = create_arg(to_save, "double_quoted");
 	free(to_save);
 	if (!arg)

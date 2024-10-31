@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:14:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 17:48:55 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 07:56:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	close_pipes(t_shell *shell)
 void	child_process(t_shell *shell)
 {
 	setup_child_signals();
-	handle_io_redirections(shell);
+	if (handle_io_redirections(shell) == -1)
+		exit(EXIT_FAILURE);
 	if (shell->there_is_redir_out < 0)
 	{
 		error_msg("Error setup redirection\n");
@@ -83,7 +84,7 @@ int	pipes_process(t_shell *shell)
 	{
 		pid = fork();
 		if (pid == -1)
-			return (error_msg("Fork failed\n"), -1);
+			return (perror("minishell: fork"), -1);
 		if (pid == 0)
 		{
 			child_process(shell);

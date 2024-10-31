@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:49:55 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:26:29 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 07:08:10 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ void	wait_and_cleanup(t_shell *shell)
 	while (i < shell->total_cmd_count)
 	{
 		if (waitpid(shell->child_pids[i], &status, 0) == -1)
-		{
-			error_msg("Waitpid failed\n");
 			shell->exit_status = 1;
-		}
 		else if (i == shell->total_cmd_count - 1)
 		{
 			if (WIFEXITED(status))

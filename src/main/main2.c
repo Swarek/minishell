@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:15:49 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 03:13:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 06:27:53 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,15 @@ int	main3(t_cmd **cmds, t_shell *shell)
 	if (error_if_subsequent_commands(cmds) == -1
 		|| error_if_unclosed_parentheses(cmds) == -1 || error_in_filename(cmds))
 	{
-		ft_printf("Syntax error\n");
+		error_msg("Syntax error\n");
 		if (*cmds)
 		{
 			safe_free_cmds(*cmds);
 			*cmds = NULL;
 			shell->cmds = NULL;
 		}
-		clean_all(shell);
+		// clean_all(shell);
+		shell->exit_status = 2;
 		return (2);
 	}
 	return (0);

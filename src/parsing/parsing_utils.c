@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 02:33:25 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 23:48:06 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 06:20:39 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_arg	*create_arg(char *content, const char *type)
 	(void)type;
 	new = malloc(sizeof(t_arg));
 	if (!new)
-		return (NULL);
+		return (error_msg("Memory allocation failed in create_arg\n"), NULL);
 	new->content = ft_strdup(content);
 	if (!new->content)
 	{

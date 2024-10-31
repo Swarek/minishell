@@ -6,54 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:42:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 07:54:09 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	**build_new_cmd(char *path, char **cmd, int args_count)
-{
-	char	**new_cmd;
-	int		j;
-
-	new_cmd = malloc(sizeof(char *) * (args_count + 2));
-	if (!new_cmd)
-		return (NULL);
-	new_cmd[0] = ft_strdup("/bin/sh");
-	new_cmd[1] = ft_strdup(path);
-	j = 1;
-	while (j < args_count)
-	{
-		new_cmd[j + 1] = ft_strdup(cmd[j]);
-		j++;
-	}
-	new_cmd[args_count + 1] = NULL;
-	return (new_cmd);
-}
-
-int	execute_with_shell(char *path, char **cmd, char **envp, int args_count)
-{
-	char	**new_cmd;
-	int		j;
-
-	new_cmd = build_new_cmd(path, cmd, args_count);
-	if (!new_cmd)
-	{
-		perror("malloc error");
-		exit(12);
-	}
-	execve("/bin/sh", new_cmd, envp);
-	perror("execve error");
-	j = 0;
-	while (new_cmd[j])
-	{
-		free(new_cmd[j]);
-		j++;
-	}
-	free(new_cmd);
-	return (-1);
-}
 
 int	is_absolute_or_relative_path(char *command)
 {

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 23:04:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:44:33 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 07:39:28 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,13 @@ int	exec_it(t_shell *shell)
 		return (0);
 	if (all_init_for_pipes_cmds(shell) == -1)
 		return (-1);
-	if (count_cmd(shell->cmds) == 0)
-		return (0);
+	if (count_cmd(shell->cmds) == 0 && shell->nbr_pipes == 0)
+		return (error_msg("command not found\n"), 0);
 	handle_here_doc(shell);
 	if (shell->nbr_pipes == 0)
 	{
 		if (starting_one_cmd(shell) == -1)
-		{
-			clean_up_for_error_init(shell, shell->nbr_pipes);
 			return (-1);
-		}
 	}
 	else if (shell->nbr_pipes >= 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 17:48:13 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 07:55:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static void	execute_command(t_shell *shell, t_cmd *cmd, char *path)
 		if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
 		{
 			free(path);
-			perror("execve error");
+			ft_printf("error 1");
 			exit(126);
 		}
 		free(path);
 		perror("execve error");
-		exit(127);
+		exit(126);
 	}
 }
 
@@ -36,23 +36,23 @@ static char	*prepare_execution(t_shell *shell, t_cmd *cmd)
 
 	if (!cmd || !cmd->args || !cmd->args->content)
 	{
-		perror("Command content is NULL");
+		error_msg("Command content is NULL\n");
 		exit(127);
 	}
 	if (is_real_cmd_in_cmds(cmd) == 0 || !cmd->cmd_arg_stdin)
 	{
-		perror("No command found");
+		error_msg("command not found\n");
 		exit(127);
 	}
 	path = find_command_path(shell, cmd->cmd_arg_stdin[0], shell->envp);
 	if (!path)
 	{
-		perror("execve error");
+		error_msg("execve error");
 		exit(shell->exit_status);
 	}
 	if (!cmd->cmd_arg_stdin)
 	{
-		perror("Command arguments are NULL");
+		error_msg("command arguments are NULL\n");
 		free(path);
 		exit(127);
 	}
@@ -94,7 +94,7 @@ int	execute_solo(t_shell *shell)
 	pid = fork();
 	if (pid == -1)
 	{
-		error_msg("Fork failed\n");
+		perror("minishell: fork");
 		return (shell->exit_status = 1, -1);
 	}
 	if (pid == 0)

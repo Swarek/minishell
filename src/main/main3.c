@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:19:31 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 03:14:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 07:39:31 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 int	main4(t_cmd **cmds, t_shell *shell)
 {
-	type_to_file_in_args1(cmds);
+	if (type_to_file_in_args1(cmds) == -1)
+	{
+		safe_free_cmds(*cmds);
+		*cmds = NULL;
+		return (shell->exit_status = 2, 1);
+	}
 	replace_exit_status_in_cmds_tab(cmds, shell);
 	shell->cmds = *cmds;
 	if (exec_it(shell) == -1)
@@ -25,7 +30,6 @@ int	main4(t_cmd **cmds, t_shell *shell)
 			*cmds = NULL;
 			shell->cmds = NULL;
 		}
-		clean_all(shell);
 		return (-1);
 	}
 	return (0);

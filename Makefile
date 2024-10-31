@@ -65,7 +65,8 @@ SRC_FILES	=	src/exec/all_execution/redirections_gestion/here_doc_management.c \
 				src/signals2.c \
 				src/utils/is_there_path.c \
 				src/utils/shlvl.c \
-				src/utils/create_basic_env.c
+				src/utils/create_basic_env.c \
+				src/exec/executing_a_cmd/path_without_error_msg.c
 
 MAIN_SRC	= main.c
 

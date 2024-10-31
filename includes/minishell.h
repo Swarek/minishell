@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 05:15:52 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 06:48:02 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int								check_pipe_position(char *input);
 int								is_valid_char(char str);
 
 // Post-check
-void							type_to_file_in_args1(t_cmd **cmds);
+int								type_to_file_in_args1(t_cmd **cmds);
 void							type_to_file_in_args2(t_arg *current_arg);
 
 int								error_if_subsequent_commands(t_cmd **cmds);
@@ -264,6 +264,10 @@ void							clean_all(t_shell *shell);
 int								starting_one_cmd(t_shell *shell);
 void							find_arg_add_type_cmd(t_shell *shell,
 									t_arg *args);
+char							*n_find_command_path(t_shell *shell,
+									char *command, char **envp);
+char							*n_get_path_from_env(t_shell *shell,
+									char *command, char **envp);
 
 // for envp
 t_env							*create_t_env(char **envp);

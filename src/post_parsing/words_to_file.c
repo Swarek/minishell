@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 00:36:43 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/30 23:31:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 06:01:37 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	type_to_file_in_args1(t_cmd **cmds)
+int	type_to_file_in_args1(t_cmd **cmds)
 {
 	t_cmd	*current_cmd;
 	t_arg	*current_arg;
@@ -30,9 +30,12 @@ void	type_to_file_in_args1(t_cmd **cmds)
 			{
 				if (current_arg->next)
 					current_arg->next->type = "file";
+				if (!current_arg->next)
+					return (-1);
 			}
 			current_arg = current_arg->next;
 		}
 		current_cmd = current_cmd->next;
 	}
+	return (0);
 }

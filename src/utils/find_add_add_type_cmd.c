@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 11:34:35 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:58:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 06:48:13 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	find_arg_update_type(t_arg *tmp, t_shell *shell)
 	}
 	else
 	{
-		path = find_command_path(shell, tmp->content, shell->envp);
+		path = n_find_command_path(shell, tmp->content, shell->envp);
 		if (path != NULL)
 		{
 			tmp->type = "command";

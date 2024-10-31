@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 03:23:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 06:27:28 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ static int	write_to_temp(int fd, char *line)
 			return (-1);
 	}
 	if (write(fd, line, ft_strlen(line)) == -1)
-		return (error_msg("Problem writing to temp.txt"), free(line), close(fd),
+		return (error_msg("Problem writing to temp.txt\n"), free(line), close(fd),
 			-1);
 	if (write(fd, "\n", 1) == -1)
-		return (error_msg("Problem writing newline to temp.txt"), free(line),
+		return (error_msg("Problem writing newline to temp.txt\n"), free(line),
 			close(fd), -1);
 	return (0);
 }
@@ -36,7 +36,7 @@ int	here_doc_management(char *limiter, char *name_file, t_shell *shell)
 
 	fd = open(name_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
-		return (error_msg("Problem opening temp.txt"));
+		return (error_msg("Problem opening temp.txt\n"));
 	while (1)
 	{
 		write(1, "> ", 2);
@@ -66,7 +66,7 @@ int	delete_all_temp_files(int total_here_doc)
 	{
 		name_file = name_files_here_doc(i);
 		if (unlink(name_file) == -1)
-			return (error_msg("Problem deleting temp.txt"), -1);
+			return (error_msg("Problem deleting temp.txt\n"), -1);
 		free(name_file);
 		i++;
 	}
