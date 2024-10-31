@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 22:32:29 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 07:52:37 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:33:14 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char	*get_path_from_env(t_shell *shell, char *command, char **envp)
 	command_path = search_in_path(shell, command, paths);
 	if (command_path)
 		return (command_path);
-	safe_free_all_strings(&paths);	// shell->exit_status = 127;
+	safe_free_all_strings(&paths);
 	return (NULL);
 }
 

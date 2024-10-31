@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_management.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 06:27:28 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:33:31 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static int	write_to_temp(int fd, char *line)
 			return (-1);
 	}
 	if (write(fd, line, ft_strlen(line)) == -1)
-		return (error_msg("Problem writing to temp.txt\n"), free(line), close(fd),
-			-1);
+		return (error_msg("Problem writing to temp.txt\n"), free(line),
+			close(fd), -1);
 	if (write(fd, "\n", 1) == -1)
 		return (error_msg("Problem writing newline to temp.txt\n"), free(line),
 			close(fd), -1);

@@ -30,7 +30,7 @@
 
 int	error_msg(const char *msg)
 {
-    write(2, "minishell: ", 11);
-    write(2, msg, ft_strlen(msg));
+	write(2, "minishell: ", 11);
+	write(2, msg, ft_strlen(msg));
 	return (0);
 }

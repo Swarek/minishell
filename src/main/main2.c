@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:15:49 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 06:27:53 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:31:17 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	main3(t_cmd **cmds, t_shell *shell)
 			*cmds = NULL;
 			shell->cmds = NULL;
 		}
-		// clean_all(shell);
 		shell->exit_status = 2;
 		return (2);
 	}

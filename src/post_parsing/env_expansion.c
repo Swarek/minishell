@@ -6,30 +6,11 @@
 /*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 13:01:01 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 13:32:58 by dmathis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	handle_empty_var_env(t_arg *curr_arg, int *i, int start)
-{
-	curr_arg->content[*i] = '$';
-	*i = start;
-}
-
-void	handle_nonexistent_var(t_arg *curr_arg, int *i, int j)
-{
-	replace_env_var(curr_arg, *i, j, "");
-	*i = *i; // On ne décrémente plus l'index
-}
-
-void	handle_existing_var(t_arg *curr_arg, int *i, int j,
-		const char *env_value)
-{
-	replace_env_var(curr_arg, *i, j, env_value);
-	*i += ft_strlen(env_value) - 1;
-}
 
 void	process_standard_var_env(t_arg *curr_arg, int *i, int start, t_shell *s)
 {
@@ -91,7 +72,7 @@ void	expand_env_vars(t_arg *current_arg, t_shell shell)
 		}
 		else if (current_arg->content[i] == '$' && current_arg->content[i + 1]
 			&& (current_arg->content[i + 1] == '?' || current_arg->content[i
-				+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
+					+ 1] == '_' || ft_isalnum(current_arg->content[i + 1])))
 			process_env_var(current_arg, &i, shell);
 		else
 			i++;
