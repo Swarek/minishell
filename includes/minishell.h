@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:22:47 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/31 02:17:45 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:45:58 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,9 @@ int								is_real_cmd_in_cmds(t_cmd *cmds);
 t_env							*find_no_na(t_env *env, const char *name);
 char							*replace_in_charstar(char **str,
 									t_shell *shell);
+char							*ft_getcwd(char *buf, int size, char **env);
+int								is_there_path(char **env);
+int								is_there_pwd(char **env);
 
 // Build-in functions
 int								ft_pwd(t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 05:56:18 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:04:25 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 02:53:47 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,13 @@ int	ft_cd(t_shell *shell)
 {
 	char	**arg;
 
+	if (is_there_path(shell->envp) == 0 || is_there_pwd(shell->envp) == 0)
+		return (error_msg("cd HOME not set\n"), shell->exit_status = 1, 1);
 	arg = shell->cmds->cmd_arg_stdin;
 	if (arg == NULL || arg[0] == NULL)
 		return (0);
 	if (arg[1] != NULL && arg[2] != NULL)
-		return (error_msg("cd: too many arguments\n"),
-			shell->exit_status = 1, 1);
+		return (error_msg("cd too many arguments\n"), shell->exit_status = 1, 1);
 	if (!arg[1])
 	{
 		if (go_home(shell) != 0)

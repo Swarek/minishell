@@ -1,58 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_getenv.c                                        :+:      :+:    :+:   */
+/*   is_there_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 06:36:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 02:40:12 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/31 02:35:04 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/31 02:49:47 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_getenv(char **env, char *name)
+int	is_there_path(char **env)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (env[i])
 	{
-		j = 0;
-		while (name[j] && env[i][j] && name[j] == env[i][j])
-			j++;
-		if (name[j] == '\0' && env[i][j] == '=')
-			return (&env[i][j + 1]);
+		if (env[i][0] == 'P' && env[i][1] == 'A' &&
+			env[i][2] == 'T' && env[i][3] == 'H' && env[i][4] == '=')
+			return (1);
 		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
-char	*ft_getcwd(char *buf, int size, char **env)
+int	is_there_pwd(char **env)
 {
 	int	i;
-	int	len;
 
 	i = 0;
-	len = 3;
 	while (env[i])
 	{
 		if (env[i][0] == 'P' && env[i][1] == 'W' &&
 			env[i][2] == 'D' && env[i][3] == '=')
-		{
-			if (buf && size > 0)
-			{
-				if ((int)strlen(env[i] + len + 1) < size)
-				{
-					ft_strcpy(buf, env[i] + len + 1);
-					return (buf);
-				}
-			}
-			return (NULL);
-		}
+			return (1);
 		i++;
 	}
-	return (NULL);
+	return (0);
 }

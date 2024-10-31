@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 00:02:41 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 00:32:28 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:33:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ size_t	get_var_len(char *str, int *i, t_shell *shell)
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		var[j++] = str[(*i)++];
 	var[j] = '\0';
-	value = getenv(var);
+	value = ft_getenv(shell->envp, var);
 	if (value)
 		return (ft_strlen(value));
 	return (0);
@@ -50,7 +50,7 @@ char	*get_var_value(char *str, int *i, t_shell *shell)
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		var[j++] = str[(*i)++];
 	var[j] = '\0';
-	value = getenv(var);
+	value = ft_getenv(shell->envp, var);
 	if (value)
 		return (ft_strdup(value));
 	return (ft_strdup(""));
@@ -85,7 +85,7 @@ char	*replace_in_charstar(char **str, t_shell *shell)
 
 	new = malloc(sizeof(char) * (get_final_len(*str, shell) + 1));
 	if (!new)
-		return (NULL);
+		return (free(*str), NULL);
 	i = 0;
 	j = 0;
 	while ((*str)[i])
@@ -94,7 +94,7 @@ char	*replace_in_charstar(char **str, t_shell *shell)
 		{
 			var_value = get_var_value(*str, &i, shell);
 			if (var_value == NULL)
-				return (free(new), NULL);
+				return (free(new), free(*str), NULL);
 			ft_strlcpy(new + j, var_value, ft_strlen(var_value) + 1);
 			j += ft_strlen(var_value);
 			free(var_value);

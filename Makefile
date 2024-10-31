@@ -1,6 +1,6 @@
 # Compiler and flags
 CC			= cc
-CFLAGS = -Wall -Wextra -Werror -g3 -Iincludes -I./Libft/includes
+CFLAGS = -Wall -Wextra -Werror -Iincludes -I./Libft/includes
 DEBUGFLAGS	= -g
 LIBFT		= ./Libft/libft.a
 
@@ -62,7 +62,8 @@ SRC_FILES	=	src/exec/all_execution/redirections_gestion/here_doc_management.c \
 				src/inits/all_init_for_pipes_cmds.c \
 				src/exec/all_execution/redirections_gestion/expand_for_here_doc.c \
 				src/signals.c \
-				src/signals2.c
+				src/signals2.c \
+				src/utils/is_there_path.c
 
 MAIN_SRC	= main.c
 

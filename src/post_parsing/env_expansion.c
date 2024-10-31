@@ -3,38 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmathis <dmathis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:20:04 by dmathis           #+#    #+#             */
-/*   Updated: 2024/10/29 23:34:09 by dmathis          ###   ########.fr       */
+/*   Updated: 2024/10/31 03:33:08 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	process_standard_var_env(t_arg *current_arg, int *i, int start)
+void	process_standard_var_env(t_arg *curr_arg, int *i, int start, t_shell *s)
 {
 	char		var_name[512];
 	const char	*env_value;
 	int			j;
 
-	if (!current_arg->content[start] || current_arg->content[start] == ' ')
+	if (!curr_arg->content[start] || curr_arg->content[start] == ' ')
 	{
-		current_arg->content[*i] = '$';
+		curr_arg->content[*i] = '$';
 		*i = start;
 		return ;
 	}
-	j = get_var_name_end_env(current_arg->content, start);
+	j = get_var_name_end_env(curr_arg->content, start);
 	if (j == start)
 	{
 		*i = start;
 		return ;
 	}
-	ft_strlcpy(var_name, current_arg->content + start, j - start + 1);
-	env_value = getenv(var_name);
+	ft_strlcpy(var_name, curr_arg->content + start, j - start + 1);
+	env_value = ft_getenv(s->envp, var_name);
 	if (env_value)
 	{
-		replace_env_var(current_arg, *i, j, env_value);
+		replace_env_var(curr_arg, *i, j, env_value);
 		*i += ft_strlen(env_value) - 1;
 	}
 	else
@@ -56,7 +56,7 @@ void	process_env_var(t_arg *current_arg, int *i, t_shell shell)
 		handle_exit_status_for_env(current_arg, i, shell);
 		return ;
 	}
-	process_standard_var_env(current_arg, i, start);
+	process_standard_var_env(current_arg, i, start, &shell);
 }
 
 void	expand_env_vars(t_arg *current_arg, t_shell shell)

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/31 00:34:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:23:59 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ int	here_doc_management(char *limiter, char *name_file, t_shell *shell)
 		if (len > 0 && line[len - 1] == '\n')
 			line[len - 1] = '\0';
 		if (ft_strcmp(line, limiter) == 0 || len == 0)
-			break ;
+			return (ft_printf("\n"), free(line), close(fd), 0);
 		line = replace_in_charstar(&line, shell);
-		ft_printf("%s\n", line);
 		if (write_to_temp(fd, line) == -1)
 			return (-1);
 		free(line);

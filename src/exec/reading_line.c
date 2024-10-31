@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:59:11 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 23:44:23 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:21:29 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	**init_colors(void)
 {
 	char	**colors;
 
-	colors = malloc(sizeof(char *) * 15);
+	colors = malloc(sizeof(char *) * 14);
 	if (!colors)
 		return (NULL);
 	colors[0] = BOLD_COLOR_BLUE;
@@ -30,10 +30,9 @@ char	**init_colors(void)
 	colors[8] = BOLD_COLOR_RED;
 	colors[9] = BOLD_COLOR_GREEN;
 	colors[10] = BOLD_COLOR_YELLOW;
-	colors[11] = COLOR_BLACK;
-	colors[12] = BOLD_COLOR_PURPLE;
-	colors[13] = BOLD_COLOR_CYAN;
-	colors[14] = NULL;
+	colors[11] = BOLD_COLOR_PURPLE;
+	colors[12] = BOLD_COLOR_CYAN;
+	colors[13] = NULL;
 	return (colors);
 }
 

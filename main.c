@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:09:52 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/30 22:46:40 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/31 03:12:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	main(int ac, char **av, char **envp)
 		if (ret != 0)
 			return (ret);
 		g_received_signal = 0;
+		ft_printf("exit status: %d\n", shell->exit_status);
 	}
 	clean_all(shell);
 	return (0);
